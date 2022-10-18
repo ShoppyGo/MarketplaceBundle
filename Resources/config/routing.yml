@@ -1,0 +1,97 @@
+#admin_marketplace:
+#    path: '/shoppygo/marketplace'
+#    defaults:
+#        _legacy_controller: AdminMarketplace
+#
+#admin_marketplace_seller:
+#    path: '/shoppygo/marketplace/seller'
+#    defaults:
+#        _legacy_controller: AdminMarketplaceSeller
+#
+#
+#admin_marketplace_employee_toggle_seller:
+#  path: '/shoppygo/marketplace/employee/toggle-seller/{id}'
+#  methods: [POST]
+#  defaults:
+#    _controller: Bwlab\Marketplace\Controller\MarketplaceConfigurationController::toggleSellerEmployee
+#
+admin_marketplace_category_toggle_seller:
+  path: '/shoppygo/marketplace/category/toggle-seller/{id}'
+  methods: [POST]
+  defaults:
+    _controller: ShoppyGo\MarketplaceBundle\Controller\MarketplaceConfigurationController::toggleSellerCategory
+#
+#admin_marketplace_configuration:
+#  path: '/shoppygo/marketplace/configuration'
+#  methods: [GET,POST]
+#  defaults:
+#    _controller: Bwlab\Marketplace\Controller\MarketplaceConfigurationController::configuration
+#    _legacy_controller: AdminMarketplaceConfiguration
+#
+#admin_marketplace_install_demo:
+#  path: '/shoppygo/marketplace/install-demo'
+#  methods: [GET,POST]
+#  defaults:
+#    _controller: Bwlab\Marketplace\Controller\MarketplaceConfigurationController::installDemo
+#    _legacy_controller: AdminMarketplaceConfiguration
+#
+#admin_marketplace_reinstall_hooks:
+#  path: '/shoppygo/marketplace/reinstall-hooks'
+#  methods: [GET,POST]
+#  defaults:
+#    _controller: Bwlab\Marketplace\Controller\MarketplaceConfigurationController::reinstallHooks
+#    _legacy_controller: AdminMarketplaceConfiguration
+#
+#
+#admin_marketplace_seller_shipping:
+#  path: '/shoppygo/marketplace/shipping'
+#  methods: [GET]
+#  defaults:
+#    _controller: Bwlab\Marketplace\Controller\MarketplaceSellerShippingController::index
+#    _legacy_controller: AdminMarketplaceSellerShipping
+#
+#admin_marketplace_seller_shipping_delete:
+#  path: /shoppygo/marketplace/shipping/delete/{id_shipping}
+#  methods: [GET]
+#  defaults:
+#    _controller: 'Bwlab\Marketplace\Controller\MarketplaceSellerShippingController::delete'
+#    _legacy_controller: AdminMarketplaceSellerShipping
+#    _legacy_link: AdminMarketplaceSellerShipping:delete
+#    _legacy_parameters:
+#      id_shipping: id_shipping
+#  requirements:
+#    mailId: \d+
+#
+#admin_marketplace_seller_shipping_edit:
+#  path: /shoppygo/marketplace/shipping/edit/{id_shipping}
+#  methods: [GET,POST]
+#  defaults:
+#    _controller: 'Bwlab\Marketplace\Controller\MarketplaceSellerShippingController::edit'
+#    _legacy_controller: AdminMarketplaceSellerShipping
+#    _legacy_link: AdminMarketplaceSellerShipping:edit
+#    _legacy_parameters:
+#      id_shipping: id_shipping
+#  requirements:
+#    mailId: \d+
+#
+#admin_marketplace_seller_shipping_create:
+#  path: /shoppygo/marketplace/shipping/create
+#  methods: [GET,POST]
+#  defaults:
+#    _controller: 'Bwlab\Marketplace\Controller\MarketplaceSellerShippingController::edit'
+#    _legacy_controller: AdminMarketplaceSellerShipping
+#    _legacy_link: AdminMarketplaceSellerShipping:edit
+#
+##  override product page
+#admin_product_form:
+#  path: /{id}
+#  methods:  [GET, POST]
+#  defaults:
+#    _controller: 'Bwlab\Marketplace\Controller\MarketplaceSellerProductController::formAction'
+#    _legacy_controller: AdminProducts
+#    _legacy_param_mapper_class: PrestaShop\PrestaShop\Adapter\Product\AdminProductDataProvider
+#    _legacy_param_mapper_method: mapLegacyParametersProductForm
+#  requirements:
+#    id: \d+
+#  options:
+#    expose: true

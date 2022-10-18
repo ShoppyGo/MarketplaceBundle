@@ -1,0 +1,12 @@
+{% macro bar(link, num) %}
+    <div class="shoppy-go-maketplace-widget-wrapper">
+        <div class="shoppy-go-maketplace-widget">
+            <div class="shoppy-go-maketplace-link-wrapper">
+                <a id="shoppy-go-maketplace-link" href="{{ link }}">{{ 'shoppy_go_maketplace.bar'|trans }}</a>
+            </div>
+            <div class="shoppy-go-maketplace-service-wrapper">
+                <code>{{ shoppy_go_maketplace_bar_service.foo(num, random(50)) }}</code>
+            </div>
+        </div>
+    </div>
+{% endmacro bar %}

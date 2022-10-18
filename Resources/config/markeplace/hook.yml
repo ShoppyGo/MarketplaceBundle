@@ -1,0 +1,155 @@
+services:
+    shoppygo.hook.action.employee.form.builder.modifier:
+        class: ShoppyGo\MarketplaceBundle\HookListener\EmployeeActionFormBuilderModifierListener
+        arguments:
+            - '@shoppygo.provider.seller.choices'
+            - '@shoppygo.core'
+            - '@shoppygo.marketplace.repository.seller_repository'
+        calls:
+            - [ setHooks,[ [ 'actionEmployeeFormBuilderModifier' ] ] ]
+            - [ setSellerSelectWidget,[ '@shoppygo.widget.seller.select' ] ]
+        tags:
+            - { name: 'shoppygo.hook', alias: 'actionemployeeformbuildermodifier' }
+
+    shoppygo.hook.action.after.create.employee.form.handler:
+        class: ShoppyGo\MarketplaceBundle\HookListener\EmployeeHookAfterCreateListener
+        arguments:
+            - '@shoppygo.provider.seller.choices'
+            - '@shoppygo.core'
+            - '@shoppygo.marketplace.repository.seller_repository'
+            - '@prestashop.core.form.identifiable_object.builder.employee_form_builder'
+        calls:
+            - [ setHooks,[ [ 'actionAfterCreateEmployeeFormHandler' ] ] ]
+        tags:
+            - { name: 'shoppygo.hook', alias: 'actionaftercreateemployeeformhandler' }
+
+    shoppygo.hook.action.after.update.employee.form.handler:
+        class: ShoppyGo\MarketplaceBundle\HookListener\EmployeeHookAfterUpdateListener
+        arguments:
+            - '@shoppygo.provider.seller.choices'
+            - '@shoppygo.core'
+            - '@shoppygo.marketplace.repository.seller_repository'
+            - '@prestashop.core.form.identifiable_object.builder.employee_form_builder'
+        calls:
+            - [ setHooks,[ [ 'actionAfterUpdateEmployeeFormHandler' ] ] ]
+        tags:
+            - { name: 'shoppygo.hook', alias: 'actionafterupdateemployeeformhandler' }
+
+    shoppygo.hook.action.employee.grid.definition.modifier:
+        class: ShoppyGo\MarketplaceBundle\HookListener\EmployeeHookActionGridDefinitionModifierListener
+        arguments:
+            - '@shoppygo.provider.seller.choices'
+            - '@shoppygo.core'
+            - '@shoppygo.marketplace.repository.seller_repository'
+            - '@translator.default'
+        calls:
+            - [ setHooks,[ [ 'actionEmployeeGridDefinitionModifier' ] ] ]
+        tags:
+            - { name: 'shoppygo.hook', alias: 'actionemployeegriddefinitionmodifier' }
+
+    shoppygo.hook.action.employee.grid.query.builder.modifier:
+        class: ShoppyGo\MarketplaceBundle\HookListener\EmployeeHookActionGridQueryBuilderModifierListener
+        arguments:
+            - '@shoppygo.provider.seller.choices'
+            - '@shoppygo.core'
+            - '@shoppygo.marketplace.repository.seller_repository'
+            - '@translator.default'
+        calls:
+            - [ setHooks,[ [ 'actionEmployeeGridQueryBuilderModifier' ] ] ]
+        tags:
+            - { name: 'shoppygo.hook', alias: 'actionemployeegridquerybuildermodifier' }
+
+    shoppygo.hook.action.products.results.fields.modifier:
+        class: ShoppyGo\MarketplaceBundle\HookListener\ProductsActionAdminListingResultsModifierListener
+        arguments:
+            - '@shoppygo.core'
+            - '@shoppygo.marketplace.repository.seller_repository'
+            - '@translator.default'
+        calls:
+            - [ setHooks,[ [ 'actionAdminProductsListingFieldsModifier' ] ] ]
+        tags:
+            - { name: 'shoppygo.hook', alias: 'actionadminproductslistingfieldsmodifier' }
+
+    shoppygo.hook.action.category.form.builder.modifier:
+        class: ShoppyGo\MarketplaceBundle\HookListener\CategoryActionFormBuilderModifier
+        arguments:
+            - '@shoppygo.core'
+            - '@shoppygo.marketplace.repository.category_repository'
+            - '@shoppygo.widget.seller.switch'
+        calls:
+            - [ setHooks,[ [ 'actionCategoryFormBuilderModifier' ] ] ]
+        tags:
+            - { name: 'shoppygo.hook', alias: 'actioncategoryformbuildermodifier' }
+
+    shoppygo.hook.action.after.update.category.form.handler:
+        class: ShoppyGo\MarketplaceBundle\HookListener\CategoryActionAfterCreateUpdateFormHandler
+        arguments:
+            - '@shoppygo.core'
+            - '@prestashop.core.command_bus'
+        calls:
+            - [ setHooks,[ [ 'actionAfterUpdateCategoryFormHandler','actionAfterCreateCategoryFormHandler' ] ] ]
+        tags:
+            - { name: 'shoppygo.hook', alias: 'actionafterupdatecategoryformhandler' }
+
+    shoppygo.hook.action.category.grid.query.builder.modifier:
+        class: ShoppyGo\MarketplaceBundle\HookListener\CategoryActionGridQueryBuilderModifier
+        arguments:
+            - '@shoppygo.core'
+            - '@translator.default'
+        calls:
+            - [ setHooks,[ [ 'actionCategoryGridQueryBuilderModifier' ] ] ]
+        tags:
+            - { name: 'shoppygo.hook', alias: 'actioncategorygridquerybuildermodifier' }
+
+    shoppygo.hook.action.category.grid.definition.modifier:
+        class: ShoppyGo\MarketplaceBundle\HookListener\CategoryActionGridDefinitionModifier
+        arguments:
+            - '@shoppygo.core'
+            - '@translator.default'
+        calls:
+            - [ setHooks,[ [ 'actionCategoryGridDefinitionModifier' ] ] ]
+        tags:
+            - { name: 'shoppygo.hook', alias: 'hookactioncategorygriddefinitionmodifier' }
+
+    shoppygo.hook.action.supplier.form.builder.modifier:
+        class: ShoppyGo\MarketplaceBundle\HookListener\SupplierActionFormBuilderModifier
+        arguments:
+            - '@shoppygo.core'
+            - '@translator.default'
+            - '@shoppygo.widget.category.select'
+            - '@prestashop.adapter.data_provider.category'
+            - '@shoppygo.marketplace.repository.category_seller_repository'
+        calls:
+            - [ setHooks,[ [ 'actionSupplierFormBuilderModifier' ] ] ]
+        tags:
+            - { name: 'shoppygo.hook', alias: 'hookactionsupplierformbuildermodifier' }
+    shoppygo.hook.action.after.update.supplier.form.handler:
+        class: ShoppyGo\MarketplaceBundle\HookListener\SupplierActionAfterCreateUpdateFormHandler
+        arguments:
+            - '@shoppygo.core'
+            - '@prestashop.core.command_bus'
+            - '@shoppygo.marketplace.repository.category_seller_repository'
+        calls:
+            - [ setHooks,[ [ 'actionAfterUpdateSupplierFormHandler' ] ] ]
+        tags:
+            - { name: 'shoppygo.hook', alias: 'actionafterupdatesupplierformhandler' }
+
+    shoppygo.hook.action.order.grid.query.builder.modifier:
+        class: ShoppyGo\MarketplaceBundle\HookListener\OrderActionGridQueryBuilderModifier
+        arguments:
+            - '@shoppygo.core'
+            - '@translator.default'
+        calls:
+            - [ setHooks,[ [ 'actionOrderGridQueryBuilderModifier' ] ] ]
+        tags:
+            - { name: 'shoppygo.hook', alias: 'actionordergridquerybuildermodifier' }
+
+    shoppygo.hook.action.order.grid.definition.modifier:
+      class: ShoppyGo\MarketplaceBundle\HookListener\OrderActionGridDefinitionModifierListener
+      arguments:
+        - '@shoppygo.core'
+        - '@translator.default'
+      calls:
+        - [ setHooks,[ [ 'actionOrderGridDefinitionModifier' ] ] ]
+      tags:
+        - { name: 'shoppygo.hook', alias: 'actionordergriddefinitionmodifier' }

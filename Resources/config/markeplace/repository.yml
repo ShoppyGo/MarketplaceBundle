@@ -1,0 +1,38 @@
+services:
+    shoppygo.marketplace.repository.seller_repository:
+        class: ShoppyGo\MarketplaceBundle\Repository\MarketplaceEmployeeSellerRepository
+        factory:
+            - "@doctrine.orm.entity_manager"
+            - getRepository
+        arguments: [ ShoppyGo\MarketplaceBundle\Entity\MarketplaceEmployeeSeller ]
+
+    shoppygo.marketplace.repository.category_repository:
+        class: ShoppyGo\MarketplaceBundle\Repository\MarketplaceCategoryRepository
+        factory:
+            - "@doctrine.orm.entity_manager"
+            - getRepository
+        arguments: [ ShoppyGo\MarketplaceBundle\Entity\MarketplaceCategory ]
+
+    shoppygo.marketplace.repository.product_supplier_repository:
+        parent: "prestashop.adapter.product.repository.product_supplier_repository"
+        class: ShoppyGo\MarketplaceBundle\Repository\MarketplaceProductSupplierRepository
+
+    shoppygo.marketplace.repository.category_seller_repository:
+        class: ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerCategoryRepository
+        factory:
+            - "@doctrine.orm.entity_manager"
+            - getRepository
+        arguments: [ ShoppyGo\MarketplaceBundle\Entity\MarketplaceSellerCategory ]
+
+    shoppygo.marketplace.repository.seller_order_repository:
+        class: ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerOrderRepository
+        factory:
+          - "@doctrine.orm.entity_manager"
+          - getRepository
+        arguments: [ ShoppyGo\MarketplaceBundle\Entity\MarketplaceSellerOrder ]
+
+    shoppygo.marketplace.repository.seller.product:
+      class: ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerProductRepository
+      arguments:
+        - '@doctrine.dbal.default_connection'
+        - '%database_prefix%'

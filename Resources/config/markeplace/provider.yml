@@ -1,0 +1,5 @@
+services:
+    shoppygo.provider.seller.choices:
+        class: ShoppyGo\MarketplaceBundle\Provider\SellerChoiceProvider
+        arguments:
+            - '@prestashop.adapter.data_provider.supplier'

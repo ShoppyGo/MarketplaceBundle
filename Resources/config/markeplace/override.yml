@@ -1,0 +1,12 @@
+services:
+    ShoppyGo\MarketplaceBundle\Controller\MarketplaceSellerProductController:
+        class: ShoppyGo\MarketplaceBundle\Controller\MarketplaceSellerProductController
+        decorates: PrestaShopBundle\Controller\Admin\ProductController
+        arguments: [ '@ShoppyGo\MarketplaceBundle\Controller\MarketplaceSellerProductController.inner' ]
+    #    public: true
+#    prestashop.adapter.data_provider.category:
+#        class: ShoppyGo\MarketplaceBundle\Provider\SellerCategoryDataProvider
+#        arguments:
+#            - "@=service('prestashop.adapter.legacy.context')"
+#            - '@shoppygo.core'
+#            - '@shoppygo.marketplace.repository.category_repository'

@@ -1,0 +1,11 @@
+services:
+    shoppygo.widget.seller.select:
+        class: ShoppyGo\MarketplaceBundle\Form\Widget\SellerSelectWidget
+        arguments:
+            - '@shoppygo.provider.seller.choices'
+
+    shoppygo.widget.category.select:
+        class: ShoppyGo\MarketplaceBundle\Form\Widget\CategorySelectWidget
+
+    shoppygo.widget.seller.switch:
+        class: ShoppyGo\MarketplaceBundle\Form\Widget\SellerSwitchWidget
