@@ -27,6 +27,7 @@
 namespace ShoppyGo\MarketplaceBundle\Repository;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSellerProduct;
 
@@ -56,8 +57,7 @@ class MarketplaceSellerProductRepository
         return $this->findOneBy(['id_product' => $id_product]);
     }
 
-    // recupero lista prodotti per seller
-    public function findSellersByProducts(array $id_products): array
+    public function qbProductSupplier(array $id_products): QueryBuilder
     {
         $where = 'ps.id_product in (';
         $last_index = count($id_products) - 1;
@@ -68,14 +68,18 @@ class MarketplaceSellerProductRepository
             }
         }
         $where .= ')';
-        $sellers = $this->connection->createQueryBuilder()
+        return  $this->connection->createQueryBuilder()
             ->from($this->dbPrefix.'product_supplier', 'ps')
-            ->select('distinct(ps.id_supplier) as seller')
             ->andWhere($where)
             ->setParameter('products', $id_products)
-            ->execute()
-            ->fetchAllAssociative()
-        ;
+            ;
+    }
+    // recupero lista prodotti per seller
+    public function findSellersByProducts(array $id_products): array
+    {
+        $sellers = $this->qbProductSupplier($id_products)
+            ->select('distinct(ps.id_supplier) as seller')
+                ->execute()->fetchAllAssociative();
 
         $id_seller = [];
 

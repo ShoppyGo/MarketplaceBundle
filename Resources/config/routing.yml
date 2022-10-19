@@ -43,12 +43,19 @@ admin_marketplace_category_toggle_seller:
 #    _legacy_controller: AdminMarketplaceConfiguration
 #
 #
-#admin_marketplace_seller_shipping:
-#  path: '/shoppygo/marketplace/shipping'
-#  methods: [GET]
-#  defaults:
-#    _controller: Bwlab\Marketplace\Controller\MarketplaceSellerShippingController::index
-#    _legacy_controller: AdminMarketplaceSellerShipping
+admin_marketplace_seller_shipping:
+  path: '/shoppygo/marketplace/shipping'
+  methods: [GET]
+  defaults:
+    _controller: ShoppyGo\MarketplaceBundle\Controller\MarketplaceSellerShippingController::index
+    _legacy_controller: AdminMarketplaceSellerShipping
+
+admin_marketplace_seller_shipping_create:
+  path: /shoppygo/marketplace/shipping/create
+  methods: [GET,POST]
+  defaults:
+    _controller: 'ShoppyGo\MarketplaceBundle\Controller\MarketplaceSellerShippingController::edit'
+    _legacy_controller: AdminMarketplaceSellerShipping
 #
 #admin_marketplace_seller_shipping_delete:
 #  path: /shoppygo/marketplace/shipping/delete/{id_shipping}

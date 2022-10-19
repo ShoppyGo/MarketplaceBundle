@@ -30,7 +30,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="MarketplaceSellerProductRepositoryOld")
+ * @ORM\Entity(repositoryClass="MarketplaceSellerProductRepository")
  *
  * Class MarketPlaceSeller
  * @package ShoppyGo\MarketplaceBundle\Entity

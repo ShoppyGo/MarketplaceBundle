@@ -1,0 +1,29 @@
+services:
+
+  shoppygo_marketplace_grid_seller_shipping_factory:
+    class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
+    arguments:
+      - '@shoppygo_marketplace_grid_definition_factory_seller_shipping' # our definition factory
+      - '@shoppygo_marketplace_grid_data_factory_seller_shipping'              # our data factory
+      - '@prestashop.core.grid.filter.form_factory'                            # core service needed by grid factory
+      - '@prestashop.core.hook.dispatcher'
+    public: true
+
+  shoppygo_marketplace_grid_definition_factory_seller_shipping:
+    class: 'ShoppyGo\MarketplaceBundle\Grid\Definition\Factory\MarketplaceSellerShippingGridDefinitionFactory'
+    parent: 'prestashop.core.grid.definition.factory.abstract_grid_definition'
+    public: true
+
+  shoppygo_marketplace_grid_data_factory_seller_shipping:
+    class: 'PrestaShop\PrestaShop\Core\Grid\Data\Factory\DoctrineGridDataFactory'
+    arguments:
+      - '@shoppygo_marketplace_grid_query_seller_shipping' # service id of our query builder
+      - '@prestashop.core.hook.dispatcher' # every doctrine query builder needs the hook dispatcher
+      - '@prestashop.core.grid.query.doctrine_query_parser' # parser to get the raw SQL query
+      - 'seller_shipping' # this should match your grid id, in our case it's "products"
+
+  shoppygo_marketplace_grid_query_seller_shipping:
+    class: 'ShoppyGo\MarketplaceBundle\Grid\Query\MarketplaceSellerShippingQueryBuilder'
+    parent: 'prestashop.core.grid.abstract_query_builder'
+    arguments:
+      - '@shoppygo.core'

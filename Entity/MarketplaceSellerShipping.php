@@ -31,7 +31,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="ShoppyGo\MarketplaceBundle\Entity\MarketplaceSellerShippingRepository")
+ * @ORM\Entity(repositoryClass="ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerShippingRepository")
  * @UniqueEntity(fields={"id_shipping", "id_shop"})
  * @package ShoppyGo\MarketplaceBundle\Entity
  */

@@ -6,6 +6,7 @@ imports:
     - { resource: markeplace/override.yml  }
     - { resource: markeplace/handler.yml  }
     - { resource: markeplace/command.yml  }
+    - { resource: markeplace/grid.yml  }
 parameters: ~
 
 services:
