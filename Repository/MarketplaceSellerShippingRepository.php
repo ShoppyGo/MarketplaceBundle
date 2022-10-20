@@ -34,8 +34,8 @@ class MarketplaceSellerShippingRepository extends EntityRepository
     public function findRange(int $id_seller, $total): ?MarketplaceSellerShipping
     {
         $range = $this->createQueryBuilder('s')
-            ->where('s.from between :from and :to')
-            ->orWhere('s.from < :total and s.to > :total')
+//            ->where('s.from between :from and :to')
+            ->where('s.from < :total and s.to > :total')
             ->andWhere('s.id_seller = :seller')
             ->setParameters(['total' => $total, 'seller' => $id_seller])
             ->orderBy('s.cost', 'DESC')
@@ -47,8 +47,8 @@ class MarketplaceSellerShippingRepository extends EntityRepository
         }
         // record big
         $range = $this->createQueryBuilder('s')
-            ->where('s.from between :from and :to')
-            ->orWhere('s.to < :total ')
+//            ->where('s.from between :from and :to')
+            ->where('s.to < :total ')
             ->andWhere('s.id_seller = :seller')
             ->setParameters(['total' => $total, 'seller' => $id_seller])
             ->orderBy('s.cost', 'DESC')
