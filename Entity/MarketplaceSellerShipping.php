@@ -32,43 +32,46 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerShippingRepository")
- * @UniqueEntity(fields={"id_shipping", "id_shop"})
- * @package ShoppyGo\MarketplaceBundle\Entity
  */
 class MarketplaceSellerShipping
 {
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(name="id_shipping", type="integer")
+     *
      * @var int
      */
     private $id_shipping;
 
     /**
      * @ORM\Column(name="id_supplier", type="integer")
+     *
      * @var int
      */
-    private $id_seller;
+    private ?int $id_seller;
 
     /**
      * @ORM\Column(name="from_total", type="decimal", precision=2)
+     *
      * @var float
      */
     private $from = 0;
     /**
      * @ORM\Column(name="to_total", type="decimal", precision=2)
+     *
      * @var float
      */
     private $to = 0;
     /**
      * @ORM\Column(name="shipping_cost", type="decimal", precision=2)
+     *
      * @var float
      */
     private $cost = 0;
     /**
      * @ORM\Column(name="vat", type="decimal", precision=2)
+     *
      * @var float
      */
     private $vat = 0;
@@ -97,7 +100,7 @@ class MarketplaceSellerShipping
         return $this;
     }
 
-    public function getIdSeller(): int
+    public function getIdSeller(): ?int
     {
         return $this->id_seller;
     }
@@ -144,5 +147,4 @@ class MarketplaceSellerShipping
 
         return $this;
     }
-
 }

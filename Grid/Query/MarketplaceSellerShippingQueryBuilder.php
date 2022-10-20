@@ -27,6 +27,7 @@
 namespace ShoppyGo\MarketplaceBundle\Grid\Query;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use PrestaShop\PrestaShop\Core\Grid\Query\AbstractDoctrineQueryBuilder;
 use PrestaShop\PrestaShop\Core\Grid\Search\SearchCriteriaInterface;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
@@ -42,12 +43,7 @@ class MarketplaceSellerShippingQueryBuilder extends AbstractDoctrineQueryBuilder
         $this->core = $core;
     }
 
-    /**
-     * @param SearchCriteriaInterface $searchCriteria
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    public function getCountQueryBuilder(SearchCriteriaInterface $searchCriteria)
+    public function getCountQueryBuilder(SearchCriteriaInterface $searchCriteria): QueryBuilder
     {
         $qb = $this->getBaseQuery();
         $qb->select('COUNT(mp.id_shipping)');
@@ -55,33 +51,27 @@ class MarketplaceSellerShippingQueryBuilder extends AbstractDoctrineQueryBuilder
         return $qb;
     }
 
-    /**
-     * @param SearchCriteriaInterface $searchCriteria
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    public function getSearchQueryBuilder(SearchCriteriaInterface $searchCriteria)
+    public function getSearchQueryBuilder(SearchCriteriaInterface $searchCriteria): QueryBuilder
     {
-        //
-        // non ha parametri di ricerca
-        //
-
-        return $this->getBaseQuery()->select('mp.*');
+        return $this->getBaseQuery();
     }
 
-    /**
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    private function getBaseQuery()
+    private function getBaseQuery(): QueryBuilder
     {
-        $qb = $this->connection
-            ->createQueryBuilder()
-            ->from($this->dbPrefix . 'marketplace_seller_shipping', 'mp');
+        $qb = $this->connection->createQueryBuilder()
+            ->select('mp.id_shipping, mp.from_total, to_total,shipping_cost')
+            ->from($this->dbPrefix.'marketplace_seller_shipping', 'mp')
+        ;
 
-        if ($this->core->isEmployStaff() === false) {
-            $qb->andWhere('mp.id_employee = :id_seller')
-                ->setParameter('id_seller', $this->core->getEmployee()->id);
+        if (false === $this->core->isEmployStaff()) {
+            $qb->andWhere('mp.id_supplier = :id_seller')
+                ->setParameter('id_seller', $this->core->getSellerId())
+            ;
+        } else {
+            $qb->innerJoin('mp', $this->dbPrefix.'supplier', 'suppl', 'suppl.id_supplier = mp.id_supplier');
+            $qb->addSelect('suppl.name');
         }
+
         $qb->orderBy('mp.from_total');
 
         return $qb;

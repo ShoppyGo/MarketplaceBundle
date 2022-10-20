@@ -30,8 +30,9 @@ use PrestaShop\PrestaShop\Core\Grid\Search\SearchCriteria;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
 use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSellerShipping;
-use ShoppyGo\MarketplaceBundle\Form\Widget\SellerSelectWidget;
+use ShoppyGo\MarketplaceBundle\Form\Type\SellerChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class MarketplaceSellerShippingController extends FrameworkBundleAdminController
@@ -81,46 +82,7 @@ class MarketplaceSellerShippingController extends FrameworkBundleAdminController
             }
         }
 
-        $builder = $this->createFormBuilder($shipping_cost);
-
-        $builder
-            ->add(
-                'from',
-                MoneyType::class,
-                [
-                    'scale' => 2,
-                    'label' => $this->trans('from', 'Admin.Marketplace.Shipping'),
-                ]
-            )
-            ->add(
-                'to',
-                MoneyType::class,
-                [
-                    'scale' => 2,
-                    'label' => $this->trans('to', 'Admin.Marketplace.Shipping'),
-                ]
-            )
-            ->add(
-                'cost',
-                MoneyType::class,
-                [
-                    'scale' => 2,
-                    'label' => $this->trans('cost', 'Admin.Marketplace.Shipping'),
-                ]
-            )
-            ->add(
-                'vat',
-                MoneyType::class,
-                [
-                    'scale' => 2,
-                    'label' => $this->trans('vat', 'Admin.Marketplace.Shipping'),
-                ]
-            );
-        if ($core->isEmployStaff()) {
-            $builder->add('id_employee', SellerSelectWidget::class);
-        }
-
-        $form = $builder->getForm();
+        $form = $this->getShippingForm($shipping_cost, $core);
 
         $form->handleRequest($request);
         //
@@ -132,9 +94,8 @@ class MarketplaceSellerShippingController extends FrameworkBundleAdminController
                 $data = $form->getData();
 
                 if ($core->isEmployeeSeller()) {
-                    $data->setIdEmployee($core->getEmployee()->id);
+                    $data->setIdSeller($core->getSellerId());
                 }
-                $data->setIdShop($core->getShop()->id);
 
                 $ranges = [];
                 $m = $this->getDoctrine()->getManager();
@@ -146,8 +107,7 @@ class MarketplaceSellerShippingController extends FrameworkBundleAdminController
                         ->getRanges(
                             $shipping_cost->getFrom(),
                             $shipping_cost->getTo(),
-                            $data->getIdEmployee(),
-                            $data->getIdShop()
+                            $data->getIdSeller(),
                         );
                 }
                 if (count($ranges) === 0) {
@@ -208,7 +168,6 @@ class MarketplaceSellerShippingController extends FrameworkBundleAdminController
     {
         $criteria = [
             'id_shipping' => $request->get('id_shipping'),
-            'id_shop' => $core->getShop()->id,
         ];
         //
         // controllo se l'utente prova ad editare un altro record da url
@@ -218,5 +177,43 @@ class MarketplaceSellerShippingController extends FrameworkBundleAdminController
         }
 
         return $criteria;
+    }
+
+    private function getShippingForm(mixed $shipping_cost, MarketplaceCore $core): FormInterface
+    {
+        $builder = $this->createFormBuilder($shipping_cost);
+
+        $builder->add(
+                'from', MoneyType::class, [
+                    'scale' => 2,
+                    'label' => $this->trans('from', 'Admin.Marketplace.Shipping'),
+                ]
+            )
+            ->add(
+                'to', MoneyType::class, [
+                    'scale' => 2,
+                    'label' => $this->trans('to', 'Admin.Marketplace.Shipping'),
+                ]
+            )
+            ->add(
+                'cost', MoneyType::class, [
+                    'scale' => 2,
+                    'label' => $this->trans('cost', 'Admin.Marketplace.Shipping'),
+                ]
+            )
+            ->add(
+                'vat', MoneyType::class, [
+                    'scale' => 2,
+                    'label' => $this->trans('vat', 'Admin.Marketplace.Shipping'),
+                ]
+            )
+        ;
+        if ($core->isEmployStaff()) {
+            $builder->add('id_seller', SellerChoiceType::class, [
+                'label' => $this->trans('seller', 'Admin.Marketplace.Shipping'),
+            ]);
+        }
+
+        return $builder->getForm();
     }
 }

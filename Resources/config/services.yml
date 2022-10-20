@@ -7,6 +7,7 @@ imports:
     - { resource: markeplace/handler.yml  }
     - { resource: markeplace/command.yml  }
     - { resource: markeplace/grid.yml  }
+    - { resource: markeplace/form.yml  }
 parameters: ~
 
 services:

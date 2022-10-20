@@ -12,6 +12,8 @@ services:
   shoppygo_marketplace_grid_definition_factory_seller_shipping:
     class: 'ShoppyGo\MarketplaceBundle\Grid\Definition\Factory\MarketplaceSellerShippingGridDefinitionFactory'
     parent: 'prestashop.core.grid.definition.factory.abstract_grid_definition'
+    arguments:
+      - '@shoppygo.core'
     public: true
 
   shoppygo_marketplace_grid_data_factory_seller_shipping:

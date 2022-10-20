@@ -1,0 +1,7 @@
+services:
+  shoppygo_marketplace_seller_choice_type:
+    class: ShoppyGo\MarketplaceBundle\Form\Type\SellerChoiceType
+    arguments:
+      - '@shoppygo.provider.seller.choices'
+    tags:
+      - { name: form.type }

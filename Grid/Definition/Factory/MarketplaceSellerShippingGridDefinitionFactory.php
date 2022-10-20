@@ -26,18 +26,27 @@
 
 namespace ShoppyGo\MarketplaceBundle\Grid\Definition\Factory;
 
-
 use PrestaShop\PrestaShop\Core\Grid\Action\Row\RowActionCollection;
 use PrestaShop\PrestaShop\Core\Grid\Action\Row\Type\LinkRowAction;
 use PrestaShop\PrestaShop\Core\Grid\Column\ColumnCollection;
 use PrestaShop\PrestaShop\Core\Grid\Column\Type\Common\ActionColumn;
 use PrestaShop\PrestaShop\Core\Grid\Column\Type\DataColumn;
 use PrestaShop\PrestaShop\Core\Grid\Definition\Factory\AbstractGridDefinitionFactory;
+use PrestaShop\PrestaShop\Core\Hook\HookDispatcherInterface;
+use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
 
 class MarketplaceSellerShippingGridDefinitionFactory extends AbstractGridDefinitionFactory
 {
+    public const DOMAIN_TRANSLATION = 'Admin.Marketplace.Seller.Shipping';
+    protected MarketplaceCore $core;
 
-    const DOMAIN_TRANSLATION = 'Admin.Marketplace.Seller.Shipping';
+    public function __construct(HookDispatcherInterface $hookDispatcher = null, MarketplaceCore $core)
+    {
+        parent::__construct(
+            $hookDispatcher
+        );
+        $this->core = $core;
+    }
 
     protected function getId()
     {
@@ -52,6 +61,15 @@ class MarketplaceSellerShippingGridDefinitionFactory extends AbstractGridDefinit
     protected function getColumns()
     {
         $column_collection = new ColumnCollection();
+
+     if(true === $this->core->isEmployStaff()) {
+         $id_seller = new DataColumn('name');
+         $id_seller->setOptions(['field' => 'name'])
+             ->setName('Seller', [], self::DOMAIN_TRANSLATION)
+         ;
+         $column_collection->add($id_seller);
+     }
+
         $from = new DataColumn('from_total');
         $from->setOptions(['field' => 'from_total'])
             ->setName('From', [], self::DOMAIN_TRANSLATION);
@@ -71,7 +89,7 @@ class MarketplaceSellerShippingGridDefinitionFactory extends AbstractGridDefinit
         $row_actions->add(
             (new LinkRowAction('edit'))
                 ->setIcon('edit')
-                ->setName('Edit',[], self::DOMAIN_TRANSLATION)
+                ->setName('Edit', [], self::DOMAIN_TRANSLATION)
                 ->setOptions(
                     [
                         'route' => 'admin_marketplace_seller_shipping_edit',
