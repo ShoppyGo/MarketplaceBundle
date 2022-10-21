@@ -82,6 +82,7 @@ class MarketplaceOrderSplit
             );
             $id_order_state = $this->mainOrder->getCurrentState();
             $sellerOrder->setCurrentState($id_order_state);
+            //TODO add payment per order beacause PS show message error Payment minus X
 
             return $this->createSellerOrder($sellerOrder->id);
 
@@ -94,6 +95,8 @@ class MarketplaceOrderSplit
             });
             $this->logger->error('ShoppyGo main order: {mainorder}', ['mainorder' => $this->mainOrder]);
             $this->logger->error($exception->getMessage());
+            $this->logger->error('Line {line} of file {file}  ',['file'=>$exception->getFile(),
+                                                                 'line'=>$exception->getLine()]);
             $this->logger->error('ShoppyGo seller oder deleted {sellerorder}', ['sellerorder' => $sellerOrder->id]);
         }
 

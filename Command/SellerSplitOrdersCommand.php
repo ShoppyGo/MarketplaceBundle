@@ -27,18 +27,17 @@
 namespace ShoppyGo\MarketplaceBundle\Command;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use Doctrine\DBAL\Driver\Exception;
 use Doctrine\DBAL\Query\QueryBuilder;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceOrderSplit;
 use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSellerOrder;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerProductRepository;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SellerOrderCommand extends Command
+class SellerSplitOrdersCommand extends Command
 {
     protected Registry $registry;
     protected string $dbPrefix;
@@ -62,15 +61,16 @@ class SellerOrderCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName('shoppygo:split:order')
+        $this->setName('shoppygo:split:orders')
             ->setDescription('Marletplace scan order and split')
-            ->addArgument('idorder', InputArgument::OPTIONAL, 'Id order to split')
             ->addOption('dbprefix', null, InputOption::VALUE_OPTIONAL, 'Database prestashop prefix', 'ps_')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $split_order_command = $this->getApplication()->find('shoppygo:split:order');
+
         $arguments = $input->getArguments();
         $options = $input->getOptions();
         $id_order = (int) ($arguments['idorder'] ?? $this->getLastMainOrder());
@@ -81,32 +81,8 @@ class SellerOrderCommand extends Command
         $marketplaceSellerOrderRepository->setSellerProductRepository(
             $this->marketplaceSellerProductRepository);
         foreach ($prestashop_id_orders_without_seller_and_main_order as $prestashop_id_order) {
-            $products = $this->getIdProductsFromOrder($prestashop_id_order);
-            if (count($products) === 0) {
-                continue;
-            }
-            $sellers = $marketplaceSellerOrderRepository->getSellers(
-                $products
-            );
-
-            switch (count($sellers)) {
-                case 1:
-                    $seller_order = new MarketplaceSellerOrder();
-                    $seller_order->setIdSeller($sellers[0]);
-                    $seller_order->setIdOrder($prestashop_id_order);
-                    $seller_order->setIdOrderMain($prestashop_id_order);
-                    $marketplaceSellerOrderRepository->save($seller_order);
-                    break;
-
-                default:
-                    foreach ($sellers as $id_seller) {
-                        $this->orderSplitter->setMainOrder($prestashop_id_order);
-                        $this->orderSplitter->setIdSeller($id_seller);
-                        $this->orderSplitter->doSplitOrder();
-                    }
-
-                    break;
-            }
+            $input_data = new ArrayInput([$prestashop_id_order]);
+            $split_order_command->run($input_data, $output);
         }
         $output->writeln('Success: ');
 
@@ -154,26 +130,6 @@ class SellerOrderCommand extends Command
         $id_main_orders = array_unique($id_main_orders);
 
         return array_diff($prestashop_id_orders_without_seller_orders, $id_main_orders);
-    }
-
-    /**
-     * @param int $id_order
-     *
-     * @return array
-     *
-     * @throws Exception
-     * @throws \Doctrine\DBAL\Exception
-     */
-    private function getIdProductsFromOrder(int $id_order): array
-    {
-        return $this->queryBuilder()
-            ->from($this->dbPrefix . 'order_detail', 'pod')
-            ->select('pod.product_id as id_product')
-            ->where('pod.id_order = :id_order')
-            ->setParameter('id_order', $id_order)
-            ->execute()
-            ->fetchAllAssociative()
-        ;
     }
 
     /**

@@ -5,8 +5,16 @@ services:
       - [setDoctrine, ['@doctrine']]
     tags:
       - 'console.command'
+  shoppygo.marketplace.seller_orders.command:
+    class: ShoppyGo\MarketplaceBundle\Command\SellerSplitOrdersCommand
+    calls:
+      - [setDoctrine, ['@doctrine']]
+      - [setMarketplaceSellerProductRepository, ['@shoppygo.marketplace.repository.seller.product']]
+      - [setSplitOrder, ['@shoppygo.marketplace.order.split']]
+    tags:
+      - 'console.command'
   shoppygo.marketplace.seller_order.command:
-    class: ShoppyGo\MarketplaceBundle\Command\SellerOrderCommand
+    class: ShoppyGo\MarketplaceBundle\Command\SellerSplitOrderCommand
     calls:
       - [setDoctrine, ['@doctrine']]
       - [setMarketplaceSellerProductRepository, ['@shoppygo.marketplace.repository.seller.product']]

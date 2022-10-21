@@ -26,7 +26,6 @@
 
 namespace ShoppyGo\MarketplaceBundle\Command;
 
-use _PHPStan_82ef69dc5\Symfony\Component\Console\Input\ArrayInput;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -55,10 +54,9 @@ class SetupMarketplaceCommand extends Command
     {
         $setup_database = $this->getApplication()->find('shoppygo:setup:database');
         $options = [
-            '--create'
+            '--create',
         ];
-        $input = new \Symfony\Component\Console\Input\ArrayInput($options);
-        $setup_database->run($input, $output);
+        $input_data = new \Symfony\Component\Console\Input\ArrayInput($options);
+        $setup_database->run($input_data, $output);
     }
-
 }
