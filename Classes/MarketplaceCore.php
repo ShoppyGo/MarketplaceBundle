@@ -345,7 +345,7 @@ class MarketplaceCore
 //     */
     public function isEmployStaff()
     {
-        return $this->legacyContext->getContext()->employee->isSuperAdmin();
+        return false === $this->isEmployeeSeller();
     }
 
 //
