@@ -1,5 +1,5 @@
 services:
-    ShoppyGo\MarketplaceBundle\Controller\MarketplaceSellerProductController:
+  ShoppyGo\MarketplaceBundle\Controller\MarketplaceSellerProductController:
         class: ShoppyGo\MarketplaceBundle\Controller\MarketplaceSellerProductController
         decorates: PrestaShopBundle\Controller\Admin\ProductController
         arguments: [ '@ShoppyGo\MarketplaceBundle\Controller\MarketplaceSellerProductController.inner' ]
@@ -10,3 +10,17 @@ services:
 #            - "@=service('prestashop.adapter.legacy.context')"
 #            - '@shoppygo.core'
 #            - '@shoppygo.marketplace.repository.category_repository'
+  prestashop.adapter.order.query_handler.get_order_for_viewing_handler:
+    class: ShoppyGo\MarketplaceBundle\Adapter\Order\QueryHandler\GetOrderForViewingMarketplaceHandler
+    arguments:
+      - '@translator'
+      - '@=service("prestashop.adapter.legacy.context").getContext().language.id'
+      - "@prestashop.core.localization.locale.context_locale"
+      - '@=service("prestashop.adapter.legacy.context").getContext()'
+      - '@prestashop.adapter.data_provider.customer'
+      - '@prestashop.adapter.order.query_handler.get_order_products_for_viewing_handler'
+      - '@prestashop.adapter.legacy.configuration'
+      - '@prestashop.adapter.address.formatter'
+    tags:
+      - name: tactician.handler
+        command: PrestaShop\PrestaShop\Core\Domain\Order\Query\GetOrderForViewing
