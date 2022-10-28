@@ -21,13 +21,12 @@ admin_marketplace_category_toggle_seller:
   defaults:
     _controller: ShoppyGo\MarketplaceBundle\Controller\MarketplaceConfigurationController::toggleSellerCategory
 #
-#admin_marketplace_configuration:
-#  path: '/shoppygo/marketplace/configuration'
-#  methods: [GET,POST]
-#  defaults:
-#    _controller: Bwlab\Marketplace\Controller\MarketplaceConfigurationController::configuration
-#    _legacy_controller: AdminMarketplaceConfiguration
-#
+admin_marketplace_configuration:
+  path: '/shoppygo/marketplace/configuration'
+  methods: [GET,POST]
+  defaults:
+    _controller: ShoppyGo\MarketplaceBundle\Controller\MarketplaceConfigurationController::configuration
+
 #admin_marketplace_install_demo:
 #  path: '/shoppygo/marketplace/install-demo'
 #  methods: [GET,POST]
