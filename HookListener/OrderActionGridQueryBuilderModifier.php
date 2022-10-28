@@ -45,7 +45,7 @@ class OrderActionGridQueryBuilderModifier extends AbstractHookListenerImplementa
 
     public function exec(array $params): void
     {
-        if (false === $this->core->isEmployStaff()) {
+        if (true === $this->core->isEmployStaff()) {
             return;
         }
 
@@ -53,7 +53,9 @@ class OrderActionGridQueryBuilderModifier extends AbstractHookListenerImplementa
         $qb = $params['search_query_builder'];
         $qb->addSelect('ms.name as seller_name')
             ->leftJoin('o', _DB_PREFIX_.'marketplace_seller_order', 'mp', 'o.id_order = mp.id_order')
-            ->leftJoin('mp', _DB_PREFIX_.'supplier', 'ms', 'ms.id_supplier = mp.id_supplier')
+            ->leftJoin('mp', _DB_PREFIX_.'supplier', 'ms', 'mp.id_supplier = ms.id_supplier')
+            ->andWhere('ms.id_supplier = :id_seller')
+            ->setParameter('id_seller', $this->core->getSellerId())
         ;
 
     }
