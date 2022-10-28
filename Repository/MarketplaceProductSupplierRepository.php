@@ -26,14 +26,39 @@
 
 namespace ShoppyGo\MarketplaceBundle\Repository;
 
+use Doctrine\DBAL\Connection;
 use PrestaShop\PrestaShop\Adapter\Product\Repository\ProductSupplierRepository;
+use PrestaShop\PrestaShop\Adapter\Product\Validate\ProductSupplierValidator;
 
 class MarketplaceProductSupplierRepository extends ProductSupplierRepository
 {
+    protected Connection $connection;
+    protected string $dbPrefix;
 
-    public function isSellerProduct(int $idProduct, $idSupplier): bool
-    {
-        return true;
+    public function __construct(
+        Connection $connection,
+        string $dbPrefix,
+        ProductSupplierValidator $productSupplierValidator
+    ) {
+        parent::__construct($connection, $dbPrefix, $productSupplierValidator);
+        $this->connection = $connection;
+        $this->dbPrefix = $dbPrefix;
     }
 
+    public function isSellerProduct(int $id_product, $id_supplier): bool
+    {
+        $qb = $this->connection->createQueryBuilder();
+        $res = $qb->select('ps.id_supplier ')
+            ->from($this->dbPrefix . 'product_supplier', 'ps')
+            ->where('ps.id_product = :id_product and ps.id_supplier = :id_supplier')
+            ->setParameters([
+                'id_product' => $id_product,
+                'id_supplier' => $id_supplier,
+            ])->execute()->fetchOne();
+        if (false === $res) {
+            return false;
+        }
+
+        return (bool) $res;
+    }
 }
