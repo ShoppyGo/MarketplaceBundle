@@ -74,14 +74,14 @@ class MarketplaceConfigurationController extends FrameworkBundleAdminController
 
     public function installDemo(Request $request)
     {
-        $fixture = new DemoFixtures($this->get('bwmarketplace.module'), $this->getDoctrine());
-        $fixture->resetMarketplaceDb();
-        $fixture->resetData();
-        $fixture->installSellerData();
-
-        $this->addFlash('success', $this->trans('Demo data installd', 'Amind.Marketplace.Configuration'));
-
-        return $this->redirectToRoute('admin_marketplace_configuration');
+//        $fixture = new DemoFixtures($this->get('bwmarketplace.module'), $this->getDoctrine());
+//        $fixture->resetMarketplaceDb();
+//        $fixture->resetData();
+//        $fixture->installSellerData();
+//
+//        $this->addFlash('success', $this->trans('Demo data installd', 'Amind.Marketplace.Configuration'));
+//
+//        return $this->redirectToRoute('admin_marketplace_configuration');
     }
 
     public function reinstallHooks(Request $request)
