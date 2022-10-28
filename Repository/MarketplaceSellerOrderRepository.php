@@ -89,6 +89,11 @@ class MarketplaceSellerOrderRepository extends EntityRepository
         return (bool)$this->marketplaceSellerProductRepository->isProductSeller($id_product, $this->id_seller);
     }
 
+    public function isSellerOrder(int $id_order, int $id_seller): bool
+    {
+        return (bool)$this->findOneBy(['id_order' => $id_order, 'id_seller' => $id_seller]);
+    }
+
     public function save(MarketplaceSellerOrder $sellerOrder)
     {
         $this->getEntityManager()

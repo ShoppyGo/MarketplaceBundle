@@ -21,6 +21,9 @@ services:
       - '@prestashop.adapter.order.query_handler.get_order_products_for_viewing_handler'
       - '@prestashop.adapter.legacy.configuration'
       - '@prestashop.adapter.address.formatter'
+    calls:
+      - [setMarketplaceCore,['@shoppygo.core']]
+      - [setSellerOrderRepo,['@shoppygo.marketplace.repository.seller_order_repository']]
     tags:
       - name: tactician.handler
         command: PrestaShop\PrestaShop\Core\Domain\Order\Query\GetOrderForViewing
