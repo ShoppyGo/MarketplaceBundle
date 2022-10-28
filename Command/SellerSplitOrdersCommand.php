@@ -69,7 +69,7 @@ class SellerSplitOrdersCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $split_order_command = $this->getApplication()->find('shoppygo:split:order');
+        $split_order_command = $this->getApplication()->find(SellerSplitSingleOrderCommand::SHOPPYGO_SPLIT_SINGLE_ORDER);
 
         $arguments = $input->getArguments();
         $options = $input->getOptions();
@@ -81,7 +81,8 @@ class SellerSplitOrdersCommand extends Command
         $marketplaceSellerOrderRepository->setSellerProductRepository(
             $this->marketplaceSellerProductRepository);
         foreach ($prestashop_id_orders_without_seller_and_main_order as $prestashop_id_order) {
-            $input_data = new ArrayInput([$prestashop_id_order]);
+            $args = ['idorder'=>$prestashop_id_order, '--dbprefix'=>$this->dbPrefix];
+            $input_data = new ArrayInput($args);
             $split_order_command->run($input_data, $output);
         }
         $output->writeln('Success: ');

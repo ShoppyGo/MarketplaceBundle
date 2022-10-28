@@ -38,8 +38,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SellerSplitOrderCommand extends Command
+class SellerSplitSingleOrderCommand extends Command
 {
+    const SHOPPYGO_SPLIT_SINGLE_ORDER = 'shoppygo:split:single:order';
     protected Registry $registry;
     protected string $dbPrefix;
     protected MarketplaceSellerProductRepository $marketplaceSellerProductRepository;
@@ -62,7 +63,7 @@ class SellerSplitOrderCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName('shoppygo:split:single:order')
+        $this->setName(self::SHOPPYGO_SPLIT_SINGLE_ORDER)
             ->setDescription('Marletplace scan order and split')
             ->addArgument('idorder', InputArgument::OPTIONAL, 'Id order to split')
             ->addOption('dbprefix', null, InputOption::VALUE_OPTIONAL, 'Database prestashop prefix', 'ps_')
