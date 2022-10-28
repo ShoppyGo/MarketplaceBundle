@@ -74,7 +74,8 @@ class MarketplaceSellerProductRepository
             ->setParameter('products', $id_products)
             ;
     }
-    // recupero lista prodotti per seller
+
+   // recupero lista prodotti per seller
     public function findSellersByProducts(array $id_products): array
     {
         $sellers = $this->qbProductSupplier($id_products)
