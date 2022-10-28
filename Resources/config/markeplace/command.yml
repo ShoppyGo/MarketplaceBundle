@@ -14,7 +14,7 @@ services:
     tags:
       - 'console.command'
   shoppygo.marketplace.seller_order.command:
-    class: ShoppyGo\MarketplaceBundle\Command\SellerSplitOrderCommand
+    class: ShoppyGo\MarketplaceBundle\Command\SellerSplitSingleOrderCommand
     calls:
       - [setDoctrine, ['@doctrine']]
       - [setMarketplaceSellerProductRepository, ['@shoppygo.marketplace.repository.seller.product']]
