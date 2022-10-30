@@ -27,21 +27,18 @@
 namespace ShoppyGo\MarketplaceBundle\Controller;
 
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
+use ShoppyGo\MarketplaceBundle\Classes\MarketplaceConfiguration;
 use ShoppyGo\MarketplaceBundle\Domain\Seller\Command\ToggleSellerCommand;
 use ShoppyGo\MarketplaceBundle\Entity\MarketplaceCategory;
+use ShoppyGo\MarketplaceBundle\Form\Type\ConfigurationType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class MarketplaceConfigurationController extends FrameworkBundleAdminController
 {
-
     public function configuration(Request $request)
     {
-        #--------vedi   https://devdocs.prestashop.com/1.7/development/components/grid/#rendering-grid
-
-        $core = $this->get('bwlab_core_marketplace');
-        #
-        # l'accesso alla configurazione del marketplace è solo per l'admin
-        #
+        $core = $this->get('shoppygo.core');
         if ($core->isEmployeeSeller()) {
             return $this->redirectToRoute('admin_suppliers_index');
         }
@@ -65,10 +62,10 @@ class MarketplaceConfigurationController extends FrameworkBundleAdminController
         }
 
         return $this->render(
-            '@Modules/bwmarketplace/views/templates/admin/controller/marketplace_configuration_configuration.html.twig',
-            array(
+            '@ShoppyGoMarketplace/controller/marketplace_configuration.html.twig',
+            [
                 'form' => $form->createView(),
-            )
+            ]
         );
     }
 
@@ -97,7 +94,7 @@ class MarketplaceConfigurationController extends FrameworkBundleAdminController
 //        return $this->redirectToRoute('admin_marketplace_configuration');
     }
 
-    public function toggleSellerCategory($id)
+    public function toggleSellerCategory($id): JsonResponse
     {
         $entityName = MarketplaceCategory::class;
         $marketplace_category = $this->getDoctrine()
@@ -107,19 +104,19 @@ class MarketplaceConfigurationController extends FrameworkBundleAdminController
         $response = [];
         if (!$marketplace_category) {
             $response = [
-                'status'  => false,
+                'status' => false,
                 'message' => $this->trans('Category marketplace doesn\'t exist.', 'Admin.Notifications.Error'),
             ];
         } else {
             $this->getCommandBus()
                 ->handle(
                     new ToggleSellerCommand(
-                        (int)$id, 'id_category', $entityName, !$marketplace_category->isSeller()
+                        (int) $id, 'id_category', $entityName, !$marketplace_category->isSeller()
                     )
                 )
             ;
             $response = [
-                'status'  => true,
+                'status' => true,
                 'message' => $this->trans('The status has been successfully updated.', 'Admin.Notifications.Success'),
             ];
         }
@@ -127,17 +124,5 @@ class MarketplaceConfigurationController extends FrameworkBundleAdminController
         $this->addFlash('success', $this->trans('Toggle success!', ''));
 
         return $this->json($response);
-    }
-
-    public function toggleSellerEmployee($id)
-    {
-        $this->getCommandBus()
-            ->handle(
-                new ToggleSellerCommand((int)$id, 'id_employee', null, MarketplaceSeller::class)
-            )
-        ;
-        $this->addFlash('success', $this->trans('Toggle success!', ''));
-
-        return $this->redirectToRoute('admin_employees_index');
     }
 }
