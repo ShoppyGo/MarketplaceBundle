@@ -27,3 +27,9 @@ services:
     tags:
       - name: tactician.handler
         command: PrestaShop\PrestaShop\Core\Domain\Order\Query\GetOrderForViewing
+  prestashop.adapter.data_provider.order_state:
+    class: ShoppyGo\MarketplaceBundle\Adapter\OrderState\OrderStateDataProvider
+    calls:
+      - [ setOrderStatusRepository, [ '@shoppygo.marketplace.repository.order_status_repository' ] ]
+      - [ setCore, ['@shoppygo.core']]
+
