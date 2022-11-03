@@ -123,6 +123,49 @@ services:
             - [ setHooks,[ [ 'actionSupplierFormBuilderModifier' ] ] ]
         tags:
             - { name: 'shoppygo.hook', alias: 'hookactionsupplierformbuildermodifier' }
+
+    shoppygo.hook.action.order.status.form.modifier:
+        class: ShoppyGo\MarketplaceBundle\HookListener\OrderActionStatusFormModifier
+        arguments:
+          - '@shoppygo.core'
+          - '@translator.default'
+          - '@shoppygo.marketplace.repository.order_status_repository'
+        calls:
+            - [ setHooks,[ [ 'actionAdminStatusesFormModifier' ] ] ]
+        tags:
+            - { name: 'shoppygo.hook', alias: 'actionadminstatusesformmodifier' }
+
+    shoppygo.hook.action.admin.status.listing.results.modifier:
+        class: ShoppyGo\MarketplaceBundle\HookListener\OrderActionAdminStatusListingResultsModifier
+        arguments:
+          - '@shoppygo.core'
+          - '@shoppygo.marketplace.repository.order_status_repository'
+        calls:
+            - [ setHooks,[ [ 'actionAdminStatusesListingResultsModifier' ] ] ]
+        tags:
+            - { name: 'shoppygo.hook', alias: 'actionadminstatuseslistingresultsmodifier' }
+
+    shoppygo.hook.action.admin.status.listing.fields.modifier:
+        class: ShoppyGo\MarketplaceBundle\HookListener\OrderActionAdminStatusListingFiledsModifier
+        arguments:
+          - '@shoppygo.core'
+          - '@translator.default'
+          - '@shoppygo.marketplace.repository.order_status_repository'
+        calls:
+            - [ setHooks,[ [ 'actionAdminStatusesListingFieldsModifier' ] ] ]
+        tags:
+            - { name: 'shoppygo.hook', alias: 'actionadminstatuseslistingfieldsmodifier' }
+
+    shoppygo.hook.action.order.status.post.process:
+        class: ShoppyGo\MarketplaceBundle\HookListener\OrderActionStatusPostProcess
+        arguments:
+          - '@shoppygo.core'
+          - '@shoppygo.marketplace.repository.order_status_repository'
+        calls:
+            - [ setHooks,[ [ 'marketPlaceAdminStatusOrderPostProcess' ] ] ]
+        tags:
+            - { name: 'shoppygo.hook', alias: 'marketplaceadminstatusorderpostprocess' }
+
     shoppygo.hook.action.after.update.supplier.form.handler:
         class: ShoppyGo\MarketplaceBundle\HookListener\SupplierActionAfterCreateUpdateFormHandler
         arguments:

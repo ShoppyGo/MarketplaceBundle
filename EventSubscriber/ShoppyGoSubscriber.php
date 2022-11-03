@@ -80,6 +80,10 @@ class ShoppyGoSubscriber implements EventSubscriberInterface
             'actionAfterCreateSupplierFormHandler' => 1,
             'actionOrderGridQueryBuilderModifier' => 1,
             'actionOrderGridDefinitionModifier' => 1,
+            'actionAdminStatusesFormModifier' => 1,
+            'marketPlaceAdminStatusOrderPostProcess' => 1,
+            'actionAdminStatusesListingFieldsModifier' => 1,
+            'actionAdminStatusesListingResultsModifier' => 1,
         ];
         $hook_list = [];
         foreach ($hooks as $hook => $params) {

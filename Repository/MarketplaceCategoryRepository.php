@@ -35,14 +35,13 @@ use ShoppyGo\MarketplaceBundle\Entity\MarketplaceCategory;
  */
 class MarketplaceCategoryRepository extends EntityRepository
 {
-
     public function create(int $id, bool $is_seller = false): MarketplaceCategory
     {
         $category = new MarketplaceCategory();
         $category->setIdCategory($id);
         $category->setSeller($is_seller);
 
-        /** @var EntityManagerInterface $em */
+        /* @var EntityManagerInterface $em */
         $this->getEntityManager()
             ->persist($category)
         ;

@@ -85,6 +85,7 @@ class SetupMarketplaceDatabaseCommand extends Command
                     KEY (`id_supplier`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
 
+
         //----- tabella spedizioni
         $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'marketplace_seller_shipping` (
                     `id_shipping` int(11) NOT NULL AUTO_INCREMENT,
@@ -103,6 +104,14 @@ class SetupMarketplaceDatabaseCommand extends Command
                     `seller` boolean,
                     PRIMARY KEY ( `id_category`),
                     KEY (`id_category`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
+
+        //------- order status
+        $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'marketplace_seller_order_status` (
+                    `id_order_state` int(11) NOT NULL ,
+                    `seller` boolean,
+                    PRIMARY KEY ( `id_order_state`),
+                    KEY (`id_order_state`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
 
         //------- order
