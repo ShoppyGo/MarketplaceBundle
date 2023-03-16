@@ -670,8 +670,7 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
      * @throws LocalizationException
      */
     private function getOrderPayments(Order $order): OrderPaymentsForViewing
-    { //TODO correggere il pagamento quando sono all'interno del main e dello split in quanto ho un
-        //  il seller vede un mesaggio che non deve vedere
+    {
         $currency = new Currency($order->id_currency);
         $payments = $order->getOrderPayments();
 
@@ -681,11 +680,19 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
         $orderAmountPaid = null;
         $paymentMismatchOrders = [];
 
+        //TODO correggere il calcolo del totale pagato e del totale da pagare altrimenti esce un alert con l'ordine
+        //    del seller
+
         if (count($payments) > 0) {
             $noPaymentMismatch = round($order->getOrdersTotalPaid(), 2) == round($order->getTotalPaid(), 2) ||
                 ($currentState && $currentState->id == $this->configuration->getInt('PS_OS_CANCELED'));
 
             if (!$noPaymentMismatch) {
+                // se l'ordine ha uno stato pagato ed è seller non devo fare
+                // devo trasferire orderAmountToPay = 0
+                // se l'ordine è un main allora devo identificare anche gli ordini correlati non pagati
+                // quindi " public function getOrdersTotalPaid()" di Orders deve cambiare perchè deve
+                // considerare solo main
                 $orderAmountToPay = $this->locale->formatPrice($order->getOrdersTotalPaid(), $currency->iso_code);
                 $orderAmountPaid = $this->locale->formatPrice($order->getTotalPaid(), $currency->iso_code);
 
