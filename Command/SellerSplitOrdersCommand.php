@@ -69,25 +69,46 @@ class SellerSplitOrdersCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $split_order_command = $this->getApplication()->find(SellerSplitSingleOrderCommand::SHOPPYGO_SPLIT_SINGLE_ORDER);
-
+        $split_order_command = $this->getApplication()
+            ->find(SellerSplitSingleOrderCommand::SHOPPYGO_SPLIT_SINGLE_ORDER)
+        ;
         $arguments = $input->getArguments();
         $options = $input->getOptions();
-        $id_order = (int) ($arguments['idorder'] ?? $this->getLastMainOrder());
+        $id_order = (int)($arguments['idorder'] ?? $this->getLastMainOrder());
         $this->dbPrefix = $options['dbprefix'];
 
         $prestashop_id_orders_without_seller_and_main_order = $this->getIdOrdersToElab($id_order);
         $marketplaceSellerOrderRepository = $this->registry->getRepository(MarketplaceSellerOrder::class);
         $marketplaceSellerOrderRepository->setSellerProductRepository(
-            $this->marketplaceSellerProductRepository);
+            $this->marketplaceSellerProductRepository
+        );
         foreach ($prestashop_id_orders_without_seller_and_main_order as $prestashop_id_order) {
-            $args = ['idorder'=>$prestashop_id_order, '--dbprefix'=>$this->dbPrefix];
+            $args = ['idorder' => $prestashop_id_order, '--dbprefix' => $this->dbPrefix];
             $input_data = new ArrayInput($args);
             $split_order_command->run($input_data, $output);
         }
         $output->writeln('Success: ');
 
         return 0;
+    }
+
+    private function filterPaidStateOrder(array $id_order_to_elab)
+    {
+        // check if order is in valid state
+        $qb = $this->registry->getConnection()
+            ->createQueryBuilder()
+        ;
+        // modify to join OrderState
+        $result = $qb->select('o.id_order')
+            ->from($this->dbPrefix.'orders', 'o')
+            ->join('o', $this->dbPrefix.'order_state', 'os', 'o.current_state = os.id_order_state')
+            ->where('o.id_order in (:id_order_to_elab)')
+            ->andWhere('os.paid = 1')
+            ->setParameter('id_order_to_elab', $id_order_to_elab, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+            ->execute()
+        ;
+
+        return $result->fetchAll();
     }
 
     /**
@@ -106,9 +127,7 @@ class SellerSplitOrdersCommand extends Command
             ->execute()
         ;
 
-        return array_map(static function ($row) {
-            return $row['id_order_main'];
-        }, $rows_main_id_orders);
+        return array_column($rows_main_id_orders, 'id_order_main');
     }
 
     /**
@@ -130,7 +149,10 @@ class SellerSplitOrdersCommand extends Command
         $id_main_orders = $this->getIdMainOrders($prestashop_id_orders_without_seller_orders);
         $id_main_orders = array_unique($id_main_orders);
 
-        return array_diff($prestashop_id_orders_without_seller_orders, $id_main_orders);
+        $id_order_to_elab = array_diff($prestashop_id_orders_without_seller_orders, $id_main_orders);
+
+        //filter valid state order
+        return array_column($this->filterPaidStateOrder($id_order_to_elab), 'id_order');
     }
 
     /**
@@ -150,9 +172,7 @@ class SellerSplitOrdersCommand extends Command
             ->execute()
         ;
 
-        return array_map(static function ($row) {
-            return $row['id_order'];
-        }, $rows_seller_id_order);
+        return array_column($rows_seller_id_order, 'id_order');
     }
 
     private function getLastMainOrder(): int
@@ -173,7 +193,7 @@ class SellerSplitOrdersCommand extends Command
     private function getPrestashopIdOrders(int $id_order): array
     {
         $row_prestashopid_orders = $this->queryBuilder()
-            ->from($this->dbPrefix . 'orders', 'pso')
+            ->from($this->dbPrefix.'orders', 'pso')
             ->select('pso.id_order')
             ->andWhere('pso.id_order >= :id_order')
             ->setParameter('id_order', $id_order)
@@ -181,9 +201,7 @@ class SellerSplitOrdersCommand extends Command
             ->fetchAllAssociative()
         ;
 
-        return array_map(static function ($row) {
-            return $row['id_order'];
-        }, $row_prestashopid_orders);
+        return array_column($row_prestashopid_orders, 'id_order');
     }
 
     private function queryBuilder(): QueryBuilder
