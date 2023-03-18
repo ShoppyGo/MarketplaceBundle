@@ -83,7 +83,12 @@ class MarketplaceOrderSplit
             $id_order_state = $this->mainOrder->getCurrentState();
             $sellerOrder->setCurrentState($id_order_state);
 
-            //TODO impostare anche l'order history per li split altrimenti il cliente non vede lo stato nel frontend
+            $history = new \OrderHistory();
+            $history->id_order = $sellerOrder->id;
+            $history->id_order_state = $id_order_state;
+            $history->id_employee = 1;
+            $history->save();
+
             return $this->createSellerOrder($sellerOrder->id);
 
         } catch (\Exception $exception) {
