@@ -63,6 +63,26 @@ class MarketplaceSellerOrderRepository extends EntityRepository
         return $res['id_order'] ?? 0;
     }
 
+    public function getMainOrdersTotalPaid($id_order, $id_cart)
+    {
+        $row = $this->findOneBy(['id_order' => $id_order]);
+        $id_main_order = 0;
+        if (!$row) {
+            $id_main_order = $id_order;
+        } else {
+            $id_main_order = $row->getIdOrderMain();
+        }
+
+        return (float)\Db::getInstance()
+            ->getValue(
+                'SELECT SUM(total_paid_tax_incl)
+            FROM `'._DB_PREFIX_.'orders`
+            WHERE `id_order` = \''.pSQL($id_main_order).'\'
+            AND `id_cart` = '.(int)$id_cart
+            )
+        ;
+    }
+
     /**
      * restituisce i seller legati ai prodotti
      *
@@ -89,7 +109,12 @@ class MarketplaceSellerOrderRepository extends EntityRepository
         return (bool)$this->marketplaceSellerProductRepository->isProductSeller($id_product, $this->id_seller);
     }
 
-    public function isSellerOrder(int $id_order, int $id_seller): bool
+    public function isSellerOrder(int $id_order): bool
+    {
+        return (bool)$this->findOneBy(['id_order' => $id_order]);
+    }
+
+    public function isSellerOwner(int $id_order, int $id_seller): bool
     {
         return (bool)$this->findOneBy(['id_order' => $id_order, 'id_seller' => $id_seller]);
     }

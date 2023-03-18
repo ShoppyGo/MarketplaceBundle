@@ -96,6 +96,8 @@ use Validate;
 class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implements GetOrderForViewingHandlerInterface
 {
     protected MarketplaceSellerOrderRepository $sellerOrderRepository;
+    protected MarketplaceCore $core;
+    protected bool $is_seller_order;
     /**
      * @var Locale
      */
@@ -193,7 +195,7 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
             $address->address2,
             $stateName,
             $address->city,
-            $country->name[(int) $order->getAssociatedLanguage()
+            $country->name[(int)$order->getAssociatedLanguage()
                 ->getId()],
             $address->postcode,
             $address->phone,
@@ -208,12 +210,17 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
      */
     public function handle(GetOrderForViewing $query): OrderForViewing
     {
+        $this->is_seller_order = $this->sellerOrderRepository->isSellerOrder(
+            $query->getOrderId()
+                ->getValue()
+        );
         if (true === $this->core->isEmployeeSeller()) {
-            $is_seller_order = $this->sellerOrderRepository->isSellerOrder(
-                $query->getOrderId()->getValue(),
+            $isSellerOwner = $this->sellerOrderRepository->isSellerOwner(
+                $query->getOrderId()
+                    ->getValue(),
                 $this->core->getSellerId()
             );
-            if (false === $is_seller_order) {
+            if (false === $isSellerOwner) {
                 throw new OrderException('You cannot view this order.');
             }
         }
@@ -231,25 +238,25 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
                 'Admin.Global'
             );
 
-        $invoiceManagementIsEnabled = (bool) $this->configuration->get(
+        $invoiceManagementIsEnabled = (bool)$this->configuration->get(
             'PS_INVOICE',
             null,
-            ShopConstraint::shop((int) $order->id_shop)
+            ShopConstraint::shop((int)$order->id_shop)
         );
 
         $orderInvoiceAddress = $this->getOrderInvoiceAddress($order);
 
         return new OrderForViewing(
-            (int) $order->id,
-            (int) $order->id_currency,
-            (int) $order->id_carrier,
-            (string) $orderCarrier->name,
-            (int) $order->id_shop,
+            (int)$order->id,
+            (int)$order->id_currency,
+            (int)$order->id_carrier,
+            (string)$orderCarrier->name,
+            (int)$order->id_shop,
             $order->reference,
-            (bool) $order->isVirtual(),
+            (bool)$order->isVirtual(),
             $taxMethod,
             $isTaxIncluded,
-            (bool) $order->valid,
+            (bool)$order->valid,
             $order->hasBeenPaid(),
             $order->hasInvoice(),
             $order->hasBeenDelivered(),
@@ -274,9 +281,9 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
             $this->getOrderDiscounts($order),
             $this->getOrderSources($order),
             $this->getLinkedOrders($order),
-            $this->addressFormatter->format(new AddressId((int) $order->id_address_delivery)),
-            $this->addressFormatter->format(new AddressId((int) $order->id_address_invoice)),
-            (string) $order->note
+            $this->addressFormatter->format(new AddressId((int)$order->id_address_delivery)),
+            $this->addressFormatter->format(new AddressId((int)$order->id_address_invoice)),
+            (string)$order->note
         );
     }
 
@@ -365,7 +372,7 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
         } else {
             $gender = new Gender($customer->id_gender);
             if (Validate::isLoadedObject($gender)) {
-                $genderName = $gender->name[(int) $order->getAssociatedLanguage()
+                $genderName = $gender->name[(int)$order->getAssociatedLanguage()
                     ->getId()];
             }
 
@@ -385,14 +392,14 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
             }
 
             // Get customer groups as IDs
-            $customerGroupIds = Customer::getGroupsStatic((int) $customer->id);
+            $customerGroupIds = Customer::getGroupsStatic((int)$customer->id);
 
             // Go through customer groups and assign a name
             // If it's the default group of the customer and there is more than 1 group, we assign a suffix
             foreach ($customerGroupIds as $id) {
                 if ($id == $customer->id_default_group && count($customerGroupIds) > 1) {
                     $groups[] =
-                        $groupNames[$id] . ' (' . $this->translator->trans('default', [], 'Admin.Orderscustomers.Feature') .
+                        $groupNames[$id].' ('.$this->translator->trans('default', [], 'Admin.Orderscustomers.Feature').
                         ')';
                 } else {
                     $groups[] = $groupNames[$id];
@@ -401,7 +408,7 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
         }
 
         return new OrderCustomerForViewing(
-            (int) $customer->id,
+            (int)$customer->id,
             $customer->firstname,
             $customer->lastname,
             $genderName,
@@ -413,8 +420,8 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
             ) : '',
             $customerStats['nb_orders'],
             $customer->note,
-            (bool) $customer->is_guest,
-            (int) $order->getAssociatedLanguage()
+            (bool)$customer->is_guest,
+            (int)$order->getAssociatedLanguage()
                 ->getId(),
             $isB2BEnabled ? ($customer->ape ?: '') : '',
             $isB2BEnabled ? ($customer->siret ?: '') : '',
@@ -439,9 +446,9 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
         foreach ($discounts as $discount) {
             $discountAmount = $isTaxIncluded ? $discount['value'] : $discount['value_tax_excl'];
             $discountsForViewing[] = new OrderDiscountForViewing(
-                (int) $discount['id_order_cart_rule'],
+                (int)$discount['id_order_cart_rule'],
                 $discount['name'],
-                new DecimalNumber((string) $discountAmount),
+                new DecimalNumber((string)$discountAmount),
                 Tools::displayPrice($discountAmount, $currency)
             );
         }
@@ -509,7 +516,7 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
                 $conf = $this->configuration->get(
                     'PS_DELIVERY_PREFIX',
                     null,
-                    ShopConstraint::shop((int) $order->id_shop)
+                    ShopConstraint::shop((int)$order->id_shop)
                 );
                 $number = sprintf(
                     '%s%06d',
@@ -551,7 +558,7 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
         $canGenerateInvoice =
             $this->configuration->get('PS_INVOICE') && count($order->getInvoicesCollection()) && $order->invoice_number;
 
-        $canGenerateDeliverySlip = (bool) $order->delivery_number;
+        $canGenerateDeliverySlip = (bool)$order->delivery_number;
 
         return new OrderDocumentsForViewing(
             $canGenerateInvoice, $canGenerateDeliverySlip, $documentsForViewing
@@ -571,12 +578,12 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
 
         foreach ($history as $item) {
             $statuses[] = new OrderStatusForViewing(
-                (int) $item['id_order_history'],
-                (int) $item['id_order_state'],
+                (int)$item['id_order_history'],
+                (int)$item['id_order_state'],
                 $item['ostate_name'],
                 $item['color'],
                 new DateTimeImmutable($item['date_add']),
-                (bool) $item['send_email'],
+                (bool)$item['send_email'],
                 $item['employee_firstname'],
                 $item['employee_lastname']
             );
@@ -615,7 +622,7 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
             $address->address2,
             $stateName,
             $address->city,
-            $country->name[(int) $order->getAssociatedLanguage()
+            $country->name[(int)$order->getAssociatedLanguage()
                 ->getId()],
             $address->postcode,
             $address->phone,
@@ -633,18 +640,18 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
     private function getOrderMessages(Order $order): OrderMessagesForViewing
     {
         $orderMessagesForOrderPage = $this->customerDataProvider->getCustomerMessages(
-            (int) $order->id_customer,
-            (int) $order->id
+            (int)$order->id_customer,
+            (int)$order->id
         );
 
         $messages = [];
 
         foreach ($orderMessagesForOrderPage['messages'] as $orderMessage) {
-            $messageEmployeeId = (int) $orderMessage['id_employee'];
-            $isCurrentEmployeesMessage = (int) $this->context->employee->id === $messageEmployeeId;
+            $messageEmployeeId = (int)$orderMessage['id_employee'];
+            $isCurrentEmployeesMessage = (int)$this->context->employee->id === $messageEmployeeId;
 
             $messages[] = new OrderMessageForViewing(
-                (int) $orderMessage['id_customer_message'],
+                (int)$orderMessage['id_customer_message'],
                 $orderMessage['message'],
                 new OrderMessageDateForViewing(
                     new DateTimeImmutable($orderMessage['date_add']), $this->context->language->date_format_full
@@ -655,7 +662,7 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
                 $orderMessage['elastname'],
                 $orderMessage['cfirstname'],
                 $orderMessage['clastname'],
-                (bool) $orderMessage['private']
+                (bool)$orderMessage['private']
             );
         }
 
@@ -680,20 +687,25 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
         $orderAmountPaid = null;
         $paymentMismatchOrders = [];
 
-        //TODO correggere il calcolo del totale pagato e del totale da pagare altrimenti esce un alert con l'ordine
-        //    del seller
-
-        if (count($payments) > 0) {
-            $noPaymentMismatch = round($order->getOrdersTotalPaid(), 2) == round($order->getTotalPaid(), 2) ||
+        // if order is a seller order, no chech Payment Mismatch
+        // if order is a main order, check Payment Mismatch but not consider seller orders
+        if ((count($payments) > 0) && ($this->is_seller_order === false)) {
+//           $total_order_payments = $order->getOrdersTotalPaid();
+//            $total_order_payments = (float)Db::getInstance()
+//                ->getValue(
+//                    'SELECT SUM(total_paid_tax_incl)
+//            FROM `'._DB_PREFIX_.'orders`
+//            WHERE `reference` = \''.pSQL($this->reference).'\'
+//            AND `id_cart` = '.(int)$this->id_cart
+//                )
+//            ;
+            $total_order_payments = $this->sellerOrderRepository->getMainOrdersTotalPaid($order->id,
+                $order->id_cart);
+            $noPaymentMismatch = round($total_order_payments, 2) == round($order->getTotalPaid(), 2) ||
                 ($currentState && $currentState->id == $this->configuration->getInt('PS_OS_CANCELED'));
 
             if (!$noPaymentMismatch) {
-                // se l'ordine ha uno stato pagato ed è seller non devo fare
-                // devo trasferire orderAmountToPay = 0
-                // se l'ordine è un main allora devo identificare anche gli ordini correlati non pagati
-                // quindi " public function getOrdersTotalPaid()" di Orders deve cambiare perchè deve
-                // considerare solo main
-                $orderAmountToPay = $this->locale->formatPrice($order->getOrdersTotalPaid(), $currency->iso_code);
+                $orderAmountToPay = $this->locale->formatPrice($total_order_payments, $currency->iso_code);
                 $orderAmountPaid = $this->locale->formatPrice($order->getTotalPaid(), $currency->iso_code);
 
                 foreach ($order->getBrother() as $relatedOrder) {
@@ -754,30 +766,30 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
         }
 
         if ($isTaxExcluded) {
-            $productsPrice = (float) $order->total_products;
-            $discountsAmount = (float) $order->total_discounts_tax_excl;
-            $wrappingPrice = (float) $order->total_wrapping_tax_excl;
-            $shippingPrice = (float) $order->total_shipping_tax_excl;
+            $productsPrice = (float)$order->total_products;
+            $discountsAmount = (float)$order->total_discounts_tax_excl;
+            $wrappingPrice = (float)$order->total_wrapping_tax_excl;
+            $shippingPrice = (float)$order->total_shipping_tax_excl;
             $shippingRefundable = max(0, $shipping_refundable_tax_excl);
         } else {
-            $productsPrice = (float) $order->total_products_wt;
-            $discountsAmount = (float) $order->total_discounts_tax_incl;
-            $wrappingPrice = (float) $order->total_wrapping_tax_incl;
-            $shippingPrice = (float) $order->total_shipping_tax_incl;
+            $productsPrice = (float)$order->total_products_wt;
+            $discountsAmount = (float)$order->total_discounts_tax_incl;
+            $wrappingPrice = (float)$order->total_wrapping_tax_incl;
+            $shippingPrice = (float)$order->total_shipping_tax_incl;
             $shippingRefundable = max(0, $shipping_refundable_tax_incl);
         }
-        $totalAmount = (float) $order->total_paid_tax_incl;
+        $totalAmount = (float)$order->total_paid_tax_incl;
 
         $taxesAmount = $order->total_paid_tax_incl - $order->total_paid_tax_excl;
 
         return new OrderPricesForViewing(
-            new DecimalNumber((string) $productsPrice),
-            new DecimalNumber((string) $discountsAmount),
-            new DecimalNumber((string) $wrappingPrice),
-            new DecimalNumber((string) $shippingPrice),
-            new DecimalNumber((string) $shippingRefundable),
-            new DecimalNumber((string) $taxesAmount),
-            new DecimalNumber((string) $totalAmount),
+            new DecimalNumber((string)$productsPrice),
+            new DecimalNumber((string)$discountsAmount),
+            new DecimalNumber((string)$wrappingPrice),
+            new DecimalNumber((string)$shippingPrice),
+            new DecimalNumber((string)$shippingRefundable),
+            new DecimalNumber((string)$taxesAmount),
+            new DecimalNumber((string)$totalAmount),
             Tools::displayPrice($productsPrice, $currency),
             Tools::displayPrice($discountsAmount, $currency),
             Tools::displayPrice($wrappingPrice, $currency),
@@ -827,8 +839,8 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
             );
 
             $orderReturns[] = new OrderReturnForViewing(
-                (int) $orderReturn['id_order_return'],
-                isset($orderReturn['id_order_invoice']) ? (int) $orderReturn['id_order_invoice'] : 0,
+                (int)$orderReturn['id_order_return'],
+                isset($orderReturn['id_order_invoice']) ? (int)$orderReturn['id_order_invoice'] : 0,
                 new DateTimeImmutable($orderReturn['date_add']),
                 $orderReturn['type'],
                 $orderReturn['state_name'] ?? '',
@@ -883,11 +895,11 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
                 $weight = sprintf('%.3f %s', $item['weight'], $this->configuration->get('PS_WEIGHT_UNIT'));
 
                 $carriers[] = new OrderCarrierForViewing(
-                    (int) $item['id_order_carrier'],
+                    (int)$item['id_order_carrier'],
                     new DateTimeImmutable($item['date_add'] ?? 'now'),
                     $item['carrier_name'],
                     $weight,
-                    (int) $item['id_carrier'],
+                    (int)$item['id_carrier'],
                     $price,
                     $trackingUrl,
                     $trackingNumber,
@@ -897,7 +909,7 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
         }
 
         return new OrderShippingForViewing(
-            $carriers, (bool) $order->recyclable, (bool) $order->gift, $order->gift_message, $carrierModuleInfo
+            $carriers, (bool)$order->recyclable, (bool)$order->gift, $order->gift_message, $carrierModuleInfo
         );
     }
 
