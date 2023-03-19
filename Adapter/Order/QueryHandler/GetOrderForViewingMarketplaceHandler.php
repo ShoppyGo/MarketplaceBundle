@@ -87,6 +87,7 @@ use PrestaShop\PrestaShop\Core\Domain\Shop\ValueObject\ShopConstraint;
 use PrestaShop\PrestaShop\Core\Localization\Exception\LocalizationException;
 use PrestaShop\PrestaShop\Core\Localization\Locale;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
+use ShoppyGo\MarketplaceBundle\Core\Domain\Order\QueryResult\OrderForViewingMarketplace;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerOrderRepository;
 use State;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -96,7 +97,7 @@ use Validate;
 class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implements GetOrderForViewingHandlerInterface
 {
     protected MarketplaceSellerOrderRepository $sellerOrderRepository;
-    protected MarketplaceCore $core;
+    protected MarketplaceCore $marketplaceCore;
     protected bool $is_seller_order;
     /**
      * @var Locale
@@ -214,11 +215,11 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
             $query->getOrderId()
                 ->getValue()
         );
-        if (true === $this->core->isEmployeeSeller()) {
+        if (true === $this->marketplaceCore->isEmployeeSeller()) {
             $isSellerOwner = $this->sellerOrderRepository->isSellerOwner(
                 $query->getOrderId()
                     ->getValue(),
-                $this->core->getSellerId()
+                $this->marketplaceCore->getSellerId()
             );
             if (false === $isSellerOwner) {
                 throw new OrderException('You cannot view this order.');
@@ -246,7 +247,7 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
 
         $orderInvoiceAddress = $this->getOrderInvoiceAddress($order);
 
-        return new OrderForViewing(
+        return new OrderForViewingMarketplace(
             (int)$order->id,
             (int)$order->id_currency,
             (int)$order->id_carrier,
@@ -283,13 +284,14 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
             $this->getLinkedOrders($order),
             $this->addressFormatter->format(new AddressId((int)$order->id_address_delivery)),
             $this->addressFormatter->format(new AddressId((int)$order->id_address_invoice)),
-            (string)$order->note
+            (string)$order->note,
+            $this->marketplaceCore
         );
     }
 
     public function setMarketplaceCore(MarketplaceCore $core): void
     {
-        $this->core = $core;
+        $this->marketplaceCore = $core;
     }
 
     public function setSellerOrderRepo(MarketplaceSellerOrderRepository $orderRepository): void
@@ -328,6 +330,7 @@ class GetOrderForViewingMarketplaceHandler extends AbstractOrderHandler implemen
      */
     private function getLinkedOrders(Order $order): LinkedOrdersForViewing
     {
+
         $brothersData = $order->getBrother();
         $brothers = [];
         /** @var Order $brotherItem */
