@@ -63,7 +63,7 @@
   {{ form_rest(updateOrderStatusActionBarForm) }}
 </div>
 {{ form_end(updateOrderStatusActionBarForm) }}
-
+{% if orderForViewing.getMarketplaceCore().isEmployeeSeller() == false %}
   {% if orderForViewing.documents.canGenerateInvoice %}
     <form class="order-actions-invoice">
       <div class="input-group">
@@ -76,6 +76,7 @@
       </div>
     </form>
   {% endif %}
+{% endif %}
 
 <form class="order-actions-print">
   <div class="input-group">
