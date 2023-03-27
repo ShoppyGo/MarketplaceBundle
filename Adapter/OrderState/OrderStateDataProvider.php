@@ -23,7 +23,9 @@
  * @copyright Since 2022 Bwlab of Luigi Massa and Contributors
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
+
 namespace ShoppyGo\MarketplaceBundle\Adapter\OrderState;
+
 use OrderState;
 use PrestaShop\PrestaShop\Core\Order\OrderStateDataProviderInterface;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
@@ -42,21 +44,23 @@ final class OrderStateDataProvider implements OrderStateDataProviderInterface
      */
     public function getOrderStates($languageId)
     {
-        if($this->core->isEmployStaff()){
+        if ($this->core->isEmployStaff()) {
             return OrderState::getOrderStates($languageId, false);
         }
-        $statuses =  OrderState::getOrderStates($languageId, false);
-        foreach ($statuses as $key=>$status) {
-            $is_seller_status = (bool)$this->orderStatusRepo->find($status['id_order_state']);
-            if(false === $is_seller_status){
+        $statuses = OrderState::getOrderStates($languageId, false);
+        foreach ($statuses as $key => $status) {
+            $seller_status = $this->orderStatusRepo->find($status['id_order_state']);
+            if(null === $seller_status || false === $seller_status->isSeller()) {
                 unset($statuses[$key]);
             }
         }
+
         return $statuses;
     }
 
     public function setCore(MarketplaceCore $core)
-    { $this->core = $core;
+    {
+        $this->core = $core;
     }
 
     public function setOrderStatusRepository(MarketplaceSellerOrderStatusRepository $orderStatusRepository)
