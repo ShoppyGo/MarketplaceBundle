@@ -3,6 +3,13 @@ services:
     class: ShoppyGo\MarketplaceBundle\Command\SetupMarketplaceCommand
     calls:
       - [setDoctrine, ['@doctrine']]
+      - [setTranslator, ['@translator']]
+    tags:
+      - 'console.command'
+  shoppygo.marketplace.setup.database:
+    class: ShoppyGo\MarketplaceBundle\Command\SetupMarketplaceDatabaseCommand
+    calls:
+      - [setDoctrine, ['@doctrine']]
     tags:
       - 'console.command'
   shoppygo.marketplace.seller_orders.command:

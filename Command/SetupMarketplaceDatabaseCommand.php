@@ -53,7 +53,7 @@ class SetupMarketplaceDatabaseCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $options = $input->getOptions();
-
+        dump($options);
         $sqls = [];
         $type = '';
         if (true === $options['create']) {
@@ -67,7 +67,9 @@ class SetupMarketplaceDatabaseCommand extends Command
 
         $conn = $this->registry->getConnection();
 
+        $output->writeln('Type: '.$options['create']?'create':'drop');
         foreach ($sqls as $sql) {
+            $output->writeln('sql: '.$sql);
             $conn->executeQuery($sql);
         }
 
@@ -85,6 +87,21 @@ class SetupMarketplaceDatabaseCommand extends Command
                     KEY (`id_supplier`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
 
+        //----- tabella commissioni
+        // create sql table marketplace_commission
+        $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'marketplace_commission` (
+                      `id_marketplace_commission` int(11) NOT NULL AUTO_INCREMENT,
+                      `commission_name` varchar(255) NOT NULL,
+                      `fixed_commission` float NOT NULL,
+                      `commission_percentage` float NOT NULL,
+                      `total_products_net_of_vat` tinyint(1) NOT NULL,
+                      `total_net_of_discount` tinyint(1) NOT NULL,
+                      `shipping_value_net_of_vat` tinyint(1) NOT NULL,
+                      `total_vat` tinyint(1) NOT NULL,
+                      `total_general` tinyint(1) NOT NULL,
+                      PRIMARY KEY (`id_marketplace_commission`)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+                    ';
 
         //----- tabella spedizioni
         $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'marketplace_seller_shipping` (

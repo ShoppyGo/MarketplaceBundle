@@ -1,5 +1,5 @@
 services:
-
+# seller
   shoppygo_marketplace_grid_seller_shipping_factory:
     class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
     arguments:
@@ -29,3 +29,35 @@ services:
     parent: 'prestashop.core.grid.abstract_query_builder'
     arguments:
       - '@shoppygo.core'
+
+# commission
+  shoppygo_marketplace_grid_commission_factory:
+    class: 'PrestaShop\PrestaShop\Core\Grid\GridFactory'
+    arguments:
+      - '@shoppygo_marketplace_grid_definition_factory_commission' # our definition factory
+      - '@shoppygo_marketplace_grid_data_factory_commission'       # our data factory
+      - '@prestashop.core.grid.filter.form_factory'                # core service needed by grid factory
+      - '@prestashop.core.hook.dispatcher'
+    public: true
+
+  shoppygo_marketplace_grid_definition_factory_commission:
+    class: 'ShoppyGo\MarketplaceBundle\Grid\Definition\Factory\MarketplaceCommissionGridDefinitionFactory'
+    parent: 'prestashop.core.grid.definition.factory.abstract_grid_definition'
+    public: true
+    calls:
+      - [ setMarketplaceCore, [ '@shoppygo.core' ] ]
+
+  shoppygo_marketplace_grid_data_factory_commission:
+    class: 'PrestaShop\PrestaShop\Core\Grid\Data\Factory\DoctrineGridDataFactory'
+    arguments:
+      - '@shoppygo_marketplace_grid_query_commission' # service id of our query builder
+      - '@prestashop.core.hook.dispatcher' # every doctrine query builder needs the hook dispatcher
+      - '@prestashop.core.grid.query.doctrine_query_parser' # parser to get the raw SQL query
+      - 'commission' # this should match your grid id, in our case it's "commission"
+
+  shoppygo_marketplace_grid_query_commission:
+    class: 'ShoppyGo\MarketplaceBundle\Grid\Query\MarketplaceCommissionQueryBuilder'
+    parent: 'prestashop.core.grid.abstract_query_builder'
+    calls:
+      - [ setMarketplaceCore, [ '@shoppygo.core' ] ]
+      - [ setRepositoryMarketplaceCommision, [ '@shoppygo.marketplace.repository.commission' ] ]

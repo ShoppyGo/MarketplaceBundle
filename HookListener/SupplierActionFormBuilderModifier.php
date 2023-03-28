@@ -30,6 +30,7 @@ use PrestaShop\PrestaShop\Adapter\Category\CategoryDataProvider;
 use PrestaShop\PrestaShop\ShoppyGo\MarketplaceBundle\Exception\NotSellerException;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
 use ShoppyGo\MarketplaceBundle\Form\Widget\CategorySelectWidget;
+use ShoppyGo\MarketplaceBundle\Form\Widget\CommissionSelectWidget;
 use ShoppyGo\MarketplaceBundle\Form\Widget\SellerSwitchWidget;
 use ShoppyGo\MarketplaceBundle\Provider\Category\MarketplaceCategoryDataProvider;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceCategoryRepository;
@@ -45,19 +46,22 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
     protected CategorySelectWidget $categorySelectWidget;
     protected CategoryDataProvider $categoryDataProvider;
     protected MarketplaceSellerCategoryRepository $marketplaceSellerCategoryRepository;
+    protected CommissionSelectWidget $commissionSelectWidget;
 
     public function __construct(
         MarketplaceCore $core,
         TranslatorInterface $translator,
         CategorySelectWidget $categorySelectWidget,
         CategoryDataProvider $categoryDataProvider,
-        MarketplaceSellerCategoryRepository $marketplaceSellerCategoryRepository
+        MarketplaceSellerCategoryRepository $marketplaceSellerCategoryRepository,
+        CommissionSelectWidget $commissionSelectWidget,
     ) {
         $this->core = $core;
         $this->translator = $translator;
         $this->categorySelectWidget = $categorySelectWidget;
         $this->categoryDataProvider = $categoryDataProvider;
         $this->marketplaceSellerCategoryRepository = $marketplaceSellerCategoryRepository;
+        $this->commissionSelectWidget = $commissionSelectWidget;
     }
 
     public function exec(array $params)
@@ -67,20 +71,26 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
         }
         /** @var FormBuilder $form */
         $form = $params['form_builder'];
-        $id_seller = (int) $params['id'];
+        $id_seller = (int)$params['id'];
+
         $seller_category = $this->marketplaceSellerCategoryRepository->findSellerCategoryRootBy($id_seller);
 
         $root_category = $this->categoryDataProvider->getNestedCategories();
-        $children_category = array_map(static function ($item) {
-            return $item['name'];
-        }, array_pop($root_category)['children']);
+
+        $children_category =array_column(array_pop($root_category)['children'],'name');
 
         $this->categorySelectWidget->setCategoryList(
-                array_combine(array_values($children_category), array_keys($children_category))
-            )
-            ->setDeafult($seller_category?$seller_category->getIdCategory():0)
+            array_combine(array_values($children_category), array_keys($children_category))
+        )
+            ->setDeafult($seller_category ? $seller_category->getIdCategory() : 0)
             ->addField($form)
         ;
+
+        //TODO comoletare con il provider per le commissioni
+        $commissions = [];
+        $this->commissionSelectWidget->setCommissionList($commissions)
+            ->setDeafult(1)
+            ->addField($form);
     }
 
 }

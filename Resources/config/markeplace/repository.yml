@@ -42,3 +42,10 @@ services:
       arguments:
         - '@doctrine.dbal.default_connection'
         - '%database_prefix%'
+
+    shoppygo.marketplace.repository.commission:
+      class: ShoppyGo\MarketplaceBundle\Repository\MarketplaceCommissionRepository
+      factory:
+        - "@doctrine.orm.entity_manager"
+        - getRepository
+      arguments: [ ShoppyGo\MarketplaceBundle\Entity\MarketplaceCommission ]

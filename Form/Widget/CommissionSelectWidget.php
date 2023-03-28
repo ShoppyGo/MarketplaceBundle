@@ -24,69 +24,40 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace ShoppyGo\MarketplaceBundle\Entity;
+namespace ShoppyGo\MarketplaceBundle\Form\Widget;
 
-class Car
+use ShoppyGo\MarketplaceBundle\Entity\MarketplaceEmployeeSeller;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilder;
+
+class CommissionSelectWidget
 {
-    protected $id;
-    protected $brand;
-    protected $model;
-    protected $user;
-    protected $createdAt;
+    protected ?MarketplaceEmployeeSeller $seller;
+    protected array $commissions;
+    protected int $id_marketplace_commission = 0;
 
-    public function __construct()
+    public function addField(FormBuilder $form)
     {
-        $now = new \DateTime();
-        $this->createdAt = $now->getTimestamp();
+        $form->add(
+            'commission', ChoiceType::class, array(
+                'label' => 'Commission',
+                'choices' => $this->commissions,
+                'data' => $this->id_marketplace_commission,
+            )
+        );
     }
 
-    public function getId()
+    public function setCommissionList(array $commissions): self
     {
-        return $this->id;
+        $this->commissions = $commissions;
+
+        return $this;
     }
 
-    public function setId($id)
+    public function setDeafult(int $id_marketplace_commission): self
     {
-        $this->id = $id;
-    }
+        $this->id_marketplace_commission = $id_marketplace_commission;
 
-    public function getBrand()
-    {
-        return $this->brand;
-    }
-
-    public function setBrand($brand)
-    {
-        $this->brand = $brand;
-    }
-
-    public function getModel()
-    {
-        return $this->model;
-    }
-
-    function setModel($model)
-    {
-        $this->model = $model;
-    }
-
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    public function setUser($user)
-    {
-        $this->user = $user;
-    }
-
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
+        return $this;
     }
 }

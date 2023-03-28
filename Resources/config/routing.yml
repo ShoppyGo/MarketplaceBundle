@@ -84,3 +84,29 @@ admin_marketplace_seller_shipping_delete:
 #    id: \d+
 #  options:
 #    expose: true
+
+admin_marketplace_marketplace_commission_index:
+  path: /shoppygo/marketplace/commission
+  methods: [GET]
+  defaults:
+    _controller: 'ShoppyGo\MarketplaceBundle\Controller\MarketplaceCommissionController::indexAction'
+admin_marketplace_marketplace_commission_new:
+  path: /shoppygo/marketplace/commission/new
+  methods: [GET,POST]
+  defaults:
+    _controller: 'ShoppyGo\MarketplaceBundle\Controller\MarketplaceCommissionController::newAction'
+admin_marketplace_marketplace_commission_edit:
+  path: /admin/marketplace/commission/edit/{id_marketplace_commission}
+  methods: [GET, POST]
+  defaults:
+    _controller: ShoppyGo\MarketplaceBundle\Controller\MarketplaceCommissionController::editAction
+  requirements:
+    id_marketplace_commission: \d+
+
+admin_marketplace_marketplace_commission_delete:
+  path: /admin/marketplace/commission/delete/{id_marketplace_commission}
+  methods: [DELETE]
+  defaults:
+    _controller: ShoppyGo\MarketplaceBundle\Controller\MarketplaceCommissionController::deleteAction
+  requirements:
+    id_marketplace_commission: \d+

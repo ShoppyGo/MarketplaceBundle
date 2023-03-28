@@ -119,6 +119,7 @@ services:
             - '@shoppygo.widget.category.select'
             - '@prestashop.adapter.data_provider.category'
             - '@shoppygo.marketplace.repository.category_seller_repository'
+            - '@shoppygo.widget.commission.select'
         calls:
             - [ setHooks,[ [ 'actionSupplierFormBuilderModifier' ] ] ]
         tags:
