@@ -52,6 +52,9 @@ class EmployeeHookAfterUpdateListener extends AbstractHookListenerImplementation
 
     public function exec(array $params)
     {
+        if ($this->core->isEmployStaff() === true) {
+            return;
+        }
         $employeeForm = $this->formBuilder->getForm();
         $employeeForm->handleRequest($params['request']);
         $data = $employeeForm->getData();
