@@ -26,15 +26,12 @@
 
 namespace ShoppyGo\MarketplaceBundle\Domain\Product\CommandHandler;
 
-use ShoppyGo\MarketplaceBundle\Domain\Product\Command\CreateSellerProductCommand;
-use ShoppyGo\MarketplaceBundle\Domain\Seller\Exception\NotOwnerMarketplaceSellerProductException;
-use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSeller;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManagerInterface;
-use PrestaShop\PrestaShop\Adapter\Entity\Employee;
-use PrestaShop\PrestaShop\Adapter\Entity\Product;
 use PrestaShop\PrestaShop\Adapter\Entity\ProductSupplier;
 use PrestaShop\PrestaShop\Adapter\LegacyContext;
+use ShoppyGo\MarketplaceBundle\Domain\Product\Command\CreateSellerProductCommand;
+use ShoppyGo\MarketplaceBundle\Domain\Seller\Exception\NotOwnerMarketplaceSellerProductException;
 
 class CreateSellerProductCommandHandler
 {
@@ -59,34 +56,32 @@ class CreateSellerProductCommandHandler
         $productId = $command->getProductId();
         $attributeId = $command->getAttributeId();
 
-        //
         $query = new \DbQuery();
         $query->select('ps.id_supplier');
         $query->from('product_supplier', 'ps');
-        $query->where('ps.id_product = '.(int)$productId);
+        $query->where('ps.id_product = ' . (int) $productId);
         $id_ps = \Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue($query);
 
         if ($id_ps) {
-            #
-            # esiste ma appartiene al seller?
-            #
+            //
+            // esiste ma appartiene al seller?
+            //
             $id = ProductSupplier::getIdByProductAndSupplier($productId, 0, $sellerId);
             if (!$id) {
                 throw new NotOwnerMarketplaceSellerProductException('Seller not own the product');
             }
-            #
-            # l'abbinamento al supplier esiste già
-            #
+            //
+            // l'abbinamento al supplier esiste già
+            //
             return;
         }
 
-        #--- il prodotto deve essere semre agganciato all'anagrafica supplier
+        //--- il prodotto deve essere semre agganciato all'anagrafica supplier
         $product_supplier = new ProductSupplier();
         $product_supplier->id_supplier = $sellerId;
         $product_supplier->id_product = $productId;
         $product_supplier->id_currency = $this->legacyContext->getContext()->currency->id;
         $product_supplier->id_product_attribute = $attributeId;
         $product_supplier->save();
-
     }
 }

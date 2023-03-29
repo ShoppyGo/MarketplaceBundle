@@ -55,17 +55,17 @@ class SetupMarketplaceCommand extends Command
             $tab->icon = $icon;
         }
 
-        $tab->name = array();
+        $tab->name = [];
         foreach (\Language::getLanguages() as $lang) {
             $tab->name[$lang['id_lang']] = $this->translator->trans(
                 $label,
-                array(),
+                [],
                 'Admin.Marketplace.Menu',
                 $lang['locale']
             );
         }
 
-        $tab->id_parent = (int)\Tab::getIdFromClassName($parent);
+        $tab->id_parent = (int) \Tab::getIdFromClassName($parent);
         $tab->module = null;
 
         return $tab->add();
@@ -104,8 +104,6 @@ class SetupMarketplaceCommand extends Command
         //     displayAdminMarketplaceDashboardCenter
         //     displayAdminMarketplaceDashboardRight
 
-
-
         $setup_database = $this->getApplication()
             ->find('shoppygo:setup:database')
         ;
@@ -122,56 +120,55 @@ class SetupMarketplaceCommand extends Command
             [
                 'controller' => 'AdminMarketplace',
                 'route_name' => '',
-                'label'      => 'Marketplace',
-                'parent'     => 'DEFAULT',
-                'icon'       => 'shopping_cart',
+                'label' => 'Marketplace',
+                'parent' => 'DEFAULT',
+                'icon' => 'shopping_cart',
             ],
-            [      #--- parent seller menu
-                   'controller' => 'AdminMarketplaceSeller',
-                   'route_name' => '',
-                   'label'      => 'Your seller configuration',
-                   'parent'     => 'DEFAULT',
-                   'icon'       => 'settings_applications',
+            [      //--- parent seller menu
+                'controller' => 'AdminMarketplaceSeller',
+                'route_name' => '',
+                'label' => 'Your seller configuration',
+                'parent' => 'DEFAULT',
+                'icon' => 'settings_applications',
             ],
             [
                 'controller' => 'AdminSuppliers',
                 'route_name' => 'admin_suppliers_index',
-                'label'      => 'Sellers',
-                'parent'     => 'AdminMarketplace',
-                'icon'       => '',
+                'label' => 'Sellers',
+                'parent' => 'AdminMarketplace',
+                'icon' => '',
             ],
             [
                 'controller' => 'AdminMarketplaceConfiguration',
                 'route_name' => 'admin_marketplace_configuration',
-                'label'      => 'Configuration',
-                'parent'     => 'AdminMarketplace',
-                'icon'       => '',
+                'label' => 'Configuration',
+                'parent' => 'AdminMarketplace',
+                'icon' => '',
             ],
             [
                 'controller' => 'AdminMarketplaceCommission',
                 'route_name' => 'admin_marketplace_marketplace_commission_index',
-                'label'      => 'Commission',
-                'parent'     => 'AdminMarketplace',
-                'icon'       => '',
+                'label' => 'Commission',
+                'parent' => 'AdminMarketplace',
+                'icon' => '',
             ],
             [
                 'controller' => 'AdminMarketplaceSeller',
                 'route_name' => 'admin_employees_index',
-                'label'      => 'Sellers',
-                'parent'     => 'AdminMarketplace',
-                'icon'       => '',
+                'label' => 'Sellers',
+                'parent' => 'AdminMarketplace',
+                'icon' => '',
             ],
-            #-------------------
-            # submenu seller
-            #
+            //-------------------
+            // submenu seller
+            //
             [
                 'controller' => 'AdminMarketplaceSellerShipping',
                 'route_name' => 'admin_marketplace_seller_shipping',
-                'label'      => 'Configure shipping cost',
-                'parent'     => 'AdminMarketplaceSeller',
-                'icon'       => '',
+                'label' => 'Configure shipping cost',
+                'parent' => 'AdminMarketplaceSeller',
+                'icon' => '',
             ],
-
         ];
         foreach ($adminMenu as $menu) {
             $res_install_menu = $this->installTab(
@@ -180,7 +177,6 @@ class SetupMarketplaceCommand extends Command
                 $menu['label'],
                 $menu['parent'],
                 $menu['icon']
-
             );
             if (!$res_install_menu) {
                 break;

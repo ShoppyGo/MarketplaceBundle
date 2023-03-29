@@ -23,16 +23,17 @@
  * @copyright Since 2022 Bwlab of Luigi Massa and Contributors
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
+
 namespace Tests\ShoppyGo\MarketplaceBundle\Engine;
 
+use Order;
+use PHPUnit\Framework\TestCase;
 use ShoppyGo\MarketplaceBundle\Engine\MarketplaceSellerCommissionCalculator;
 use ShoppyGo\MarketplaceBundle\Entity\MarketplaceCommission;
 use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSeller;
 use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSellerOrder;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerOrderRepository;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerRepository;
-use PHPUnit\Framework\TestCase;
-use Order;
 
 class MarketplaceSellerCommissionCalculatorTest extends TestCase
 {
@@ -63,7 +64,7 @@ class MarketplaceSellerCommissionCalculatorTest extends TestCase
         $marketplaceSellerOrder->setIdSeller(1);
         $marketplaceSellerOrder->setIdOrderMain(1);
 
-        $order = new class extends Order {
+        $order = new class() extends Order {
             public function getTotalPaid()
             {
                 return 100;

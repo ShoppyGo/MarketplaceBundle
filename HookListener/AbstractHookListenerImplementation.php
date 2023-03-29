@@ -28,9 +28,7 @@ namespace ShoppyGo\MarketplaceBundle\HookListener;
 
 abstract class AbstractHookListenerImplementation implements HookListenerInterface
 {
-
     public array $hooks = [];
-
 
     public function setHooks(array $hooks)
     {

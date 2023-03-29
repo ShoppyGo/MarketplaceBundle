@@ -36,6 +36,7 @@ class MarketplaceDashboardController extends FrameworkBundleAdminController
         return $this->render('@ShoppyGoMarketplace/controller/dashboard/index.html.twig', [
         ]);
     }
+
     public function calendarAction()
     {
         \Context::getContext()->controller->ajax = true;
@@ -49,6 +50,4 @@ class MarketplaceDashboardController extends FrameworkBundleAdminController
             'calendar' => $helper->generate(),
         ]);
     }
-
-
 }

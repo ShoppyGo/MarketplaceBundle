@@ -40,18 +40,20 @@ class MarketplaceSellerRepository extends EntityRepository
         $entity->setMarketplaceCommission($commission);
         $this->getEntityManager()->persist($entity);
         $this->getEntityManager()->flush();
+
         return $entity;
     }
 
-    public function createOrUpdate(int $id_seller,int $id_category, int $id_commission): MarketplaceSeller
+    public function createOrUpdate(int $id_seller, int $id_category, int $id_commission): MarketplaceSeller
     {
         xdebug_break();
         $commission = $this->getEntityManager()->getRepository(MarketplaceCommission::class)
-                ->find($id_commission);
+            ->find($id_commission);
         $marketplaceSellerCategory = $this->update($id_seller, $id_category, $commission);
-        if(!$marketplaceSellerCategory){
+        if (!$marketplaceSellerCategory) {
             $marketplaceSellerCategory = $this->create($id_seller, $id_category, $commission);
         }
+
         return $marketplaceSellerCategory;
     }
 
@@ -64,11 +66,14 @@ class MarketplaceSellerRepository extends EntityRepository
 
     public function update(int $id_seller, int $id_category, MarketplaceCommission $commission): ?MarketplaceSeller
     {
-        $entity = $this->findOneBy(['id_seller'=>$id_seller]);
-        if(!$entity) return null;
+        $entity = $this->findOneBy(['id_seller' => $id_seller]);
+        if (!$entity) {
+            return null;
+        }
         $entity->setIdCategory($id_category);
         $entity->setMarketplaceCommission($commission);
         $this->getEntityManager()->flush();
+
         return $entity;
     }
 }

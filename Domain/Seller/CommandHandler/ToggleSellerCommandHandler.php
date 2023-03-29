@@ -32,7 +32,6 @@ use ShoppyGo\MarketplaceBundle\Domain\Seller\Command\ToggleSellerCommand;
 
 class ToggleSellerCommandHandler
 {
-
     private EntityManagerInterface $manager;
 
     public function __construct(Registry $registry)

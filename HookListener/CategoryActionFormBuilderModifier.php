@@ -63,5 +63,4 @@ class CategoryActionFormBuilderModifier extends AbstractHookListenerImplementati
             ->addField($form)
         ;
     }
-
 }

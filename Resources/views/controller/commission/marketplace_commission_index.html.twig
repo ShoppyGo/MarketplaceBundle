@@ -1,0 +1,29 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+{% set layoutTitle = 'Marketplace Commissions'| trans({},'Admin.Marketplace.Commissions') %}
+
+{% set layoutHeaderToolbarBtn = {
+    add_shipping_cost: {
+        href: path('admin_marketplace_marketplace_commission_new'),
+        desc: 'Add new cost'|trans({}, 'Admin.Marketplace.Commissions'),
+        icon: 'add_circle_outline',
+    }
+}
+%}
+{% block content %}
+    {% include '@PrestaShop/Admin/Common/Grid/grid_panel.html.twig' with {'grid': marketplaceCommissionGrid} %}
+{% endblock %}
+{% block javascripts %}
+  {{ parent() }}
+  <script>
+    $(document).ready(function (){
+      window.prestashop.component.initComponents(
+        [
+          "Grid",
+        ],
+      );
+      const grid = new window.prestashop.component.Grid('marketplace_commission');
+      grid.addExtension(new window.prestashop.component.GridExtensions.SubmitRowActionExtension());
+
+    })
+  </script>
+{% endblock %}

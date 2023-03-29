@@ -33,20 +33,20 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerRepository")
  *
  * Class MarketplaceSellerCategory
- * @package ShoppyGo\MarketplaceBundle\Entity
  */
 class MarketplaceSeller
 {
-
     /**
      * @ORM\Id
      * @ORM\Column(name="id_supplier", type="integer")
+     *
      * @var int
      */
     private int $id_seller;
 
     /**
      * @ORM\Column(name="id_category", type="integer")
+     *
      * @var int
      */
     private int $id_category;
@@ -97,5 +97,4 @@ class MarketplaceSeller
 
         return $this;
     }
-
 }

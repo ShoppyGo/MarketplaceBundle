@@ -37,14 +37,15 @@ class CreateSellerProductCommand
 
     /**
      * ReplaceProductCommand constructor.
+     *
      * @param int $sellerId
      * @param int $productId
      */
     public function __construct($sellerId, $productId, $attributeId = 0)
     {
-        $this->sellerId = (int)$sellerId;
-        $this->productId = (int)$productId;
-        $this->attributeId = (int)$attributeId;
+        $this->sellerId = (int) $sellerId;
+        $this->productId = (int) $productId;
+        $this->attributeId = (int) $attributeId;
     }
 
     /**
@@ -70,6 +71,4 @@ class CreateSellerProductCommand
     {
         return $this->sellerId;
     }
-
-
 }

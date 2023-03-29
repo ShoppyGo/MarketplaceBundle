@@ -34,7 +34,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class MarketplaceCommission
 {
-
     /**
      * @var int
      * @ORM\Id
@@ -58,27 +57,27 @@ class MarketplaceCommission
      */
     private float $commissionPercentage = 0;
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="total_products_net_of_vat", type="boolean")
      */
     private bool $totalProductsNetOfVat = false;
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="total_net_of_discount", type="boolean")
      */
     private bool $totalNetOfDiscount = false;
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="shipping_value_net_of_vat", type="boolean")
      */
     private bool $shippingValueNetOfVat = false;
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="total_vat", type="boolean")
      */
     private bool $totalVat = false;
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="total_general", type="boolean")
      */
     private bool $totalGeneral = false;
@@ -239,5 +238,4 @@ class MarketplaceCommission
 
         return $this;
     }
-
 }

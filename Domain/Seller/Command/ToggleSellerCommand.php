@@ -26,8 +26,6 @@
 
 namespace ShoppyGo\MarketplaceBundle\Domain\Seller\Command;
 
-
-use Context;
 use ShoppyGo\MarketplaceBundle\Adapter\Entity\Seller;
 
 /**
@@ -40,7 +38,7 @@ class ToggleSellerCommand
     private string $fieldName;
     private string $entityName;
 
-    public function __construct(int $id,string $fieldName,string $entityName, bool $switch)
+    public function __construct(int $id, string $fieldName, string $entityName, bool $switch)
     {
         $this->id = $id;
         $this->fieldName = $fieldName;
@@ -75,5 +73,4 @@ class ToggleSellerCommand
     {
         return $this->switch;
     }
-
 }

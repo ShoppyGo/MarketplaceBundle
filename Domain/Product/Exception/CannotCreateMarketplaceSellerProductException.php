@@ -30,5 +30,4 @@ use ShoppyGo\MarketplaceBundle\Domain\Exception\MarketplaceException;
 
 class CannotCreateMarketplaceSellerProductException extends MarketplaceException
 {
-
 }

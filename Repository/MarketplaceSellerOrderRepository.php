@@ -73,12 +73,12 @@ class MarketplaceSellerOrderRepository extends EntityRepository
             $id_main_order = $row->getIdOrderMain();
         }
 
-        return (float)\Db::getInstance()
+        return (float) \Db::getInstance()
             ->getValue(
                 'SELECT SUM(total_paid_tax_incl)
-            FROM `'._DB_PREFIX_.'orders`
-            WHERE `id_order` = \''.pSQL($id_main_order).'\'
-            AND `id_cart` = '.(int)$id_cart
+            FROM `' . _DB_PREFIX_ . 'orders`
+            WHERE `id_order` = \'' . pSQL($id_main_order) . '\'
+            AND `id_cart` = ' . (int) $id_cart
             )
         ;
     }
@@ -106,17 +106,17 @@ class MarketplaceSellerOrderRepository extends EntityRepository
 
     public function hasSellerProduct($id_product): bool
     {
-        return (bool)$this->marketplaceSellerProductRepository->isProductSeller($id_product, $this->id_seller);
+        return (bool) $this->marketplaceSellerProductRepository->isProductSeller($id_product, $this->id_seller);
     }
 
     public function isSellerOrder(int $id_order): bool
     {
-        return (bool)$this->findOneBy(['id_order' => $id_order]);
+        return (bool) $this->findOneBy(['id_order' => $id_order]);
     }
 
     public function isSellerOwner(int $id_order, int $id_seller): bool
     {
-        return (bool)$this->findOneBy(['id_order' => $id_order, 'id_seller' => $id_seller]);
+        return (bool) $this->findOneBy(['id_order' => $id_order, 'id_seller' => $id_seller]);
     }
 
     public function save(MarketplaceSellerOrder $sellerOrder)
@@ -141,5 +141,4 @@ class MarketplaceSellerOrderRepository extends EntityRepository
     {
         $this->marketplaceSellerProductRepository = $marketplaceSellerProductRepository;
     }
-
 }

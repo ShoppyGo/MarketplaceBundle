@@ -30,5 +30,4 @@ use Doctrine\ORM\EntityRepository;
 
 class MarketplaceCommissionRepository extends EntityRepository
 {
-
 }

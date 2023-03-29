@@ -26,10 +26,8 @@
 
 namespace ShoppyGo\MarketplaceBundle\Interfaces;
 
-
 /**
  * Interface MarketplaceEntityInterface
- * @package Bwlab\Marketplace\Interfaces
  */
 interface MarketplaceEntityInterface
 {

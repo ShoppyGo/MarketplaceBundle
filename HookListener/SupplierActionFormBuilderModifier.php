@@ -31,8 +31,6 @@ use PrestaShop\PrestaShop\ShoppyGo\MarketplaceBundle\Exception\NotSellerExceptio
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
 use ShoppyGo\MarketplaceBundle\Form\Widget\CategorySelectWidget;
 use ShoppyGo\MarketplaceBundle\Form\Widget\CommissionSelectWidget;
-use ShoppyGo\MarketplaceBundle\Form\Widget\SellerSwitchWidget;
-use ShoppyGo\MarketplaceBundle\Provider\Category\MarketplaceCategoryDataProvider;
 use ShoppyGo\MarketplaceBundle\Provider\MarketplaceCommissionChoiceProvider;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceCategoryRepository;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerRepository;
@@ -75,7 +73,7 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
         }
         /** @var FormBuilder $form */
         $form = $params['form_builder'];
-        $id_seller = (int)$params['id'];
+        $id_seller = (int) $params['id'];
 
         $seller_category = $this->marketplaceSellerCategoryRepository->findSellerCategoryRootBy($id_seller);
 
@@ -107,5 +105,4 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
             ->addField($form)
         ;
     }
-
 }

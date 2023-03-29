@@ -25,9 +25,9 @@
  */
 
 namespace ShoppyGo\MarketplaceBundle\Domain\Exception;
+
 use PrestaShopException;
 
 class MarketplaceException extends PrestaShopException
 {
-
 }

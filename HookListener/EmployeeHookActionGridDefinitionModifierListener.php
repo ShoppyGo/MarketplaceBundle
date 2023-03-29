@@ -66,21 +66,21 @@ class EmployeeHookActionGridDefinitionModifierListener extends AbstractHookListe
         $definition = $params['definition'];
         /** @var ColumnCollection $columns */
         $columns = $definition->getColumns();
-        #-------creo la colonna e la nomino is_seller
+        //-------creo la colonna e la nomino is_seller
         $toggle_seller = new DataColumn('seller_name');
 
         $toggle_seller->setName($this->translator->trans('Seller'))
             ->setOptions(
                 [
-                    'field'            => 'seller_name'
+                    'field' => 'seller_name',
                 ]
             )
         ;
 
-        #----aggiungo la colonna alla grid
+        //----aggiungo la colonna alla grid
         $columns->addAfter('id_employee', $toggle_seller);
 
-        #----alla colonna aggiungo anche il filtro
+        //----alla colonna aggiungo anche il filtro
         $definition->getFilters()
             ->add(
                 (new Filter(
@@ -89,5 +89,4 @@ class EmployeeHookActionGridDefinitionModifierListener extends AbstractHookListe
             )
         ;
     }
-
 }

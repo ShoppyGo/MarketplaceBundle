@@ -3,8 +3,8 @@ services:
     class: 'ShoppyGo\MarketplaceBundle\Engine\CalculatorEngine'
     public: true
 
-  shoppygo_marketplace_marketplace_seller_commission_calculator:
-    class: 'ShoppyGo\MarketplaceBundle\Engine\MarketplaceSellerCommissionCalculator'
+  shoppygo.marketplace.seller_commission_calculator:
+    class: 'ShoppyGo\MarketplaceBundle\Engine\MarketplaceCommissionCalculator'
     arguments:
       - '@shoppygo.marketplace.repository.marketplace_seller_repository'
       - '@shoppygo.marketplace.repository.seller_order_repository'

@@ -48,8 +48,8 @@ class OrderActionGridQueryBuilderModifier extends AbstractHookListenerImplementa
         /** @var QueryBuilder $qb */
         $qb = $params['search_query_builder'];
         $qb->addSelect('ms.name as seller_name')
-            ->leftJoin('o', _DB_PREFIX_.'marketplace_seller_order', 'mp', 'o.id_order = mp.id_order')
-            ->leftJoin('mp', _DB_PREFIX_.'supplier', 'ms', 'mp.id_supplier = ms.id_supplier')
+            ->leftJoin('o', _DB_PREFIX_ . 'marketplace_seller_order', 'mp', 'o.id_order = mp.id_order')
+            ->leftJoin('mp', _DB_PREFIX_ . 'supplier', 'ms', 'mp.id_supplier = ms.id_supplier')
         ;
         if (false === $this->core->isEmployStaff()) {
             $qb->andWhere('ms.id_supplier = :id_seller')

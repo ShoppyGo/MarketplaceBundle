@@ -26,16 +26,14 @@
 
 namespace ShoppyGo\MarketplaceBundle\Service;
 
-use ShoppyGo\MaketplaceBundle\Entity\Car;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
+use ShoppyGo\MaketplaceBundle\Entity\Car;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
 
 class Service
 {
-
     /**
      * @var EntityManagerInterface
      */
@@ -62,12 +60,12 @@ class Service
     protected $bar;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $integerFoo;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $integerBar;
 

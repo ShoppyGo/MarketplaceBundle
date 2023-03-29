@@ -24,27 +24,23 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace  ShoppyGo\MarketplaceBundle\Repository;
+namespace ShoppyGo\MarketplaceBundle\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\OptimisticLockException;
 use ShoppyGo\MarketplaceBundle\Entity\MarketplaceEmployeeSeller;
-use ShoppyGo\MarketplaceBundle\Interfaces\MarketplaceSellerRepositoryInterface;
 
 /**
  * @method get(string $string)
  */
 class MarketplaceEmployeeSellerRepository extends EntityRepository
 {
-
     public function findSellersByEmployees(array $employees): array
     {
         return $this->createQueryBuilder('ms')
             ->where('ms.id_employee in (:employee)')
             ->setParameters([':employee' => $employees])
             ->getQuery()->execute();
-
     }
 
     public function create(int $id_employee, int $id_seller)
@@ -58,6 +54,7 @@ class MarketplaceEmployeeSellerRepository extends EntityRepository
         $em->persist($seller);
         $em->flush();
     }
+
     public function update(int $id_employee, int $id_seller)
     {
         $employee_seller = $this->find($id_employee);

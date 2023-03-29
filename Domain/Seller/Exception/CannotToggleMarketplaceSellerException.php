@@ -25,9 +25,9 @@
  */
 
 namespace ShoppyGo\MarketplaceBundle\Domain\Seller\Exception;
+
 use ShoppyGo\MarketplaceBundle\Domain\Exception\MarketplaceException;
 
 class CannotToggleMarketplaceSellerException extends MarketplaceException
 {
-
 }

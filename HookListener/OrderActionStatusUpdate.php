@@ -29,7 +29,6 @@ namespace ShoppyGo\MarketplaceBundle\HookListener;
 use PrestaShop\PrestaShop\Core\CommandBus\CommandBusInterface;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceSellerOrderManager;
-use ShoppyGo\MarketplaceBundle\Provider\SellerChoiceProvider;
 
 class OrderActionStatusUpdate extends AbstractHookListenerImplementation
 {
@@ -44,7 +43,6 @@ class OrderActionStatusUpdate extends AbstractHookListenerImplementation
         $this->core = $core;
         $this->sellerOrderManager = $sellerOrderManager;
     }
-
 
     public function exec(array $params)
     {

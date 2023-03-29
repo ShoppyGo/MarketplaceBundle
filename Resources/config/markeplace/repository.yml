@@ -32,6 +32,7 @@ services:
 
     shoppygo.marketplace.repository.marketplace_seller_repository:
         class: ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerRepository
+        public: true
         factory:
             - "@doctrine.orm.entity_manager"
             - getRepository

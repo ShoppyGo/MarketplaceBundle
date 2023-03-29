@@ -55,8 +55,7 @@ class CategoryActionAfterCreateUpdateFormHandler extends AbstractHookListenerImp
         $id = $params['id'];
         $is_seller = $params['form_data']['seller'];
         $this->commandBus->handle(
-            new ToggleSellerCommand($id, 'id_category',  MarketplaceCategory::class, $is_seller)
+            new ToggleSellerCommand($id, 'id_category', MarketplaceCategory::class, $is_seller)
         );
     }
-
 }

@@ -26,7 +26,6 @@
 
 namespace ShoppyGo\MarketplaceBundle\Grid\Query;
 
-use Doctrine\DBAL\Query\QueryBuilder;
 use PrestaShop\PrestaShop\Core\Grid\Query\AbstractDoctrineQueryBuilder;
 use PrestaShop\PrestaShop\Core\Grid\Search\SearchCriteriaInterface;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
@@ -52,14 +51,11 @@ class MarketplaceCommissionQueryBuilder extends AbstractDoctrineQueryBuilder
         ;
 
         return $queryBuilder;
+    }
 
-}
     public function getSearchQueryBuilder(SearchCriteriaInterface $searchCriteria)
     {
-
-
         $queryBuilder = $this->getBaseQueryBuilder()->select('mc.*');
-        ;
 
         // Add filters if any
         foreach ($searchCriteria->getFilters() as $filterName => $filterValue) {
@@ -91,5 +87,4 @@ class MarketplaceCommissionQueryBuilder extends AbstractDoctrineQueryBuilder
     {
         $this->commissionRepository = $commissionRepository;
     }
-
 }

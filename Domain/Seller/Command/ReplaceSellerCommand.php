@@ -28,7 +28,6 @@ namespace ShoppyGo\MarketplaceBundle\Domain\Seller\Command;
 
 class ReplaceSellerCommand
 {
-
     private int $id;
     private string $fieldName;
     private string $entityName;
@@ -61,5 +60,4 @@ class ReplaceSellerCommand
     {
         return $this->params;
     }
-
 }

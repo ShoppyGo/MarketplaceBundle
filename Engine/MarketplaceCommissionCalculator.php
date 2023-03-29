@@ -28,11 +28,10 @@ namespace ShoppyGo\MarketplaceBundle\Engine;
 
 use PrestaShop\PrestaShop\Adapter\Entity\Order;
 use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSeller;
-use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSellerOrder;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerOrderRepository;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerRepository;
 
-class MarketplaceSellerCommissionCalculator
+class MarketplaceCommissionCalculator
 {
     private MarketplaceSellerRepository $sellerRepository;
     private MarketplaceSellerOrderRepository $sellerOrderRepository;
@@ -54,22 +53,29 @@ class MarketplaceSellerCommissionCalculator
         $commissions = [];
 
         foreach ($sellers as $seller) {
-            $sellerOrders = $this->sellerOrderRepository->findBy(['id_seller' => $seller->getIdSeller()]);
+            $commissions[] = $this->calucalteSellerCommission($seller);
+        }
 
-            foreach ($sellerOrders as $sellerOrder) {
-                $order = new Order($sellerOrder->getIdOrder());
-                $commission = $this->calculatorEngine->calculateCommission($order, $seller->getMarketplaceCommission());
+        return $commissions;
+    }
 
-                $commissions[] = [
-                    'seller'          => $seller,
-                    'id_order'        => $order->id,
-                    'order_reference' => $order->reference,
-                    'commission'      => $commission,
-                ];
-            }
+    public function calucalteSellerCommission(MarketplaceSeller $seller): array
+    {
+        $sellerOrders = $this->sellerOrderRepository->findBy(['id_seller' => $seller->getIdSeller()]);
+        $commissions = [];
+        foreach ($sellerOrders as $sellerOrder) {
+            $order = new Order($sellerOrder->getIdOrder());
+            $commission = $this->calculatorEngine->calculateCommission($order, $seller->getMarketplaceCommission());
+
+            $commissions[] = [
+                'seller' => $seller,
+                'id_seller' => $seller->getIdSeller(),
+                'id_order' => $order->id,
+                'order_reference' => $order->reference,
+                'total' => $commission,
+            ];
         }
 
         return $commissions;
     }
 }
-

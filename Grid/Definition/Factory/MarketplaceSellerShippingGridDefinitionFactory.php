@@ -62,13 +62,13 @@ class MarketplaceSellerShippingGridDefinitionFactory extends AbstractGridDefinit
     {
         $column_collection = new ColumnCollection();
 
-     if(true === $this->core->isEmployStaff()) {
-         $id_seller = new DataColumn('name');
-         $id_seller->setOptions(['field' => 'name'])
-             ->setName('Seller', [], self::DOMAIN_TRANSLATION)
+        if (true === $this->core->isEmployStaff()) {
+            $id_seller = new DataColumn('name');
+            $id_seller->setOptions(['field' => 'name'])
+                ->setName('Seller', [], self::DOMAIN_TRANSLATION)
          ;
-         $column_collection->add($id_seller);
-     }
+            $column_collection->add($id_seller);
+        }
 
         $from = new DataColumn('from_total');
         $from->setOptions(['field' => 'from_total'])

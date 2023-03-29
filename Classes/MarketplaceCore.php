@@ -49,7 +49,6 @@ class MarketplaceCore
     private CommandBusInterface $bus;
     private LegacyContext $legacyContext;
 
-//
     public function __construct(
         MarketplaceEmployeeSellerRepository $marketplaceEmployeeSellerRepository,
         CommandBusInterface $bus,
@@ -61,6 +60,7 @@ class MarketplaceCore
         $this->marketplaceEmployeeSellerRepository = $marketplaceEmployeeSellerRepository;
         $this->setMarketplaceSeller();
     }
+
 //
 //    /**
 //     * build lista prodotti
@@ -108,7 +108,7 @@ class MarketplaceCore
 //    public function actionFormHandler($field_name, $entity_name, $params)
 //    {
 //        $id = $params['id'];
-////        $is_seller = $params['form_data']['seller'];
+    ////        $is_seller = $params['form_data']['seller'];
 //        $params['supplier'] = $params['form_data']['supplier'];
 //        #---- CannotReplaceMarketplaceSellerException
 //        $this->bus->handle(
@@ -136,37 +136,37 @@ class MarketplaceCore
 //     */
 //    public function actionGridDefinitionModifier($params, $field_name, $primary_field, $route, $route_parama_name)
 //    {
-////        /** @var GridDefinitionInterface $definition */
-////        $definition = $params['definition'];
-////        /** @var ColumnCollection $columns */
-////        $columns = $definition->getColumns();
-////        #-------creo la colonna e la nomino is_seller
-////        $toggle_seller = new ToggleColumn($field_name);
-////
-////        $toggle_seller
-////            ->setName($this->trans('Seller'))
-////            ->setOptions(
-////                [
-////                    'field' => $field_name,
-////                    #------associo il campo di riferimento per la route
-////                    'primary_field' => $primary_field,
-////                    #------controller richiamato al click dell'utente
-////                    'route' => $route,
-////                    #-----parametro della route che sarà modificato con il primary_field
-////                    'route_param_name' => $route_parama_name,     //passa sempre il primary_field
-////                ]
-////            );
-////
-////        #----aggiungo la colonna alla grid
-////        $columns->addAfter('active', $toggle_seller);
-////
-////        #----alla colonna aggiungo anche il filtro
-////        $definition->getFilters()->add(
-////            (new Filter(
-////                $field_name,
-////                YesAndNoChoiceType::class
-////            ))->setAssociatedColumn($field_name)
-////        );
+    ////        /** @var GridDefinitionInterface $definition */
+    ////        $definition = $params['definition'];
+    ////        /** @var ColumnCollection $columns */
+    ////        $columns = $definition->getColumns();
+    ////        #-------creo la colonna e la nomino is_seller
+    ////        $toggle_seller = new ToggleColumn($field_name);
+    ////
+    ////        $toggle_seller
+    ////            ->setName($this->trans('Seller'))
+    ////            ->setOptions(
+    ////                [
+    ////                    'field' => $field_name,
+    ////                    #------associo il campo di riferimento per la route
+    ////                    'primary_field' => $primary_field,
+    ////                    #------controller richiamato al click dell'utente
+    ////                    'route' => $route,
+    ////                    #-----parametro della route che sarà modificato con il primary_field
+    ////                    'route_param_name' => $route_parama_name,     //passa sempre il primary_field
+    ////                ]
+    ////            );
+    ////
+    ////        #----aggiungo la colonna alla grid
+    ////        $columns->addAfter('active', $toggle_seller);
+    ////
+    ////        #----alla colonna aggiungo anche il filtro
+    ////        $definition->getFilters()->add(
+    ////            (new Filter(
+    ////                $field_name,
+    ////                YesAndNoChoiceType::class
+    ////            ))->setAssociatedColumn($field_name)
+    ////        );
 //    }
 //
 //    /**
@@ -182,28 +182,28 @@ class MarketplaceCore
 //        /** @var QueryBuilder $search_query_builder */
 //        $search_query_builder = $params['search_query_builder'];
 //
-////        #-------creo la join con la mia tabella custom
-////        $search_query_builder
-////            #------!ATTENZIONE: qui rinomino il campo in is_seller, che è il nome della colonna
-////            ->addSelect('mp.seller as is_seller')
-////            #-----per recuperare l'alias della tabella principale, andare in dub.
-////            ->leftJoin($fromAlias, _DB_PREFIX_.$table, 'mp', 'mp.'.$field_name.' = '.$fromAlias.'.'.$field_name);
-////
+    ////        #-------creo la join con la mia tabella custom
+    ////        $search_query_builder
+    ////            #------!ATTENZIONE: qui rinomino il campo in is_seller, che è il nome della colonna
+    ////            ->addSelect('mp.seller as is_seller')
+    ////            #-----per recuperare l'alias della tabella principale, andare in dub.
+    ////            ->leftJoin($fromAlias, _DB_PREFIX_.$table, 'mp', 'mp.'.$field_name.' = '.$fromAlias.'.'.$field_name);
+    ////
 //
-////        #------se l'utente a cliccato sull'ordinamento, aggiungo anche l'ordinamento
-////        /** @var SearchCriteriaInterface $search_criteria */
-////        $search_criteria = $params['search_criteria'];
-////        if ($search_criteria->getOrderBy() === 'is_seller') {
-////            $search_query_builder->orderBy('mp.seller', $search_criteria->getOrderWay());
-////        }
-////
-////        #-------se l'utente ha selezionato un filtro ggiungo anche il filtro
-////        foreach ($search_criteria->getFilters() as $filternae => $filter) {
-////            if ($filternae === 'is_seller') {
-////                $search_query_builder->andWhere('mp.active = :active')
-////                    ->setParameter('seller', (bool)$filter);
-////            }
-////        }
+    ////        #------se l'utente a cliccato sull'ordinamento, aggiungo anche l'ordinamento
+    ////        /** @var SearchCriteriaInterface $search_criteria */
+    ////        $search_criteria = $params['search_criteria'];
+    ////        if ($search_criteria->getOrderBy() === 'is_seller') {
+    ////            $search_query_builder->orderBy('mp.seller', $search_criteria->getOrderWay());
+    ////        }
+    ////
+    ////        #-------se l'utente ha selezionato un filtro ggiungo anche il filtro
+    ////        foreach ($search_criteria->getFilters() as $filternae => $filter) {
+    ////            if ($filternae === 'is_seller') {
+    ////                $search_query_builder->andWhere('mp.active = :active')
+    ////                    ->setParameter('seller', (bool)$filter);
+    ////            }
+    ////        }
 //    }
 //
 //    /**
@@ -270,13 +270,14 @@ class MarketplaceCore
          */
         $form = $params['form_builder'];
         $form->add(
-            'supplier', ChoiceType::class, array(
+            'supplier', ChoiceType::class, [
                 'label'   => 'Seller',
                 'choices' => $choices->getChoices(),
                 'data'    => $seller ? $seller->getIdSupplier() : '',
-            )
+            ]
         );
     }
+
 //
 //    /**
 //     * @param $object
@@ -289,19 +290,17 @@ class MarketplaceCore
          */
         $form = $params['form_builder'];
         $form->add(
-            'seller', SwitchType::class, array(
+            'seller', SwitchType::class, [
                 'label'   => 'Seller',
                 'choices' => [
                     'OFF' => false,
                     'ON'  => true,
                 ],
                 'data'    => $object ? $object->isSeller() : false,
-
-            )
+            ]
         );
     }
 
-//
     public function getEmployee(): \Employee
     {
         return $this->legacyContext->getContext()->employee;
@@ -311,15 +310,15 @@ class MarketplaceCore
     {
         return (int)$this->getEmployee()->id;
     }
+
 //
 //    /**
 //     * @return Supplier
 //     */
-    public function getSeller(): Seller
+    public function getSeller(int $id = 0): Seller
     {
-        return new Seller($this->marketplaceSeller->getIdSeller());
+        return new Seller($id ?: $this->marketplaceSeller->getIdSeller());
     }
-//
 
     /**
      * @return int
@@ -328,6 +327,7 @@ class MarketplaceCore
     {
         return (int)$this->marketplaceSeller->getIdSeller();
     }
+
 //
 //    /**
 //     * @return \Shop
@@ -348,11 +348,11 @@ class MarketplaceCore
         return false === $this->isEmployeeSeller();
     }
 
-//
     public function isEmployeeSeller()
     {
         return (bool)$this->marketplaceSeller;
     }
+
 //
 //
 //    /**
@@ -387,5 +387,4 @@ class MarketplaceCore
         $this->marketplaceSeller =
             $this->marketplaceEmployeeSellerRepository->findOneBy(['id_employee' => $this->getEmployeeId()]);
     }
-
 }

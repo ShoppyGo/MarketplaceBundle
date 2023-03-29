@@ -26,12 +26,12 @@
 
 namespace ShoppyGo\MarketplaceBundle\Core\Domain\Order\QueryResult;
 
+use DateTimeImmutable;
 use PrestaShop\PrestaShop\Core\Domain\Order\QueryResult\LinkedOrdersForViewing;
 use PrestaShop\PrestaShop\Core\Domain\Order\QueryResult\OrderCustomerForViewing;
 use PrestaShop\PrestaShop\Core\Domain\Order\QueryResult\OrderDiscountsForViewing;
 use PrestaShop\PrestaShop\Core\Domain\Order\QueryResult\OrderDocumentsForViewing;
-use  PrestaShop\PrestaShop\Core\Domain\Order\QueryResult\OrderForViewing as OrderForViewingPrestaShop;
-use DateTimeImmutable;
+use PrestaShop\PrestaShop\Core\Domain\Order\QueryResult\OrderForViewing as OrderForViewingPrestaShop;
 use PrestaShop\PrestaShop\Core\Domain\Order\QueryResult\OrderHistoryForViewing;
 use PrestaShop\PrestaShop\Core\Domain\Order\QueryResult\OrderInvoiceAddressForViewing;
 use PrestaShop\PrestaShop\Core\Domain\Order\QueryResult\OrderMessagesForViewing;
@@ -86,8 +86,7 @@ class OrderForViewingMarketplace extends OrderForViewingPrestaShop
         string $invoiceAddressFormatted = '',
         string $note = '',
         MarketplaceCore $marketplaceCore
-    )
-    {
+    ) {
         parent::__construct(
             $orderId,
             $currencyId,
@@ -133,5 +132,4 @@ class OrderForViewingMarketplace extends OrderForViewingPrestaShop
     {
         return $this->marketplaceCore;
     }
-
 }

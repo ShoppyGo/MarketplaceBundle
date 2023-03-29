@@ -56,7 +56,7 @@ class CategoryActionGridDefinitionModifier extends AbstractHookListenerImplement
         $definition = $params['definition'];
         /** @var ColumnCollection $columns */
         $columns = $definition->getColumns();
-        #-------creo la colonna e la nomino is_seller
+        //-------creo la colonna e la nomino is_seller
         $toggle_seller = new ToggleColumn('is_seller');
 
         $route = 'admin_marketplace_category_toggle_seller';
@@ -66,19 +66,17 @@ class CategoryActionGridDefinitionModifier extends AbstractHookListenerImplement
         $toggle_seller->setName($this->translator->trans('Is seller'))
             ->setOptions(
                 [
-                    'field'            => 'is_seller',
-                     'primary_field' => $primary_field,
-//                    #------controller richiamato al click dell'utente
+                    'field' => 'is_seller',
+                    'primary_field' => $primary_field,
+                    //                    #------controller richiamato al click dell'utente
                     'route' => $route,
-//                    #-----parametro della route che sarà modificato con il primary_field
+                    //                    #-----parametro della route che sarà modificato con il primary_field
                     'route_param_name' => $route_parama_name,     //passa sempre il primary_field
                 ]
             )
         ;
 
-        #----aggiungo la colonna alla grid
+        //----aggiungo la colonna alla grid
         $columns->addAfter('active', $toggle_seller);
-
     }
-
 }

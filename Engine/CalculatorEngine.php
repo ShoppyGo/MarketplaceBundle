@@ -34,7 +34,7 @@ class CalculatorEngine implements CommissionCalculatorInterface
     {
         $amount = $order->getTotalPaid();
         $commissionPercentage = $commission->getCommissionPercentage();
-        $calculatedCommission = $amount * ($commissionPercentage / 100);
+        $calculatedCommission = $amount * ($commissionPercentage); // commissionPercentage is float
 
         return $calculatedCommission;
     }

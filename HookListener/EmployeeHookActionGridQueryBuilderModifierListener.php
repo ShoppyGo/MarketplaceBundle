@@ -64,8 +64,8 @@ class EmployeeHookActionGridQueryBuilderModifierListener extends AbstractHookLis
 
         $search_query_builder
             ->addSelect('s.name as seller_name')
-            ->leftJoin('e', _DB_PREFIX_.'marketplace_employee_seller', 'mes', 'mes.id_employee = e.id_employee')
-            ->leftJoin('mes', _DB_PREFIX_.'supplier', 's', 's.id_supplier = mes.id_supplier')
+            ->leftJoin('e', _DB_PREFIX_ . 'marketplace_employee_seller', 'mes', 'mes.id_employee = e.id_employee')
+            ->leftJoin('mes', _DB_PREFIX_ . 'supplier', 's', 's.id_supplier = mes.id_supplier')
         ;
         /** @var SearchCriteriaInterface $search_criteria */
         $search_criteria = $params['search_criteria'];
@@ -75,10 +75,9 @@ class EmployeeHookActionGridQueryBuilderModifierListener extends AbstractHookLis
         foreach ($search_criteria->getFilters() as $filtername => $filter) {
             if ($filtername === 'seller_name') {
                 $search_query_builder->andWhere('s.name like :name')
-                    ->setParameter('name', '%'.$filter.'%')
+                    ->setParameter('name', '%' . $filter . '%')
                 ;
             }
         }
     }
-
 }

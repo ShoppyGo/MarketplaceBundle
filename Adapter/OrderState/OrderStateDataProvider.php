@@ -50,7 +50,7 @@ final class OrderStateDataProvider implements OrderStateDataProviderInterface
         $statuses = OrderState::getOrderStates($languageId, false);
         foreach ($statuses as $key => $status) {
             $seller_status = $this->orderStatusRepo->find($status['id_order_state']);
-            if(null === $seller_status || false === $seller_status->isSeller()) {
+            if (null === $seller_status || false === $seller_status->isSeller()) {
                 unset($statuses[$key]);
             }
         }

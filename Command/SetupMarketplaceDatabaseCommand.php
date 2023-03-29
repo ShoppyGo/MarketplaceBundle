@@ -67,13 +67,13 @@ class SetupMarketplaceDatabaseCommand extends Command
 
         $conn = $this->registry->getConnection();
 
-        $output->writeln('Type: '.$options['create']?'create':'drop');
+        $output->writeln('Type: ' . $options['create'] ? 'create' : 'drop');
         foreach ($sqls as $sql) {
-            $output->writeln('sql: '.$sql);
+            $output->writeln('sql: ' . $sql);
             $conn->executeQuery($sql);
         }
 
-        $output->writeln('Success: '.$type);
+        $output->writeln('Success: ' . $type);
 
         return 0;
     }
@@ -81,15 +81,14 @@ class SetupMarketplaceDatabaseCommand extends Command
     private function createSql(): array
     {
         //----- tabella seller
-        $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'marketplace_seller` (
+        $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'marketplace_seller` (
                     `id_supplier` int(11) NOT NULL,
                     `id_category` int(11) NOT NULL ,
                     `id_marketplace_commission` int(11) NOT NULL ,
                     KEY (`id_supplier`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
 
-
-        $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'marketplace_employee_seller` (
+        $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'marketplace_employee_seller` (
                     `id_employee` int(11) NOT NULL ,
                     `id_supplier` int(11) NOT NULL,
                     PRIMARY KEY  (`id_employee`),
@@ -98,7 +97,7 @@ class SetupMarketplaceDatabaseCommand extends Command
 
         //----- tabella commissioni
         // create sql table marketplace_commission
-        $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'marketplace_commission` (
+        $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'marketplace_commission` (
                       `id_marketplace_commission` int(11) NOT NULL AUTO_INCREMENT,
                       `commission_name` varchar(255) NOT NULL,
                       `fixed_commission` float NOT NULL,
@@ -113,7 +112,7 @@ class SetupMarketplaceDatabaseCommand extends Command
                     ';
 
         //----- tabella spedizioni
-        $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'marketplace_seller_shipping` (
+        $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'marketplace_seller_shipping` (
                     `id_shipping` int(11) NOT NULL AUTO_INCREMENT,
                     `id_supplier` int(11) NOT NULL ,
                     `from_total` decimal(8,2),
@@ -125,7 +124,7 @@ class SetupMarketplaceDatabaseCommand extends Command
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
 
         //------- categorie abilitate
-        $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'marketplace_category` (
+        $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'marketplace_category` (
                     `id_category` int(11) NOT NULL ,
                     `seller` boolean,
                     PRIMARY KEY ( `id_category`),
@@ -133,7 +132,7 @@ class SetupMarketplaceDatabaseCommand extends Command
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
 
         //------- order status
-        $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'marketplace_seller_order_status` (
+        $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'marketplace_seller_order_status` (
                     `id_order_state` int(11) NOT NULL ,
                     `seller` boolean,
                     PRIMARY KEY ( `id_order_state`),
@@ -141,7 +140,7 @@ class SetupMarketplaceDatabaseCommand extends Command
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
 
         //------- order
-        $sql[] = 'create table if not exists shoppygo.'._DB_PREFIX_.'marketplace_seller_order
+        $sql[] = 'create table if not exists shoppygo.' . _DB_PREFIX_ . 'marketplace_seller_order
                     (
                         id_order      int  not null,
                         id_supplier   int  not null,
@@ -152,15 +151,15 @@ class SetupMarketplaceDatabaseCommand extends Command
                         charset = utf8;
 
                     create index ps_marketplace_seller_order_id_order_main_index
-                        on '._DB_PREFIX_.'marketplace_seller_order (id_order_main);
+                        on ' . _DB_PREFIX_ . 'marketplace_seller_order (id_order_main);
 
                     create index ps_marketplace_seller_order_id_supplier_index
-                        on '._DB_PREFIX_.'marketplace_seller_order (id_supplier);
+                        on ' . _DB_PREFIX_ . 'marketplace_seller_order (id_supplier);
 
                     ';
 
         //------- order
-        $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'marketplace_seller_category` (
+        $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'marketplace_seller_category` (
                     `id_category` int(11) NOT NULL ,
                     `id_supplier` int(11) NOT NULL,
                     KEY (`id_supplier`, `id_category`)
@@ -172,11 +171,11 @@ class SetupMarketplaceDatabaseCommand extends Command
     private function dropSql(): array
     {
         return [
-            'DROP TABLE IF EXISTS '._DB_PREFIX_.'marketplace_employee_seller',
-            'DROP TABLE IF EXISTS '._DB_PREFIX_.'marketplace_seller_shipping',
-            'DROP TABLE IF EXISTS '._DB_PREFIX_.'marketplace_category',
-            'DROP TABLE IF EXISTS '._DB_PREFIX_.'marketplace_seller_order',
-            'DROP TABLE IF EXISTS '._DB_PREFIX_.'marketplace_seller_category',
+            'DROP TABLE IF EXISTS ' . _DB_PREFIX_ . 'marketplace_employee_seller',
+            'DROP TABLE IF EXISTS ' . _DB_PREFIX_ . 'marketplace_seller_shipping',
+            'DROP TABLE IF EXISTS ' . _DB_PREFIX_ . 'marketplace_category',
+            'DROP TABLE IF EXISTS ' . _DB_PREFIX_ . 'marketplace_seller_order',
+            'DROP TABLE IF EXISTS ' . _DB_PREFIX_ . 'marketplace_seller_category',
         ];
     }
 }

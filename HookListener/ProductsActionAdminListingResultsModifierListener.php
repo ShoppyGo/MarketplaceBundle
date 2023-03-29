@@ -72,6 +72,5 @@ class ProductsActionAdminListingResultsModifierListener extends AbstractHookList
         ];
         $sql_where[] = 'mksp.`id_supplier` = ' . $seller->getSellerId();
         $sql_group[] = 'p.`id_product`';
-
     }
 }

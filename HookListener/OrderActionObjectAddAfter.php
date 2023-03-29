@@ -46,7 +46,6 @@ class OrderActionObjectAddAfter extends AbstractHookListenerImplementation
         $this->commandBus = $commandBus;
     }
 
-
     public function exec(array $params)
     {
         // TODO: Implement exec() method.

@@ -27,35 +27,32 @@
 namespace ShoppyGo\MarketplaceBundle\Form\Widget;
 
 use PrestaShopBundle\Form\Admin\Type\SwitchType;
-use ShoppyGo\MarketplaceBundle\Entity\MarketplaceEmployeeSeller;
-use ShoppyGo\MarketplaceBundle\Provider\SellerChoiceProvider;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilder;
 
 class SellerSwitchWidget
 {
     protected bool $seller = false;
 
-
     public function addField(FormBuilder $form)
     {
         $form->add(
             'seller',
             SwitchType::class,
-            array(
+            [
                 'label' => 'Seller',
                 'choices' => [
                     'OFF' => false,
                     'ON' => true,
                 ],
-                'data' =>$this->seller,
-            )
+                'data' => $this->seller,
+            ]
         );
     }
 
     public function setSeller(?bool $seller): self
     {
         $this->seller = $seller;
+
         return $this;
     }
 }

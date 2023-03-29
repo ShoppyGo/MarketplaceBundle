@@ -74,7 +74,7 @@ class SellerSplitOrdersCommand extends Command
         ;
         $arguments = $input->getArguments();
         $options = $input->getOptions();
-        $id_order = (int)($arguments['idorder'] ?? $this->getLastMainOrder());
+        $id_order = (int) ($arguments['idorder'] ?? $this->getLastMainOrder());
         $this->dbPrefix = $options['dbprefix'];
 
         $prestashop_id_orders_without_seller_and_main_order = $this->getIdOrdersToElab($id_order);
@@ -100,8 +100,8 @@ class SellerSplitOrdersCommand extends Command
         ;
         // modify to join OrderState
         $result = $qb->select('o.id_order')
-            ->from($this->dbPrefix.'orders', 'o')
-            ->join('o', $this->dbPrefix.'order_state', 'os', 'o.current_state = os.id_order_state')
+            ->from($this->dbPrefix . 'orders', 'o')
+            ->join('o', $this->dbPrefix . 'order_state', 'os', 'o.current_state = os.id_order_state')
             ->where('o.id_order in (:id_order_to_elab)')
             ->andWhere('os.paid = 1')
             ->setParameter('id_order_to_elab', $id_order_to_elab, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
@@ -193,7 +193,7 @@ class SellerSplitOrdersCommand extends Command
     private function getPrestashopIdOrders(int $id_order): array
     {
         $row_prestashopid_orders = $this->queryBuilder()
-            ->from($this->dbPrefix.'orders', 'pso')
+            ->from($this->dbPrefix . 'orders', 'pso')
             ->select('pso.id_order')
             ->andWhere('pso.id_order >= :id_order')
             ->setParameter('id_order', $id_order)

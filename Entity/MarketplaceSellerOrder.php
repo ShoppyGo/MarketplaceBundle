@@ -106,6 +106,7 @@ class MarketplaceSellerOrder
 
     /**
      * @param bool $split
+     *
      * @return void
      */
     public function setSplit(bool $split): self

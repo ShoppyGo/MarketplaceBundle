@@ -28,10 +28,10 @@ namespace ShoppyGo\MarketplaceBundle\Classes;
 
 class MarketplaceConfiguration
 {
-    const  CONFIGURATION_KEYS = [
-//        'BWMARKETPLACE_CATEGORY_ID', # ok form
-//        'BWMARKETPLACE_TAXRULE_SHIPPING',
-//        'BWMARKETPLACE_PREFIX_SHIPPING_NAME',
+    public const CONFIGURATION_KEYS = [
+        //        'BWMARKETPLACE_CATEGORY_ID', # ok form
+        //        'BWMARKETPLACE_TAXRULE_SHIPPING',
+        //        'BWMARKETPLACE_PREFIX_SHIPPING_NAME',
     ];
     public static $adminMenu = [
         [
@@ -41,7 +41,7 @@ class MarketplaceConfiguration
             'parent' => 'DEFAULT',
             'icon' => 'shopping_cart',
         ],
-        [      #--- parent seller menu
+        [      //--- parent seller menu
             'controller' => 'AdminMarketplaceSeller',
             'route_name' => '',
             'label' => 'Your seller configuration',
@@ -62,9 +62,9 @@ class MarketplaceConfiguration
             'parent' => 'AdminMarketplace',
             'icon' => '',
         ],
-        #-------------------
-        # submenu seller
-        #
+        //-------------------
+        // submenu seller
+        //
         [
             'controller' => 'AdminMarketplaceSellerShipping',
             'route_name' => 'admin_marketplace_seller_shipping',
@@ -72,70 +72,68 @@ class MarketplaceConfiguration
             'parent' => 'AdminMarketplaceSeller',
             'icon' => '',
         ],
-
     ];
     public static $hooks = [
-        #------
-        # seller
-        #
-        #  form
+        //------
+        // seller
+        //
+        //  form
         'actionEmployeeFormBuilderModifier',
-        #  data
+        //  data
         'actionAfterCreateEmployeeFormHandler',
         'actionAfterUpdateEmployeeFormHandler',
         'actionEmployeeGridDefinitionModifier',
         'actionEmployeeGridQueryBuilderModifier',
-        #------
-        #  categorie
-        #
-        #  form
+        //------
+        //  categorie
+        //
+        //  form
         'actionCategoryFormBuilderModifier',
-        #  data
+        //  data
         'actionAfterCreateCategoryFormHandler',
         'actionAfterUpdateCategoryFormHandler',
         'actionCategoryGridDefinitionModifier',
         'actionCategoryGridQueryBuilderModifier',
-        #-------
-        #  prodotti
-        #
-        #  lista
+        //-------
+        //  prodotti
+        //
+        //  lista
         'actionAdminProductsListingFieldsModifier',
-        #  form
+        //  form
         'actionProductFormBuilderModifier',
-        #  aggiunta e creazione
-        #  @todo eliminare quando la pagina prodotto sarà passata a cqrs
+        //  aggiunta e creazione
+        //  @todo eliminare quando la pagina prodotto sarà passata a cqrs
         'actionObjectProductAddAfter',
         'actionObjectProductUpdateAfter',
         'actionAfterCreateProductFormHandler', //nuovi hook in attesa
         'actionAfterUpdateProductFormHandler',  //nuovi hook in attesa
-        # lista prodotti
+        // lista prodotti
         'actionProductGridDefinitionModifier',
         'actionProductGridQueryBuilderModifier',
-        #--------
-        # carrello
-        #
+        //--------
+        // carrello
+        //
         'actionObjectCartUpdateBefore',
         'actionObjectCartUpdateAfter',
         'actionObjectProductInCartDeleteBefore',
         'actionObjectProductInCartDeleteAfter',
-        #--------
-        # ordini
-        #
+        //--------
+        // ordini
+        //
         'actionObjectOrderAddAfter',
         'actionObjectOrderDetailAddAfter',
         'actionObjectOrderCarrierAddAfter',
         'actionOrderStatusUpdate',
         'actionOrderGridQueryBuilderModifier',
-        #-------
-        #  altro
-        #
+        //-------
+        //  altro
+        //
         'header',
         'backOfficeHeader',
-
     ];
-    #
-    # autorizzioni per il seller
-    #
+    //
+    // autorizzioni per il seller
+    //
     public static $authrole_for_seller = [
         'ROLE_MOD_TAB_ADMINADDRESSES_CREATE',
         'ROLE_MOD_TAB_ADMINADDRESSES_READ',
@@ -195,12 +193,11 @@ class MarketplaceConfiguration
         'ROLE_MOD_TAB_ADMINMARKETPLACESELLERSHIPPING_READ',
         'ROLE_MOD_TAB_ADMINMARKETPLACESELLERSHIPPING_UPDATE',
         'ROLE_MOD_TAB_ADMINMARKETPLACESELLERSHIPPING_DELETE',
-
     ];
 
-    #
-    # moduli per seller
-    #
+    //
+    // moduli per seller
+    //
     public static $modauthrole_for_seller = [
         'ROLE_MOD_MODULE_BWMARKETPLACE_READ',
         'ROLE_MOD_MODULE_BWMARKETPLACE_UPDATE',

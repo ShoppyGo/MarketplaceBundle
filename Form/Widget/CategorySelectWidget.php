@@ -39,16 +39,17 @@ class CategorySelectWidget
     public function addField(FormBuilder $form)
     {
         $form->add(
-            'category', ChoiceType::class, array(
+            'category', ChoiceType::class, [
                 'label' => 'Categories',
                 'choices' => $this->categories,
                 'data' => $this->id_category,
-            )
+            ]
         );
     }
 
     /**
      * @param array $categories ['name'=>id]
+     *
      * @return $this
      */
     public function setCategoryList(array $categories): self

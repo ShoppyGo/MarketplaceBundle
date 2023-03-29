@@ -65,7 +65,7 @@ class OrderActionGridDefinitionModifierListener extends AbstractHookListenerImpl
         //-------creo la colonna e la nomino is_seller
 //        $seller_name = new DataColumn('split');
 //        $seller_name->setName($this->translator->trans('Split', [], 'Admin.Shoppygo.Marketplace'));
-////            ->setOptions();
+        ////            ->setOptions();
 
         //----aggiungo la colonna alla grid
         $columns->addAfter('reference', $seller_name);

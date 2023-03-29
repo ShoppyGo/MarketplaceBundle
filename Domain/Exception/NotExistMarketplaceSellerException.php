@@ -26,8 +26,6 @@
 
 namespace ShoppyGo\MarketplaceBundle\Domain\Exception;
 
-
 class NotExistMarketplaceSellerException extends \PrestaShopException
 {
-
 }

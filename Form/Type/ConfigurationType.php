@@ -34,10 +34,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ConfigurationType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
 //            ->add(
 //                'BWMARKETPLACE_CATEGORY_ID',
 //                CategoryChoiceTreeType::class,
@@ -66,14 +64,13 @@ class ConfigurationType extends AbstractType
                 )
             )
         */
-        ;
     }
+
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             // ...,
-//            'categories' => [],
+            //            'categories' => [],
         ]);
-
     }
 }

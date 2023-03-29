@@ -28,5 +28,4 @@ namespace PrestaShop\PrestaShop\ShoppyGo\MarketplaceBundle\Exception;
 
 class NotSellerOderDetailsException extends \Exception
 {
-
 }

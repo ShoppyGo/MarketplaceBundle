@@ -26,10 +26,10 @@
 
 namespace ShoppyGo\MarketplaceBundle\Domain\Seller\CommandHandler;
 
-use ShoppyGo\MarketplaceBundle\Domain\Seller\Command\ReplaceSellerCommand;
-use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSeller;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManagerInterface;
+use ShoppyGo\MarketplaceBundle\Domain\Seller\Command\ReplaceSellerCommand;
+use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSeller;
 
 class ReplaceSellerCommandHandler
 {
@@ -61,6 +61,5 @@ class ReplaceSellerCommandHandler
         $seller->setIdSupplier($params['supplier']);
         $this->manager->persist($seller);
         $this->manager->flush();
-
     }
 }

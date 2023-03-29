@@ -53,7 +53,7 @@ class CategoryActionGridQueryBuilderModifier extends AbstractHookListenerImpleme
         $search_query_builder = $params['search_query_builder'];
 
         $search_query_builder->addSelect('mc.seller as is_seller')
-            ->leftJoin('c', _DB_PREFIX_.'marketplace_category', 'mc', 'mc.id_category = c.id_category')
+            ->leftJoin('c', _DB_PREFIX_ . 'marketplace_category', 'mc', 'mc.id_category = c.id_category')
         ;
         /** @var SearchCriteriaInterface $search_criteria */
         $search_criteria = $params['search_criteria'];
@@ -68,5 +68,4 @@ class CategoryActionGridQueryBuilderModifier extends AbstractHookListenerImpleme
             }
         }
     }
-
 }

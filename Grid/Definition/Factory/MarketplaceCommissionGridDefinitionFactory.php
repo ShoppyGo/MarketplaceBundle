@@ -32,7 +32,6 @@ use PrestaShop\PrestaShop\Core\Grid\Action\Row\Type\LinkRowAction;
 use PrestaShop\PrestaShop\Core\Grid\Action\Row\Type\SubmitRowAction;
 use PrestaShop\PrestaShop\Core\Grid\Column\ColumnCollection;
 use PrestaShop\PrestaShop\Core\Grid\Column\Type\Common\ActionColumn;
-use PrestaShop\PrestaShop\Core\Grid\Column\Type\Common\ToggleColumn;
 use PrestaShop\PrestaShop\Core\Grid\Column\Type\DataColumn;
 use PrestaShop\PrestaShop\Core\Grid\Definition\Factory\AbstractGridDefinitionFactory;
 use PrestaShop\PrestaShop\Core\Grid\Filter\FilterCollection;
@@ -41,7 +40,7 @@ use ShoppyGo\MarketplaceBundle\Grid\Column\Type\TickColumn;
 
 class MarketplaceCommissionGridDefinitionFactory extends AbstractGridDefinitionFactory
 {
-    const GRID_ID = 'marketplace_commission';
+    public const GRID_ID = 'marketplace_commission';
 
     public function setMarketplaceCore(MarketplaceCore $marketplaceCore)
     {
@@ -75,7 +74,6 @@ class MarketplaceCommissionGridDefinitionFactory extends AbstractGridDefinitionF
                     $this->trans('Total of product (net Vat)', [], 'Admin.Global')
                 )
                     ->setOptions([
-
                         'field' => 'total_products_net_of_vat',
                     ]),
             )
@@ -157,10 +155,10 @@ class MarketplaceCommissionGridDefinitionFactory extends AbstractGridDefinitionF
             )
                 ->setIcon('edit')
                 ->setOptions([
-                    'route'             => 'admin_marketplace_marketplace_commission_edit',
-                    'route_param_name'  => 'id_marketplace_commission',
+                    'route' => 'admin_marketplace_marketplace_commission_edit',
+                    'route_param_name' => 'id_marketplace_commission',
                     'route_param_field' => 'id_marketplace_commission',
-                    'clickable_row'     => true,
+                    'clickable_row' => true,
                 ])
         )
             ->add(
@@ -169,11 +167,11 @@ class MarketplaceCommissionGridDefinitionFactory extends AbstractGridDefinitionF
                 )
                     ->setIcon('delete')
                     ->setOptions([
-                        'method'            => 'DELETE',
-                        'route'             => 'admin_marketplace_marketplace_commission_delete',
-                        'route_param_name'  => 'id_marketplace_commission',
+                        'method' => 'DELETE',
+                        'route' => 'admin_marketplace_marketplace_commission_delete',
+                        'route_param_name' => 'id_marketplace_commission',
                         'route_param_field' => 'id_marketplace_commission',
-                        'confirm_message'   => $this->trans(
+                        'confirm_message' => $this->trans(
                             'Delete selected item?',
                             [],
                             'Admin.Notifications.Warning'

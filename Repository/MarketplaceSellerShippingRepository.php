@@ -60,7 +60,6 @@ class MarketplaceSellerShippingRepository extends EntityRepository
             return $range[0];
         }
 
-
         return null;
     }
 
@@ -68,6 +67,7 @@ class MarketplaceSellerShippingRepository extends EntityRepository
      * @param $from
      * @param $to
      * @param $id_seller
+     *
      * @return array<MarketplaceSellerShipping>
      */
     public function getRanges($from, $to, $id_seller): array

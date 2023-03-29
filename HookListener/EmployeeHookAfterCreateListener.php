@@ -59,5 +59,4 @@ class EmployeeHookAfterCreateListener extends AbstractHookListenerImplementation
         $id_employee = $params['id'];
         $this->employeeSellerRepository->create($id_employee, $id_seller);
     }
-
 }

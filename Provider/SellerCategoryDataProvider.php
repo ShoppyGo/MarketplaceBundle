@@ -26,7 +26,6 @@
 
 namespace ShoppyGo\MarketplaceBundle\Provider;
 
-use Category;
 use PrestaShop\PrestaShop\Adapter\Category\CategoryDataProvider;
 use PrestaShop\PrestaShop\Adapter\LegacyContext;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;

@@ -60,7 +60,7 @@ class MarketplaceSellerShippingQueryBuilder extends AbstractDoctrineQueryBuilder
     {
         $qb = $this->connection->createQueryBuilder()
             ->select('mp.id_shipping, mp.from_total, to_total,shipping_cost')
-            ->from($this->dbPrefix.'marketplace_seller_shipping', 'mp')
+            ->from($this->dbPrefix . 'marketplace_seller_shipping', 'mp')
         ;
 
         if (false === $this->core->isEmployStaff()) {
@@ -68,7 +68,7 @@ class MarketplaceSellerShippingQueryBuilder extends AbstractDoctrineQueryBuilder
                 ->setParameter('id_seller', $this->core->getSellerId())
             ;
         } else {
-            $qb->innerJoin('mp', $this->dbPrefix.'supplier', 'suppl', 'suppl.id_supplier = mp.id_supplier');
+            $qb->innerJoin('mp', $this->dbPrefix . 'supplier', 'suppl', 'suppl.id_supplier = mp.id_supplier');
             $qb->addSelect('suppl.name');
         }
 

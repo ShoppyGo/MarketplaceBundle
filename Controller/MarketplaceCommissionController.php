@@ -28,7 +28,6 @@ namespace ShoppyGo\MarketplaceBundle\Controller;
 
 use PrestaShop\PrestaShop\Core\Grid\Search\SearchCriteria;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
-use PrestaShopBundle\Security\Annotation\AdminSecurity;
 use ShoppyGo\MarketplaceBundle\Entity\MarketplaceCommission;
 use ShoppyGo\MarketplaceBundle\Form\Type\MarketplaceCommissionType;
 use Symfony\Component\HttpFoundation\Request;
@@ -110,12 +109,12 @@ class MarketplaceCommissionController extends FrameworkBundleAdminController
         ;
 
         return $this->render(
-            '@Modules/bwmarketplace/views/templates/admin/controller/marketplace_commission_index.html.twig',
+            '@ShoppyGoMarketplace/controller/commission/marketplace_commission_index.html.twig',
             [
                 'marketplaceCommissionGrid' => $this->presentGrid($grid),
-                'layoutHeaderToolbarBtn'    => [],
-                'enableSidebar'             => true,
-                'help_link'                 => '',
+                'layoutHeaderToolbarBtn' => [],
+                'enableSidebar' => true,
+                'help_link' => '',
             ]
         );
     }

@@ -39,11 +39,11 @@ class CommissionSelectWidget
     public function addField(FormBuilder $form)
     {
         $form->add(
-            'commission', ChoiceType::class, array(
+            'commission', ChoiceType::class, [
                 'label' => 'Commission',
                 'choices' => $this->commissions,
                 'data' => $this->id_marketplace_commission,
-            )
+            ]
         );
     }
 

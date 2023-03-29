@@ -72,5 +72,4 @@ class EmployeeActionFormBuilderModifierListener extends AbstractHookListenerImpl
     {
         $this->sellerSelectWidget = $sellerSelectWidget;
     }
-
 }

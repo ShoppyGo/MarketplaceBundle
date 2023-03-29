@@ -59,5 +59,4 @@ class EmployeeHookAfterUpdateListener extends AbstractHookListenerImplementation
         $id_employee = $params['id'];
         $this->employeeSellerRepository->update($id_employee, $id_seller);
     }
-
 }

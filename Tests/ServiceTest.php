@@ -2,14 +2,14 @@
 
 namespace ShoppyGo\MarketplaceBundle\Tests;
 
-use ShoppyGo\MaketplaceBundle\Service\Service;
-use ShoppyGo\MaketplaceBundle\Tests\Mock\UserMock;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use ShoppyGo\MaketplaceBundle\Service\Service;
+use ShoppyGo\MaketplaceBundle\Tests\Mock\UserMock;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Translation\Translator;
 
 class ServiceTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
@@ -37,7 +37,7 @@ class ServiceTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
         $requestMock = $this->getMockBuilder(Request::class)->getMock();
         $this->requestStackMock = $this->getMockBuilder(RequestStack::class)
             ->disableOriginalConstructor()
-            ->setMethods(array('getCurrentRequest'))
+            ->setMethods(['getCurrentRequest'])
             ->getMock();
         $this->requestStackMock->expects($this->any())
             ->method('getCurrentRequest')->willReturn($requestMock);
@@ -65,6 +65,6 @@ class ServiceTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 
         $foo = $service->foo(4, 3);
 
-        $this->assertSame('This is an uncertain  output' , $foo);
+        $this->assertSame('This is an uncertain  output', $foo);
     }
 }

@@ -40,7 +40,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class SellerSplitSingleOrderCommand extends Command
 {
-    const SHOPPYGO_SPLIT_SINGLE_ORDER = 'shoppygo:split:single:order';
+    public const SHOPPYGO_SPLIT_SINGLE_ORDER = 'shoppygo:split:single:order';
     protected Registry $registry;
     protected string $dbPrefix;
     protected MarketplaceSellerProductRepository $marketplaceSellerProductRepository;

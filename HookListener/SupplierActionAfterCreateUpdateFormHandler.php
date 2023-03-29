@@ -54,10 +54,9 @@ class SupplierActionAfterCreateUpdateFormHandler extends AbstractHookListenerImp
         if ($this->core->isEmployeeSeller()) {
             throw new NotSellerException('Seller can\'t update category');
         }
-        $id_seller = (int)$params['id'];
-        $id_category = (int)$params['form_data']['category'];
-        $id_commission = (int)$params['form_data']['commission'];
+        $id_seller = (int) $params['id'];
+        $id_category = (int) $params['form_data']['category'];
+        $id_commission = (int) $params['form_data']['commission'];
         $this->marketplaceSellerCategoryRepository->createOrUpdate($id_seller, $id_category, $id_commission);
     }
-
 }

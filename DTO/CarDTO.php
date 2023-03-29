@@ -32,9 +32,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CarDTO implements \JsonSerializable
 {
-    const ID = 'id';
-    const BRAND = 'brand';
-    const MODEL = 'model';
+    public const ID = 'id';
+    public const BRAND = 'brand';
+    public const MODEL = 'model';
 
     protected $id;
     protected $brand;
@@ -56,7 +56,6 @@ class CarDTO implements \JsonSerializable
             ->withBrand($request->request->get(self::BRAND))
             ->withModel($request->request->get(self::MODEL))
             ->build();
-
     }
 
     public static function toResponse(CarDTO $carDTO)
@@ -110,10 +109,10 @@ class CarDTO implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        return array(
+        return [
             'id' => $this->id,
             'brand' => $this->brand,
             'model' => $this->model,
-        );
+        ];
     }
 }

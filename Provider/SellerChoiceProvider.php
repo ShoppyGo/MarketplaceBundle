@@ -49,7 +49,6 @@ class SellerChoiceProvider implements FormChoiceProviderInterface, FormChoiceAtt
     {
         $choices = [];
         foreach ($this->sellerDataProvider->getSuppliers() as $supplier) {
-
             $choices[$supplier['name']] = $supplier['id_supplier'];
         }
 

@@ -54,6 +54,4 @@ class MarketplaceCommissionChoiceProvider
 
         return $choices;
     }
-
-
 }

@@ -34,22 +34,22 @@ use ShoppyGo\MarketplaceBundle\Interfaces\MarketplaceEntityInterface;
  * @ORM\Entity(repositoryClass="ShoppyGo\MarketplaceBundle\Repository\MarketplaceCategoryRepository")
  *
  * Class MarketplaceCategory
- * @package ShoppyGo\MarketplaceBundle\Entity
  */
 class MarketplaceCategory implements MarketplaceEntityInterface
 {
     /**
      * @Orm\Id
      * @ORM\Column(name="id_category", type="integer")
+     *
      * @var int
      */
     private $id_category;
     /**
      * @ORM\Column(name="seller", type="boolean")
+     *
      * @var bool
      */
     private $seller = false;
-
 
     public function getId()
     {
@@ -101,5 +101,4 @@ class MarketplaceCategory implements MarketplaceEntityInterface
     {
         $this->setSeller(!$this->isSeller());
     }
-
 }
