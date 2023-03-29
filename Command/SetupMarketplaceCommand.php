@@ -96,6 +96,16 @@ class SetupMarketplaceCommand extends Command
         if ($input->getOption('menu')) {
             $this->addMarketplaceMenu($output);
         }
+        //TODO devo impostare gòli hook per il marketplace.
+        //     in questo momento sono questi Hook
+        //     displayAdminMarketplaceDashboardTop
+        //     displayAdminMarketplaceDashboardBottom
+        //     displayAdminMarketplaceDashboardLeft
+        //     displayAdminMarketplaceDashboardCenter
+        //     displayAdminMarketplaceDashboardRight
+
+
+
         $setup_database = $this->getApplication()
             ->find('shoppygo:setup:database')
         ;
