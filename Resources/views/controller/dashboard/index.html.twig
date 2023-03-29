@@ -1,0 +1,26 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+{% block content %}
+  <div class="row">
+    <div class="col-md-12">
+      {{ renderhook('displayAdminMarketplaceDashboardTop') }}
+    </div>
+  </div>
+  <div class="row">
+
+    <div class="col-md-2">
+      {{ renderhook('displayAdminMarketplaceDashboardLeft') }}
+    </div>
+    <div class="col-md-8">
+      {{ renderhook('displayAdminMarketplaceDashboardCenter') }}
+    </div>
+    <div class="col-md-2">
+      {{ renderhook('displayAdminMarketplaceDashboardRight') }}
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        {{ renderhook('displayAdminMarketplaceDashboardBottom') }}
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

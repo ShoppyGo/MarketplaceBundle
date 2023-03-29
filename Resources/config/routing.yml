@@ -110,3 +110,9 @@ admin_marketplace_marketplace_commission_delete:
     _controller: ShoppyGo\MarketplaceBundle\Controller\MarketplaceCommissionController::deleteAction
   requirements:
     id_marketplace_commission: \d+
+
+admin_marketplace_dashboard:
+  path: /admin/marketplace/dashboard
+  methods: [GET]
+  defaults:
+    _controller: ShoppyGo\MarketplaceBundle\Controller\MarketplaceDashboardController::indexAction
