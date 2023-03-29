@@ -30,45 +30,61 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerCategoryRepository")
+ * @ORM\Entity(repositoryClass="ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerRepository")
  *
  * Class MarketplaceSellerCategory
  * @package ShoppyGo\MarketplaceBundle\Entity
  */
-class MarketplaceSellerCategory
+class MarketplaceSeller
 {
 
     /**
      * @ORM\Id
-     * @ORM\Column(name="id_category", type="integer")
-     * @var int
-     */
-    private $id_category;
-
-    /**
      * @ORM\Column(name="id_supplier", type="integer")
      * @var int
      */
-    private $id_seller;
+    private int $id_seller;
 
     /**
-     * @return int
+     * @ORM\Column(name="id_category", type="integer")
+     * @var int
      */
+    private int $id_category;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="ShoppyGo\MarketplaceBundle\Entity\MarketplaceCommission",
+     *     inversedBy="id_marketplace_commission")
+     * @ORM\JoinColumn(name="id_marketplace_commission", referencedColumnName="id_marketplace_commission")
+     */
+    private MarketplaceCommission $marketplaceCommission;
+
+    /**
+     * @return MarketplaceCommission
+     */
+    public function getMarketplaceCommission(): MarketplaceCommission
+    {
+        return $this->marketplaceCommission;
+    }
+
+    /**
+     * @param MarketplaceCommission $marketplaceCommission
+     */
+    public function setMarketplaceCommission(MarketplaceCommission $marketplaceCommission): void
+    {
+        $this->marketplaceCommission = $marketplaceCommission;
+    }
+
     public function getIdCategory(): int
     {
         return $this->id_category;
     }
 
-    /**
-     * @param int $id_category
-     */
     public function setIdCategory(int $id_category): self
     {
         $this->id_category = $id_category;
 
         return $this;
     }
-
 
     public function getIdSeller(): int
     {
@@ -81,7 +97,5 @@ class MarketplaceSellerCategory
 
         return $this;
     }
-
-
 
 }

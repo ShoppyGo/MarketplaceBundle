@@ -23,12 +23,19 @@ services:
         parent: "prestashop.adapter.product.repository.product_supplier_repository"
         class: ShoppyGo\MarketplaceBundle\Repository\MarketplaceProductSupplierRepository
 
-    shoppygo.marketplace.repository.category_seller_repository:
-        class: ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerCategoryRepository
+#    shoppygo.marketplace.repository.category_seller_repository:
+#        class: ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerCategoryRepository
+#        factory:
+#            - "@doctrine.orm.entity_manager"
+#            - getRepository
+#        arguments: [ ShoppyGo\MarketplaceBundle\Entity\MarketplaceSellerCategory ]
+
+    shoppygo.marketplace.repository.marketplace_seller_repository:
+        class: ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerRepository
         factory:
             - "@doctrine.orm.entity_manager"
             - getRepository
-        arguments: [ ShoppyGo\MarketplaceBundle\Entity\MarketplaceSellerCategory ]
+        arguments: [ ShoppyGo\MarketplaceBundle\Entity\MarketplaceSeller ]
 
     shoppygo.marketplace.repository.seller_order_repository:
         class: ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerOrderRepository

@@ -27,41 +27,47 @@
 namespace ShoppyGo\MarketplaceBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSellerCategory;
+use ShoppyGo\MarketplaceBundle\Entity\MarketplaceCommission;
+use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSeller;
 
-class MarketplaceSellerCategoryRepository extends EntityRepository
+class MarketplaceSellerRepository extends EntityRepository
 {
-    public function create(int $id_seller, int $id_category): ?MarketplaceSellerCategory
+    public function create(int $id_seller, int $id_category, MarketplaceCommission $commission): ?MarketplaceSeller
     {
-        $entity = new MarketplaceSellerCategory();
+        $entity = new MarketplaceSeller();
         $entity->setIdSeller($id_seller);
         $entity->setIdCategory($id_category);
+        $entity->setMarketplaceCommission($commission);
         $this->getEntityManager()->persist($entity);
         $this->getEntityManager()->flush();
         return $entity;
     }
 
-    public function createOrUpdate(int $id_seller,int $id_category): MarketplaceSellerCategory
+    public function createOrUpdate(int $id_seller,int $id_category, int $id_commission): MarketplaceSeller
     {
-        $marketplaceSellerCategory = $this->update($id_seller, $id_category);
+        xdebug_break();
+        $commission = $this->getEntityManager()->getRepository(MarketplaceCommission::class)
+                ->find($id_commission);
+        $marketplaceSellerCategory = $this->update($id_seller, $id_category, $commission);
         if(!$marketplaceSellerCategory){
-            $marketplaceSellerCategory = $this->create($id_seller, $id_category);
+            $marketplaceSellerCategory = $this->create($id_seller, $id_category, $commission);
         }
         return $marketplaceSellerCategory;
     }
 
-    public function findSellerCategoryRootBy(int $id_seller): ?MarketplaceSellerCategory
+    public function findSellerCategoryRootBy(int $id_seller): ?MarketplaceSeller
     {
         return $this->findOneBy([
             'id_seller' => $id_seller,
         ]);
     }
 
-    public function update(int $id_seller, int $id_category): ?MarketplaceSellerCategory
+    public function update(int $id_seller, int $id_category, MarketplaceCommission $commission): ?MarketplaceSeller
     {
         $entity = $this->findOneBy(['id_seller'=>$id_seller]);
         if(!$entity) return null;
         $entity->setIdCategory($id_category);
+        $entity->setMarketplaceCommission($commission);
         $this->getEntityManager()->flush();
         return $entity;
     }

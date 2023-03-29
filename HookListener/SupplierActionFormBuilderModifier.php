@@ -35,7 +35,7 @@ use ShoppyGo\MarketplaceBundle\Form\Widget\SellerSwitchWidget;
 use ShoppyGo\MarketplaceBundle\Provider\Category\MarketplaceCategoryDataProvider;
 use ShoppyGo\MarketplaceBundle\Provider\MarketplaceCommissionChoiceProvider;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceCategoryRepository;
-use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerCategoryRepository;
+use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerRepository;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -46,7 +46,7 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
     protected TranslatorInterface $translator;
     protected CategorySelectWidget $categorySelectWidget;
     protected CategoryDataProvider $categoryDataProvider;
-    protected MarketplaceSellerCategoryRepository $marketplaceSellerCategoryRepository;
+    protected MarketplaceSellerRepository $marketplaceSellerCategoryRepository;
     protected CommissionSelectWidget $commissionSelectWidget;
     protected MarketplaceCommissionChoiceProvider $marketplaceCommissionChoiceProvider;
 
@@ -55,7 +55,7 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
         TranslatorInterface $translator,
         CategorySelectWidget $categorySelectWidget,
         CategoryDataProvider $categoryDataProvider,
-        MarketplaceSellerCategoryRepository $marketplaceSellerCategoryRepository,
+        MarketplaceSellerRepository $marketplaceSellerCategoryRepository,
         CommissionSelectWidget $commissionSelectWidget,
         MarketplaceCommissionChoiceProvider $marketplaceCommissionChoiceProvider
     ) {
@@ -100,6 +100,7 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
             ->addField($form)
         ;
 
+        // TODO aggiungere il default commission
         $commissions = $this->marketplaceCommissionChoiceProvider->getChoices();
         $this->commissionSelectWidget->setCommissionList($commissions)
             ->setDeafult(1)

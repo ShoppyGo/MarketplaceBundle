@@ -38,7 +38,7 @@ services:
 
     shoppygo.marketplace.create.seller.product.handler:
         class: ShoppyGo\MarketplaceBundle\Domain\Product\CommandHandler\CreateSellerProductCommandHandler
-        arguments: [ '@doctrine', '@prestashop.adapter.legacy.context', '@shoppygo.marketplace.repository.category_seller_repository' ]
+        arguments: [ '@doctrine', '@prestashop.adapter.legacy.context', '@shoppygo.marketplace.repository.marketplace_seller_repository' ]
         tags:
             - name: tactician.handler
               command: 'ShoppyGo\MarketplaceBundle\Domain\Product\Command\CreateSellerProductCommand'

@@ -30,19 +30,19 @@ use PrestaShop\PrestaShop\Core\CommandBus\CommandBusInterface;
 use PrestaShop\PrestaShop\ShoppyGo\MarketplaceBundle\Exception\NotSellerException;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceCategoryRepository;
-use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerCategoryRepository;
+use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerRepository;
 
 class SupplierActionAfterCreateUpdateFormHandler extends AbstractHookListenerImplementation
 {
     protected MarketplaceCore $core;
     protected MarketplaceCategoryRepository $categoryRepository;
     protected CommandBusInterface $commandBus;
-    protected MarketplaceSellerCategoryRepository $marketplaceSellerCategoryRepository;
+    protected MarketplaceSellerRepository $marketplaceSellerCategoryRepository;
 
     public function __construct(
         MarketplaceCore $core,
         CommandBusInterface $commandBus,
-        MarketplaceSellerCategoryRepository $marketplaceSellerCategoryRepository
+        MarketplaceSellerRepository $marketplaceSellerCategoryRepository
     ) {
         $this->core = $core;
         $this->commandBus = $commandBus;
@@ -56,7 +56,8 @@ class SupplierActionAfterCreateUpdateFormHandler extends AbstractHookListenerImp
         }
         $id_seller = (int)$params['id'];
         $id_category = (int)$params['form_data']['category'];
-        $this->marketplaceSellerCategoryRepository->createOrUpdate($id_seller, $id_category);
+        $id_commission = (int)$params['form_data']['commission'];
+        $this->marketplaceSellerCategoryRepository->createOrUpdate($id_seller, $id_category, $id_commission);
     }
 
 }

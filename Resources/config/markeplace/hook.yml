@@ -118,7 +118,7 @@ services:
             - '@translator.default'
             - '@shoppygo.widget.category.select'
             - '@prestashop.adapter.data_provider.category'
-            - '@shoppygo.marketplace.repository.category_seller_repository'
+            - '@shoppygo.marketplace.repository.marketplace_seller_repository'
             - '@shoppygo.widget.commission.select'
             - '@shoppygo.provider.marketplace.commission.choices'
         calls:
@@ -173,7 +173,7 @@ services:
         arguments:
             - '@shoppygo.core'
             - '@prestashop.core.command_bus'
-            - '@shoppygo.marketplace.repository.category_seller_repository'
+            - '@shoppygo.marketplace.repository.marketplace_seller_repository'
         calls:
             - [ setHooks,[ [ 'actionAfterUpdateSupplierFormHandler' ] ] ]
         tags:

@@ -80,6 +80,15 @@ class SetupMarketplaceDatabaseCommand extends Command
 
     private function createSql(): array
     {
+        //----- tabella seller
+        $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'marketplace_seller` (
+                    `id_supplier` int(11) NOT NULL,
+                    `id_category` int(11) NOT NULL ,
+                    `id_marketplace_commission` int(11) NOT NULL ,
+                    KEY (`id_supplier`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
+
+
         $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'marketplace_employee_seller` (
                     `id_employee` int(11) NOT NULL ,
                     `id_supplier` int(11) NOT NULL,

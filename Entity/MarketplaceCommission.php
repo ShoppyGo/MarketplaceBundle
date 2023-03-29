@@ -83,6 +83,11 @@ class MarketplaceCommission
      */
     private bool $totalGeneral = false;
 
+    public function __toString(): string
+    {
+        return $this->getCommissionName();
+    }
+
     /**
      * @return string
      */
