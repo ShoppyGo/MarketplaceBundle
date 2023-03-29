@@ -33,6 +33,7 @@ use ShoppyGo\MarketplaceBundle\Form\Widget\CategorySelectWidget;
 use ShoppyGo\MarketplaceBundle\Form\Widget\CommissionSelectWidget;
 use ShoppyGo\MarketplaceBundle\Form\Widget\SellerSwitchWidget;
 use ShoppyGo\MarketplaceBundle\Provider\Category\MarketplaceCategoryDataProvider;
+use ShoppyGo\MarketplaceBundle\Provider\MarketplaceCommissionChoiceProvider;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceCategoryRepository;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerCategoryRepository;
 use Symfony\Component\Form\FormBuilder;
@@ -47,6 +48,7 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
     protected CategoryDataProvider $categoryDataProvider;
     protected MarketplaceSellerCategoryRepository $marketplaceSellerCategoryRepository;
     protected CommissionSelectWidget $commissionSelectWidget;
+    protected MarketplaceCommissionChoiceProvider $marketplaceCommissionChoiceProvider;
 
     public function __construct(
         MarketplaceCore $core,
@@ -55,6 +57,7 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
         CategoryDataProvider $categoryDataProvider,
         MarketplaceSellerCategoryRepository $marketplaceSellerCategoryRepository,
         CommissionSelectWidget $commissionSelectWidget,
+        MarketplaceCommissionChoiceProvider $marketplaceCommissionChoiceProvider
     ) {
         $this->core = $core;
         $this->translator = $translator;
@@ -62,6 +65,7 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
         $this->categoryDataProvider = $categoryDataProvider;
         $this->marketplaceSellerCategoryRepository = $marketplaceSellerCategoryRepository;
         $this->commissionSelectWidget = $commissionSelectWidget;
+        $this->marketplaceCommissionChoiceProvider = $marketplaceCommissionChoiceProvider;
     }
 
     public function exec(array $params)
@@ -77,20 +81,30 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
 
         $root_category = $this->categoryDataProvider->getNestedCategories();
 
-        $children_category =array_column(array_pop($root_category)['children'],'name');
+        $children_category = array_column(array_pop($root_category)['children'], 'name');
+        $categoryChoices = [];
+        $categoryChoices[''] = '';
+
+        $categoryChoices = array_merge(
+            $categoryChoices,
+            array_combine(
+                array_values($children_category),
+                array_keys($children_category)
+            )
+        );
 
         $this->categorySelectWidget->setCategoryList(
-            array_combine(array_values($children_category), array_keys($children_category))
+            $categoryChoices
         )
             ->setDeafult($seller_category ? $seller_category->getIdCategory() : 0)
             ->addField($form)
         ;
 
-        //TODO comoletare con il provider per le commissioni
-        $commissions = [];
+        $commissions = $this->marketplaceCommissionChoiceProvider->getChoices();
         $this->commissionSelectWidget->setCommissionList($commissions)
             ->setDeafult(1)
-            ->addField($form);
+            ->addField($form)
+        ;
     }
 
 }

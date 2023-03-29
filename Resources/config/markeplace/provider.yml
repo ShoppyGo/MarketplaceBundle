@@ -3,3 +3,7 @@ services:
         class: ShoppyGo\MarketplaceBundle\Provider\SellerChoiceProvider
         arguments:
             - '@prestashop.adapter.data_provider.supplier'
+    shoppygo.provider.marketplace.commission.choices:
+      class: ShoppyGo\MarketplaceBundle\Provider\MarketplaceCommissionChoiceProvider
+      arguments:
+        - '@doctrine.orm.entity_manager'

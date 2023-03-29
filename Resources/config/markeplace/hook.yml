@@ -120,6 +120,7 @@ services:
             - '@prestashop.adapter.data_provider.category'
             - '@shoppygo.marketplace.repository.category_seller_repository'
             - '@shoppygo.widget.commission.select'
+            - '@shoppygo.provider.marketplace.commission.choices'
         calls:
             - [ setHooks,[ [ 'actionSupplierFormBuilderModifier' ] ] ]
         tags:
