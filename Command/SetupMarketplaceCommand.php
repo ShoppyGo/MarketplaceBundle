@@ -132,6 +132,13 @@ class SetupMarketplaceCommand extends Command
                 'icon' => 'settings_applications',
             ],
             [
+                'controller' => 'AdminMarketplaceDashboard',
+                'route_name' => 'admin_marketplace_dashboard',
+                'label' => 'Dashboard',
+                'parent' => 'AdminMarketplace',
+                'icon' => '',
+            ],
+            [
                 'controller' => 'AdminSuppliers',
                 'route_name' => 'admin_suppliers_index',
                 'label' => 'Sellers',

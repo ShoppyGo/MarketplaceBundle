@@ -116,3 +116,4 @@ admin_marketplace_dashboard:
   methods: [GET]
   defaults:
     _controller: ShoppyGo\MarketplaceBundle\Controller\MarketplaceDashboardController::indexAction
+    _legacy_controller: AdminMarketplaceDashboard
