@@ -27,14 +27,10 @@
 namespace ShoppyGo\MarketplaceBundle\HookListener;
 
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
-use ShoppyGo\MarketplaceBundle\Classes\MarketplaceSellerOrderManager;
-use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSellerOrderStatus;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerOrderStatusRepository;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class OrderActionAdminStatusListingResultsModifier extends AbstractHookListenerImplementation
 {
-
     public function __construct(
         private MarketplaceCore $core,
         private MarketplaceSellerOrderStatusRepository $orderStatusRepository
@@ -45,11 +41,13 @@ class OrderActionAdminStatusListingResultsModifier extends AbstractHookListenerI
     {
         foreach ($params['list'] as &$order_status_data) {
             $order_status_data['is_seller'] = 0;
-            if(false === isset($order_status_data['id_order_state'])) continue;
-            $seller_order_status= $this->orderStatusRepository->find($order_status_data['id_order_state']);
-            if($seller_order_status)
-            $order_status_data['is_seller'] = $seller_order_status->isSeller();
+            if (false === isset($order_status_data['id_order_state'])) {
+                continue;
+            }
+            $seller_order_status = $this->orderStatusRepository->find($order_status_data['id_order_state']);
+            if ($seller_order_status) {
+                $order_status_data['is_seller'] = $seller_order_status->isSeller();
+            }
         }
     }
-
 }

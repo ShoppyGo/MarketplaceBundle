@@ -27,7 +27,6 @@
 namespace ShoppyGo\MarketplaceBundle\HookListener;
 
 use PrestaShop\PrestaShop\Core\CommandBus\CommandBusInterface;
-use PrestaShop\PrestaShop\ShoppyGo\MarketplaceBundle\Exception\NotSellerException;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceCategoryRepository;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerRepository;
@@ -51,7 +50,7 @@ class SupplierActionAfterCreateUpdateFormHandler extends AbstractHookListenerImp
 
     public function exec(array $params)
     {
-        if ($this->core->isEmployeeSeller()===true) {
+        if ($this->core->isEmployeeSeller() === true) {
             return;
         }
         $id_seller = (int) $params['id'];

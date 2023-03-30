@@ -52,7 +52,7 @@ class ShoppyGoSubscriber implements EventSubscriberInterface
     {
         // vedi LegacyHookSubscriber __call
         foreach ($this->hooks as $key => $hook) {
-            $this->logger->info('SHOPPYGO-SUBSCRBER: '.$hookname);
+            $this->logger->info('SHOPPYGO-SUBSCRBER: ' . $hookname);
             if (true === $hook->supports($hookname)) {
                 $event_hook = $event[0];
 
@@ -64,28 +64,28 @@ class ShoppyGoSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         $hooks = [
-            'actionEmployeeFormBuilderModifier'         => 1,
-            'actionAfterCreateEmployeeFormHandler'      => 1,
-            'actionAfterUpdateEmployeeFormHandler'      => 1,
-            'actionEmployeeGridDefinitionModifier'      => 1,
-            'actionEmployeeGridQueryBuilderModifier'    => 1,
-            'actionAdminProductsListingFieldsModifier'  => 1,
-            'actionCategoryFormBuilderModifier'         => 1,
-            'actionAfterUpdateCategoryFormHandler'      => 1,
-            'actionAfterCreateCategoryFormHandler'      => 1,
-            'actionCategoryGridDefinitionModifier'      => 1,
-            'actionCategoryGridQueryBuilderModifier'    => 1,
-            'actionSupplierFormBuilderModifier'         => 1,
-            'actionAfterUpdateSupplierFormHandler'      => 1,
-            'actionAfterCreateSupplierFormHandler'      => 1,
-            'actionOrderGridQueryBuilderModifier'       => 1,
-            'actionOrderGridDefinitionModifier'         => 1,
-            'actionAdminStatusesFormModifier'           => 1,
-            'marketPlaceAdminStatusOrderPostProcess'    => 1,
-            'actionAdminStatusesListingFieldsModifier'  => 1,
+            'actionEmployeeFormBuilderModifier' => 1,
+            'actionAfterCreateEmployeeFormHandler' => 1,
+            'actionAfterUpdateEmployeeFormHandler' => 1,
+            'actionEmployeeGridDefinitionModifier' => 1,
+            'actionEmployeeGridQueryBuilderModifier' => 1,
+            'actionAdminProductsListingFieldsModifier' => 1,
+            'actionCategoryFormBuilderModifier' => 1,
+            'actionAfterUpdateCategoryFormHandler' => 1,
+            'actionAfterCreateCategoryFormHandler' => 1,
+            'actionCategoryGridDefinitionModifier' => 1,
+            'actionCategoryGridQueryBuilderModifier' => 1,
+            'actionSupplierFormBuilderModifier' => 1,
+            'actionAfterUpdateSupplierFormHandler' => 1,
+            'actionAfterCreateSupplierFormHandler' => 1,
+            'actionOrderGridQueryBuilderModifier' => 1,
+            'actionOrderGridDefinitionModifier' => 1,
+            'actionAdminStatusesFormModifier' => 1,
+            'marketPlaceAdminStatusOrderPostProcess' => 1,
+            'actionAdminStatusesListingFieldsModifier' => 1,
             'actionAdminStatusesListingResultsModifier' => 1,
-            'actionSupplierGridDefinitionModifier'      => 1,
-            'actionSupplierGridDataModifier'            => 1,
+            'actionSupplierGridDefinitionModifier' => 1,
+            'actionSupplierGridDataModifier' => 1,
         ];
         $hook_list = [];
         foreach ($hooks as $hook => $params) {

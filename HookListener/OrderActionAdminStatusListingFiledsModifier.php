@@ -27,13 +27,11 @@
 namespace ShoppyGo\MarketplaceBundle\HookListener;
 
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
-use ShoppyGo\MarketplaceBundle\Classes\MarketplaceSellerOrderManager;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerOrderStatusRepository;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class OrderActionAdminStatusListingFiledsModifier extends AbstractHookListenerImplementation
 {
-
     public function __construct(
         private MarketplaceCore $core,
         private TranslatorInterface $translator,
@@ -44,13 +42,12 @@ class OrderActionAdminStatusListingFiledsModifier extends AbstractHookListenerIm
     public function exec(array $params)
     {
         $params['fields']['is_seller'] = [
-            'title'   => $this->translator->trans('Is seller', [], 'Admin.Global'),
-            'align'   => 'text-center',
-            'active'  => 'delivery',
-            'type'    => 'bool',
+            'title' => $this->translator->trans('Is seller', [], 'Admin.Global'),
+            'align' => 'text-center',
+            'active' => 'delivery',
+            'type' => 'bool',
             'orderby' => false,
-            'class'   => 'fixed-width-sm',
+            'class' => 'fixed-width-sm',
         ];
     }
-
 }

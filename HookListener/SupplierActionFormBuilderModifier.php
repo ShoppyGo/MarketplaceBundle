@@ -72,7 +72,7 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
         $form = $params['form_builder'];
 
         if ($this->core->isEmployeeSeller() === true) {
-            if ($this->core->getSellerId() !== (int)$params['id']) {
+            if ($this->core->getSellerId() !== (int) $params['id']) {
                 throw new NotSellerException(
                     $this->translator->trans('You ar note authorized', [], 'Admin.Marketplace.Exception')
                 );
@@ -86,7 +86,7 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
             return;
         }
 
-        $id_seller = (int)$params['id'];
+        $id_seller = (int) $params['id'];
 
         $seller_category = $this->marketplaceSellerCategoryRepository->findSellerCategoryRootBy($id_seller);
 

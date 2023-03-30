@@ -48,7 +48,6 @@ class MarketplaceOrderSplit
         private readonly MarketplaceSellerOrderRepository $marketplaceSellerOrderRepository,
         private readonly MarketplaceSellerProductRepository $marketplaceSellerProductRepository,
         private readonly LoggerInterface $logger
-
     ) {
         $this->marketplaceSellerOrderRepository->setSellerProductRepository($this->marketplaceSellerProductRepository);
     }
@@ -59,7 +58,7 @@ class MarketplaceOrderSplit
         $currency = new Currency($sellerOrder->id_currency);
         \Context::getContext()->currency = $currency;
         $selleOrderDetails = $this->cloneOrderDetails();
-        if(0===count($selleOrderDetails)){
+        if (0 === count($selleOrderDetails)) {
             throw new NotSellerOderDetailsException();
         }
         $sellerOrderCarrier = $this->cloneOrderCarrier();
@@ -90,7 +89,6 @@ class MarketplaceOrderSplit
             $history->save();
 
             return $this->createSellerOrder($sellerOrder->id);
-
         } catch (\Exception $exception) {
             $sellerOrder->delete();
             array_walk($selleOrderDetails, static function (OrderDetail $detail) {
@@ -100,8 +98,8 @@ class MarketplaceOrderSplit
             });
             $this->logger->error('ShoppyGo main order: {mainorder}', ['mainorder' => $this->mainOrder]);
             $this->logger->error($exception->getMessage());
-            $this->logger->error('Line {line} of file {file}  ',['file'=>$exception->getFile(),
-                                                                 'line'=>$exception->getLine()]);
+            $this->logger->error('Line {line} of file {file}  ', ['file' => $exception->getFile(),
+                'line' => $exception->getLine(), ]);
             $this->logger->error('ShoppyGo seller oder deleted {sellerorder}', ['sellerorder' => $sellerOrder->id]);
         }
 
@@ -140,6 +138,7 @@ class MarketplaceOrderSplit
 
     /**
      * @return array<OrderDetail>
+     *
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
      */
@@ -150,7 +149,7 @@ class MarketplaceOrderSplit
         /** @var array $detail */
         foreach ($this->mainOrder->getOrderDetailList() as $detail) {
             if (false === $this->marketplaceSellerProductRepository->isProductSeller(
-                    (int)$detail['product_id'],
+                    (int) $detail['product_id'],
                     $this->idSeller
                 )) {
                 continue;
@@ -177,32 +176,32 @@ class MarketplaceOrderSplit
     private function updateTotalOrder(Cart $cart, Order $sellerOrder, int|float $computingPrecision, int $id_carrier)
     {
         $sellerOrder->total_products = \Tools::ps_round(
-            (float)$cart->getOrderTotal(false, Cart::ONLY_PRODUCTS, $sellerOrder->getCartProducts(), $id_carrier),
+            (float) $cart->getOrderTotal(false, Cart::ONLY_PRODUCTS, $sellerOrder->getCartProducts(), $id_carrier),
             $computingPrecision
         );
         $sellerOrder->total_products_wt = \Tools::ps_round(
-            (float)$cart->getOrderTotal(true, Cart::ONLY_PRODUCTS, $sellerOrder->getCartProducts(), $id_carrier),
+            (float) $cart->getOrderTotal(true, Cart::ONLY_PRODUCTS, $sellerOrder->getCartProducts(), $id_carrier),
             $computingPrecision
         );
         $sellerOrder->total_discounts_tax_excl = \Tools::ps_round(
-            (float)abs(
+            (float) abs(
                 $cart->getOrderTotal(false, Cart::ONLY_DISCOUNTS, $sellerOrder->getCartProducts(), $id_carrier)
             ),
             $computingPrecision
         );
         $sellerOrder->total_discounts_tax_incl = \Tools::ps_round(
-            (float)abs($cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS, $sellerOrder->getCartProducts(), $id_carrier)),
+            (float) abs($cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS, $sellerOrder->getCartProducts(), $id_carrier)),
             $computingPrecision
         );
         $sellerOrder->total_discounts = $sellerOrder->total_discounts_tax_incl;
 
-        #---- impostare gli importi di spedizione
+        //---- impostare gli importi di spedizione
         $sellerOrder->total_shipping_tax_excl = \Tools::ps_round(
-            (float)$cart->getPackageShippingCost($id_carrier, false, null, $sellerOrder->getCartProducts()),
+            (float) $cart->getPackageShippingCost($id_carrier, false, null, $sellerOrder->getCartProducts()),
             $computingPrecision
         );
         $sellerOrder->total_shipping_tax_incl = \Tools::ps_round(
-            (float)$cart->getPackageShippingCost($id_carrier, true, null, $sellerOrder->getCartProducts()),
+            (float) $cart->getPackageShippingCost($id_carrier, true, null, $sellerOrder->getCartProducts()),
             $computingPrecision
         );
         $sellerOrder->total_shipping = $sellerOrder->total_shipping_tax_incl;
@@ -210,27 +209,27 @@ class MarketplaceOrderSplit
         $carrier = null;
         if (null !== $carrier && Validate::isLoadedObject($carrier)) {
             $sellerOrder->carrier_tax_rate = $carrier->getTaxesRate(
-                new Address((int)$cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')})
+                new Address((int) $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')})
             );
         }
-        #--------------------
+        //--------------------
 
         $sellerOrder->total_wrapping_tax_excl = \Tools::ps_round(
-            (float)abs($cart->getOrderTotal(false, Cart::ONLY_WRAPPING, $sellerOrder->getCartProducts(), $id_carrier)),
+            (float) abs($cart->getOrderTotal(false, Cart::ONLY_WRAPPING, $sellerOrder->getCartProducts(), $id_carrier)),
             $computingPrecision
         );
         $sellerOrder->total_wrapping_tax_incl = \Tools::ps_round(
-            (float)abs($cart->getOrderTotal(true, Cart::ONLY_WRAPPING, $sellerOrder->getCartProducts(), $id_carrier)),
+            (float) abs($cart->getOrderTotal(true, Cart::ONLY_WRAPPING, $sellerOrder->getCartProducts(), $id_carrier)),
             $computingPrecision
         );
         $sellerOrder->total_wrapping = $sellerOrder->total_wrapping_tax_incl;
 
         $sellerOrder->total_paid_tax_excl = \Tools::ps_round(
-            (float)$cart->getOrderTotal(false, Cart::BOTH, $sellerOrder->getCartProducts(), $id_carrier),
+            (float) $cart->getOrderTotal(false, Cart::BOTH, $sellerOrder->getCartProducts(), $id_carrier),
             $computingPrecision
         );
         $sellerOrder->total_paid_tax_incl = \Tools::ps_round(
-            (float)$cart->getOrderTotal(true, Cart::BOTH, $sellerOrder->getCartProducts(), $id_carrier),
+            (float) $cart->getOrderTotal(true, Cart::BOTH, $sellerOrder->getCartProducts(), $id_carrier),
             $computingPrecision
         );
         $sellerOrder->total_paid = $sellerOrder->total_paid_tax_incl;

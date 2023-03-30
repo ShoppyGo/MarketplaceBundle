@@ -26,10 +26,8 @@
 
 namespace ShoppyGo\MarketplaceBundle\HookListener;
 
-use Doctrine\ORM\QueryBuilder;
 use PrestaShop\PrestaShop\Core\Grid\Data\GridData;
 use PrestaShop\PrestaShop\Core\Grid\Record\RecordCollection;
-use PrestaShop\PrestaShop\Core\Grid\Search\SearchCriteriaInterface;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -56,7 +54,7 @@ class SupplierActionGridDataModifierListener extends AbstractHookListenerImpleme
         $data = $params['data'];
         $collection = new RecordCollection([]);
         foreach ($data->getRecords() as $record) {
-            if ((int)$record['id_supplier'] === (int)$this->core->getSellerId()) {
+            if ((int) $record['id_supplier'] === (int) $this->core->getSellerId()) {
                 $collection = new RecordCollection([$record]);
                 break;
             }

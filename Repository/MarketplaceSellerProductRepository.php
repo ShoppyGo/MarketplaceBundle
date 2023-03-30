@@ -36,8 +36,7 @@ class MarketplaceSellerProductRepository
     public function __construct(
         private Connection $connection,
         private string $dbPrefix
-    )
-    {
+    ) {
     }
 
     public function createProduct(int $id_seller, int $id_product)
@@ -68,19 +67,20 @@ class MarketplaceSellerProductRepository
             }
         }
         $where .= ')';
-        return  $this->connection->createQueryBuilder()
-            ->from($this->dbPrefix.'product_supplier', 'ps')
+
+        return $this->connection->createQueryBuilder()
+            ->from($this->dbPrefix . 'product_supplier', 'ps')
             ->andWhere($where)
             ->setParameter('products', $id_products)
             ;
     }
 
-   // recupero lista prodotti per seller
+    // recupero lista prodotti per seller
     public function findSellersByProducts(array $id_products): array
     {
         $sellers = $this->qbProductSupplier($id_products)
             ->select('distinct(ps.id_supplier) as seller')
-                ->execute()->fetchAllAssociative();
+            ->execute()->fetchAllAssociative();
 
         $id_seller = [];
 
@@ -98,13 +98,14 @@ class MarketplaceSellerProductRepository
     public function isProductSeller($id_product, int $id_seller): bool
     {
         $res = $this->connection->createQueryBuilder()
-            ->from($this->dbPrefix.'product_supplier', 'ps')
+            ->from($this->dbPrefix . 'product_supplier', 'ps')
             ->select('distinct(ps.id_supplier) as seller')
             ->andWhere('ps.id_product = :product')
             ->andWhere('ps.id_supplier = :seller')
             ->setParameter('product', $id_product)
             ->setParameter('seller', $id_seller)
             ->execute()->fetchOne();
+
         return (bool) $res;
     }
 }

@@ -27,13 +27,11 @@
 namespace ShoppyGo\MarketplaceBundle\HookListener;
 
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
-use ShoppyGo\MarketplaceBundle\Classes\MarketplaceSellerOrderManager;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerOrderStatusRepository;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class OrderActionStatusFormModifier extends AbstractHookListenerImplementation
 {
-
     public function __construct(
         private MarketplaceCore $core,
         private TranslatorInterface $translator,
@@ -47,41 +45,41 @@ class OrderActionStatusFormModifier extends AbstractHookListenerImplementation
         //   has not dispatch
         /** @var \OrderState $order_state */
         $object = $params['object'];
-        if (false === (bool)$object->id) {
+        if (false === (bool) $object->id) {
             return;
         }
 
         $seller_order_status = $this->orderStatusRepository->find($object->id);
 
-        $params['fields_value']['is_seller'] = $seller_order_status ? (int)$seller_order_status->isSeller() : 0;
+        $params['fields_value']['is_seller'] = $seller_order_status ? (int) $seller_order_status->isSeller() : 0;
 
         $params['fields'][]['form'] = [
             'tinymce' => true,
-            'legend'  => [
+            'legend' => [
                 'title' => $this->trans('Marketplace', [], 'Admin.Shoppygo.Marketplace'),
-                'icon'  => 'icon-time',
+                'icon' => 'icon-time',
             ],
-            'input'   => [
+            'input' => [
                 'is_seller' => [
-                    'type'   => 'switch',
-                    'label'  => $this->trans('Is a seller order state', [], 'Admin.Shoppygo.Marketplace'),
-                    'name'   => 'is_seller',
-                    'class'  => 't',
+                    'type' => 'switch',
+                    'label' => $this->trans('Is a seller order state', [], 'Admin.Shoppygo.Marketplace'),
+                    'name' => 'is_seller',
+                    'class' => 't',
                     'values' => [
                         [
-                            'id'    => 'is_seller_on',
+                            'id' => 'is_seller_on',
                             'value' => 1,
                             'label' => $this->trans('Yes', [], 'Admin.Global'),
                         ],
                         [
-                            'id'    => 'is_seller_off',
+                            'id' => 'is_seller_off',
                             'value' => 0,
                             'label' => $this->trans('No', [], 'Admin.Global'),
                         ],
                     ],
                 ],
             ],
-            'submit'  => [
+            'submit' => [
                 'title' => $this->trans('Save', [], 'Admin.Actions'),
             ],
         ];
@@ -91,5 +89,4 @@ class OrderActionStatusFormModifier extends AbstractHookListenerImplementation
     {
         return $this->translator->trans($id, $params, $domain);
     }
-
 }

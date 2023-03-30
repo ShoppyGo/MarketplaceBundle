@@ -271,9 +271,9 @@ class MarketplaceCore
         $form = $params['form_builder'];
         $form->add(
             'supplier', ChoiceType::class, [
-                'label'   => 'Seller',
+                'label' => 'Seller',
                 'choices' => $choices->getChoices(),
-                'data'    => $seller ? $seller->getIdSupplier() : '',
+                'data' => $seller ? $seller->getIdSupplier() : '',
             ]
         );
     }
@@ -291,12 +291,12 @@ class MarketplaceCore
         $form = $params['form_builder'];
         $form->add(
             'seller', SwitchType::class, [
-                'label'   => 'Seller',
+                'label' => 'Seller',
                 'choices' => [
                     'OFF' => false,
-                    'ON'  => true,
+                    'ON' => true,
                 ],
-                'data'    => $object ? $object->isSeller() : false,
+                'data' => $object ? $object->isSeller() : false,
             ]
         );
     }
@@ -308,7 +308,7 @@ class MarketplaceCore
 
     public function getEmployeeId(): int
     {
-        return (int)$this->getEmployee()->id;
+        return (int) $this->getEmployee()->id;
     }
 
 //
@@ -325,7 +325,7 @@ class MarketplaceCore
      */
     public function getSellerId(): int
     {
-        return (int)$this->marketplaceSeller->getIdSeller();
+        return (int) $this->marketplaceSeller->getIdSeller();
     }
 
 //
@@ -350,7 +350,7 @@ class MarketplaceCore
 
     public function isEmployeeSeller()
     {
-        return (bool)$this->marketplaceSeller;
+        return (bool) $this->marketplaceSeller;
     }
 
 //

@@ -27,13 +27,11 @@
 namespace ShoppyGo\MarketplaceBundle\HookListener;
 
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
-use ShoppyGo\MarketplaceBundle\Classes\MarketplaceSellerOrderManager;
 use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSellerOrderStatus;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerOrderStatusRepository;
 
 class OrderActionStatusPostProcess extends AbstractHookListenerImplementation
 {
-
     public function __construct(
         private MarketplaceCore $core,
         private MarketplaceSellerOrderStatusRepository $orderStatusRepository
@@ -42,15 +40,16 @@ class OrderActionStatusPostProcess extends AbstractHookListenerImplementation
 
     public function exec(array $params)
     {
-        if("1" !== \Tools::getValue('submitAddorder_state')) return;
+        if ('1' !== \Tools::getValue('submitAddorder_state')) {
+            return;
+        }
         $idOrderState = $params['id_order_state'];
         $order_state = $this->orderStatusRepository->find($idOrderState);
-        if(!$order_state){
+        if (!$order_state) {
             $order_state = new MarketplaceSellerOrderStatus();
         }
         $order_state->setIdOrderState($idOrderState);
-        $order_state->setSeller((bool)$params['is_seller']);
+        $order_state->setSeller((bool) $params['is_seller']);
         $this->orderStatusRepository->save($order_state);
     }
-
 }
