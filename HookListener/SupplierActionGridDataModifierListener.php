@@ -26,37 +26,42 @@
 
 namespace ShoppyGo\MarketplaceBundle\HookListener;
 
-use PrestaShop\PrestaShop\Core\CommandBus\CommandBusInterface;
-use PrestaShop\PrestaShop\ShoppyGo\MarketplaceBundle\Exception\NotSellerException;
+use Doctrine\ORM\QueryBuilder;
+use PrestaShop\PrestaShop\Core\Grid\Data\GridData;
+use PrestaShop\PrestaShop\Core\Grid\Record\RecordCollection;
+use PrestaShop\PrestaShop\Core\Grid\Search\SearchCriteriaInterface;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
-use ShoppyGo\MarketplaceBundle\Repository\MarketplaceCategoryRepository;
-use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerRepository;
+use Symfony\Component\Translation\TranslatorInterface;
 
-class SupplierActionAfterCreateUpdateFormHandler extends AbstractHookListenerImplementation
+class SupplierActionGridDataModifierListener extends AbstractHookListenerImplementation
 {
     protected MarketplaceCore $core;
-    protected MarketplaceCategoryRepository $categoryRepository;
-    protected CommandBusInterface $commandBus;
-    protected MarketplaceSellerRepository $marketplaceSellerCategoryRepository;
+    protected TranslatorInterface $translator;
 
     public function __construct(
         MarketplaceCore $core,
-        CommandBusInterface $commandBus,
-        MarketplaceSellerRepository $marketplaceSellerCategoryRepository
+        TranslatorInterface $translator
     ) {
         $this->core = $core;
-        $this->commandBus = $commandBus;
-        $this->marketplaceSellerCategoryRepository = $marketplaceSellerCategoryRepository;
+        $this->translator = $translator;
     }
 
     public function exec(array $params)
     {
-        if ($this->core->isEmployeeSeller()===true) {
+        dump($params);
+        if (true === $this->core->isEmployStaff()) {
             return;
         }
-        $id_seller = (int) $params['id'];
-        $id_category = (int) $params['form_data']['category'];
-        $id_commission = (int) $params['form_data']['commission'];
-        $this->marketplaceSellerCategoryRepository->createOrUpdate($id_seller, $id_category, $id_commission);
+        /** @var GridData $data */
+        $data = $params['data'];
+        $collection = new RecordCollection([]);
+        foreach ($data->getRecords() as $record) {
+            if ((int)$record['id_supplier'] === (int)$this->core->getSellerId()) {
+                $collection = new RecordCollection([$record]);
+                break;
+            }
+        }
+
+        $params['data'] = new GridData($collection, 1);
     }
 }

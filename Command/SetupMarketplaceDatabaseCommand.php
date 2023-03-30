@@ -53,7 +53,6 @@ class SetupMarketplaceDatabaseCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $options = $input->getOptions();
-        dump($options);
         $sqls = [];
         $type = '';
         if (true === $options['create']) {

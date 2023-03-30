@@ -27,8 +27,8 @@
 namespace ShoppyGo\MarketplaceBundle\HookListener;
 
 use PrestaShop\PrestaShop\Adapter\Category\CategoryDataProvider;
-use PrestaShop\PrestaShop\ShoppyGo\MarketplaceBundle\Exception\NotSellerException;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
+use ShoppyGo\MarketplaceBundle\Exception\NotSellerException;
 use ShoppyGo\MarketplaceBundle\Form\Widget\CategorySelectWidget;
 use ShoppyGo\MarketplaceBundle\Form\Widget\CommissionSelectWidget;
 use ShoppyGo\MarketplaceBundle\Provider\MarketplaceCommissionChoiceProvider;
@@ -68,12 +68,25 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
 
     public function exec(array $params)
     {
-        if ($this->core->isEmployeeSeller()) {
-            throw new NotSellerException('Seller can\'t update');
-        }
         /** @var FormBuilder $form */
         $form = $params['form_builder'];
-        $id_seller = (int) $params['id'];
+
+        if ($this->core->isEmployeeSeller() === true) {
+            if ($this->core->getSellerId() !== (int)$params['id']) {
+                throw new NotSellerException(
+                    $this->translator->trans('You ar note authorized', [], 'Admin.Marketplace.Exception')
+                );
+            }
+            $form->remove('is_enabled')
+                ->remove('meta_title')
+                ->remove('meta_description')
+                ->remove('meta_keyword')
+            ;
+
+            return;
+        }
+
+        $id_seller = (int)$params['id'];
 
         $seller_category = $this->marketplaceSellerCategoryRepository->findSellerCategoryRootBy($id_seller);
 

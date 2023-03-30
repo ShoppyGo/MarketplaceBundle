@@ -46,7 +46,6 @@ class MarketplaceSellerRepository extends EntityRepository
 
     public function createOrUpdate(int $id_seller, int $id_category, int $id_commission): MarketplaceSeller
     {
-        xdebug_break();
         $commission = $this->getEntityManager()->getRepository(MarketplaceCommission::class)
             ->find($id_commission);
         $marketplaceSellerCategory = $this->update($id_seller, $id_category, $commission);
