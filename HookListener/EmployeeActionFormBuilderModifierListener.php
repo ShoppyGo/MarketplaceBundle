@@ -53,6 +53,9 @@ class EmployeeActionFormBuilderModifierListener extends AbstractHookListenerImpl
 
     public function exec(array $params)
     {
+        if ($this->core->isEmployStaff() === false) {
+            return;
+        }
         $id_employee = $params['id'];
         $form = $params['form_builder'];
 
