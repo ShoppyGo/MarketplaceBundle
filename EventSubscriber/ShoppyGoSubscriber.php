@@ -49,7 +49,7 @@ class ShoppyGoSubscriber implements EventSubscriberInterface
     }
 
     public function __call($hookname, $event)
-    {
+    {xdebug_break();
         // vedi LegacyHookSubscriber __call
         foreach ($this->hooks as $key => $hook) {
             $this->logger->info('SHOPPYGO-SUBSCRBER: ' . $hookname);

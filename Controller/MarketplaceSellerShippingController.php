@@ -134,7 +134,7 @@ class MarketplaceSellerShippingController extends FrameworkBundleAdminController
         }
 
         return $this->render(
-            '@Modules/bwmarketplace/views/templates/admin/controller/marketplace_seller_shipping_edit.html.twig',
+            '@ShoppyGoMarketplace/controller/shipping/marketplace_seller_shipping_edit.html.twig',
             [
                 'form' => $form->createView(),
             ]
@@ -151,7 +151,7 @@ class MarketplaceSellerShippingController extends FrameworkBundleAdminController
         $productGrid = $gridFactory->getGrid(new SearchCriteria());
         //TODO spostare il template sotto Resources
         return $this->render(
-            '@Modules/bwmarketplace/views/templates/admin/controller/marketplace_seller_shipping_index.html.twig',
+            '@ShoppyGoMarketplace/controller/shipping/marketplace_seller_shipping_index.html.twig',
             [
                 'shipping_grid' => $this->presentGrid($productGrid),
             ]
