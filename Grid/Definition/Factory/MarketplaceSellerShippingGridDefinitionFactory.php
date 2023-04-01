@@ -70,6 +70,12 @@ class MarketplaceSellerShippingGridDefinitionFactory extends AbstractGridDefinit
             $column_collection->add($id_seller);
         }
 
+        $from = new DataColumn('carrier_name');
+        $from->setOptions(['field' => 'carrier_name'])
+            ->setName('Carrier name', [], self::DOMAIN_TRANSLATION);
+        $column_collection->add($from);
+
+
         $from = new DataColumn('from_total');
         $from->setOptions(['field' => 'from_total'])
             ->setName('From', [], self::DOMAIN_TRANSLATION);

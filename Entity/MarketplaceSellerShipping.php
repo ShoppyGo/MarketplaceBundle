@@ -49,7 +49,11 @@ class MarketplaceSellerShipping
      * @var int
      */
     private ?int $id_seller;
-
+    /**
+     * @ORM\Column(name="carrier_name", type="string", length=255)
+     * @var string
+     */
+    private string $carrier_name;
     /**
      * @ORM\Column(name="from_total", type="decimal", precision=2)
      *
@@ -74,6 +78,25 @@ class MarketplaceSellerShipping
      * @var float
      */
     private $vat = 0;
+
+    /**
+     * @return string
+     */
+    public function getCarrierName(): string
+    {
+        return $this->carrier_name;
+    }
+
+    /**
+     * @param string $carrier_name
+     * @return $this
+     */
+    public function setCarrierName(string $carrier_name): self
+    {
+        $this->carrier_name = $carrier_name;
+
+        return $this;
+    }
 
     public function getCost()
     {

@@ -32,6 +32,7 @@ use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
 use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSellerShipping;
 use ShoppyGo\MarketplaceBundle\Form\Type\SellerChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -183,7 +184,13 @@ class MarketplaceSellerShippingController extends FrameworkBundleAdminController
     {
         $builder = $this->createFormBuilder($shipping_cost);
 
-        $builder->add(
+        $builder
+            ->add(
+                'carrier_name', TextType::class, [
+                    'label' => $this->trans('Carrier name', 'Admin.Marketplace.Shipping'),
+                ]
+            )
+            ->add(
                 'from', MoneyType::class, [
                     'scale' => 2,
                     'label' => $this->trans('from', 'Admin.Marketplace.Shipping'),

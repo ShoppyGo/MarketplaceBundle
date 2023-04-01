@@ -59,7 +59,7 @@ class MarketplaceSellerShippingQueryBuilder extends AbstractDoctrineQueryBuilder
     private function getBaseQuery(): QueryBuilder
     {
         $qb = $this->connection->createQueryBuilder()
-            ->select('mp.id_shipping, mp.from_total, to_total,shipping_cost')
+            ->select('mp.carrier_name, mp.id_shipping, mp.from_total, to_total,shipping_cost')
             ->from($this->dbPrefix . 'marketplace_seller_shipping', 'mp')
         ;
 
