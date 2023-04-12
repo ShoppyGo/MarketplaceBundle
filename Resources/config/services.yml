@@ -30,9 +30,9 @@ services:
     shoppygo.core:
         class: ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore
         arguments:
-            - '@shoppygo.marketplace.repository.seller_repository'
-            - '@prestashop.core.command_bus'
             - '@prestashop.adapter.legacy.context'
+            - '@shoppygo.marketplace.repository.seller_repository'
+            - '@shoppygo.marketplace.repository.marketplace_seller_repository'
     #
     shoppygo.event.subscriber:
         class: ShoppyGo\MarketplaceBundle\EventSubscriber\ShoppyGoSubscriber
