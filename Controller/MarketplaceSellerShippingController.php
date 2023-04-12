@@ -173,7 +173,7 @@ class MarketplaceSellerShippingController extends FrameworkBundleAdminController
         // controllo se l'utente prova ad editare un altro record da url
         //
         if ($core->isEmployStaff() === false) {
-            $criteria['id_employee'] = $core->getSellerId();
+            $criteria['id_seller'] = $core->getSellerId();
         }
 
         return $criteria;
