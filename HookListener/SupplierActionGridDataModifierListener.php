@@ -46,7 +46,6 @@ class SupplierActionGridDataModifierListener extends AbstractHookListenerImpleme
 
     public function exec(array $params)
     {
-        dump($params);
         if (true === $this->core->isEmployStaff()) {
             return;
         }

@@ -27,6 +27,7 @@
 namespace ShoppyGo\MarketplaceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table()
@@ -59,19 +60,45 @@ class MarketplaceSeller
     private MarketplaceCommission $marketplaceCommission;
 
     /**
-     * @return MarketplaceCommission
+     * @ORM\Column(name="vat_number", type="string", length=25)
+     *
+     * @var string
      */
-    public function getMarketplaceCommission(): MarketplaceCommission
+    private string $vat_number;
+    /**
+     * @var string
+     * @ORM\Column(name="website", type="string", length=255)
+     * @Assert\Url()
+     */
+    private string $website;
+    /**
+     * @var string
+     * @ORM\Column(name="email", type="string", length=100)
+     * @Assert\Email()
+     */
+    private string $email;
+    /**
+     * @var string
+     * @ORM\Column(name="return_policy", type="text")
+     */
+    private string $return_policy;
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
     {
-        return $this->marketplaceCommission;
+        return $this->email;
     }
 
     /**
-     * @param MarketplaceCommission $marketplaceCommission
+     * @param string $email
      */
-    public function setMarketplaceCommission(MarketplaceCommission $marketplaceCommission): void
+    public function setEmail(string $email): self
     {
-        $this->marketplaceCommission = $marketplaceCommission;
+        $this->email = $email;
+
+        return $this;
     }
 
     public function getIdCategory(): int
@@ -94,6 +121,78 @@ class MarketplaceSeller
     public function setIdSeller(int $id_seller): self
     {
         $this->id_seller = $id_seller;
+
+        return $this;
+    }
+
+    /**
+     * @return MarketplaceCommission
+     */
+    public function getMarketplaceCommission(): MarketplaceCommission
+    {
+        return $this->marketplaceCommission;
+    }
+
+    /**
+     * @param MarketplaceCommission $marketplaceCommission
+     */
+    public function setMarketplaceCommission(MarketplaceCommission $marketplaceCommission): self
+    {
+        $this->marketplaceCommission = $marketplaceCommission;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReturnPolicy(): string
+    {
+        return $this->return_policy;
+    }
+
+    /**
+     * @param string $return_policy
+     */
+    public function setReturnPolicy(string $return_policy): self
+    {
+        $this->return_policy = $return_policy;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVatNumber(): string
+    {
+        return $this->vat_number;
+    }
+
+    /**
+     * @param string $vat_number
+     */
+    public function setVatNumber(string $vat_number): self
+    {
+        $this->vat_number = $vat_number;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWebsite(): string
+    {
+        return $this->website;
+    }
+
+    /**
+     * @param string $website
+     */
+    public function setWebsite(string $website): self
+    {
+        $this->website = $website;
 
         return $this;
     }

@@ -50,12 +50,17 @@ class SupplierActionAfterCreateUpdateFormHandler extends AbstractHookListenerImp
 
     public function exec(array $params)
     {
-        if ($this->core->isEmployeeSeller() === true) {
-            return;
+        $marketplace_seller_values = [];
+        $marketplace_seller_values['id_seller'] = (int)$params['id'];
+
+        if ($this->core->isEmployStaff() === true) {
+            $marketplace_seller_values['id_category'] = (int)$params['form_data']['category'];
+            $marketplace_seller_values['id_commission'] = (int)$params['form_data']['commission'];
         }
-        $id_seller = (int) $params['id'];
-        $id_category = (int) $params['form_data']['category'];
-        $id_commission = (int) $params['form_data']['commission'];
-        $this->marketplaceSellerCategoryRepository->createOrUpdate($id_seller, $id_category, $id_commission);
+        $marketplace_seller_values['vat_number'] = $params['form_data']['vat_number'];
+        $marketplace_seller_values['website'] = $params['form_data']['website'];
+        $marketplace_seller_values['email'] = $params['form_data']['email'];
+        $marketplace_seller_values['return_policy'] = $params['form_data']['return_policy'];
+        $this->marketplaceSellerCategoryRepository->createOrUpdate($marketplace_seller_values);
     }
 }

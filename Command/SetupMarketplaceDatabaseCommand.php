@@ -84,6 +84,10 @@ class SetupMarketplaceDatabaseCommand extends Command
                     `id_supplier` int(11) NOT NULL,
                     `id_category` int(11) NOT NULL ,
                     `id_marketplace_commission` int(11) NOT NULL ,
+                    `vat_number` varchar(25) NOT NULL ,
+                    `website` varchar(255) NOT NULL ,
+                    `email` varchar(100) NOT NULL ,
+                    `return_policy` text NOT NULL ,
                     KEY (`id_supplier`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
 

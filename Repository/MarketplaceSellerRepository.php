@@ -32,25 +32,35 @@ use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSeller;
 
 class MarketplaceSellerRepository extends EntityRepository
 {
-    public function create(int $id_seller, int $id_category, MarketplaceCommission $commission): ?MarketplaceSeller
+    public function create(array $values, MarketplaceCommission $commission): ?MarketplaceSeller
     {
         $entity = new MarketplaceSeller();
-        $entity->setIdSeller($id_seller);
-        $entity->setIdCategory($id_category);
+        $entity->setIdSeller($values['id_seller']);
+        $entity->setIdCategory($values['id_category']);
         $entity->setMarketplaceCommission($commission);
-        $this->getEntityManager()->persist($entity);
-        $this->getEntityManager()->flush();
+        $entity->setWebsite($values['website']);
+        $entity->setVatNumber($values['vat_number']);
+        $entity->setReturnPolicy($values['return_policy']);
+        $entity->setEmail($values['email']);
+
+        $this->getEntityManager()
+            ->persist($entity)
+        ;
+        $this->getEntityManager()
+            ->flush()
+        ;
 
         return $entity;
     }
 
-    public function createOrUpdate(int $id_seller, int $id_category, int $id_commission): MarketplaceSeller
+    public function createOrUpdate(array $values): MarketplaceSeller
     {
-        $commission = $this->getEntityManager()->getRepository(MarketplaceCommission::class)
-            ->find($id_commission);
-        $marketplaceSellerCategory = $this->update($id_seller, $id_category, $commission);
+        $commission = isset($values['id_commission']) ? $this->getEntityManager()
+            ->getRepository(MarketplaceCommission::class)
+            ->find($values['id_commission']) : null;
+        $marketplaceSellerCategory = $this->update($values, $commission);
         if (!$marketplaceSellerCategory) {
-            $marketplaceSellerCategory = $this->create($id_seller, $id_category, $commission);
+            $marketplaceSellerCategory = $this->create($values, $commission);
         }
 
         return $marketplaceSellerCategory;
@@ -63,15 +73,25 @@ class MarketplaceSellerRepository extends EntityRepository
         ]);
     }
 
-    public function update(int $id_seller, int $id_category, MarketplaceCommission $commission): ?MarketplaceSeller
+    public function update(array $values, ?MarketplaceCommission $commission): ?MarketplaceSeller
     {
-        $entity = $this->findOneBy(['id_seller' => $id_seller]);
+        $entity = $this->findOneBy(['id_seller' => $values['id_seller']]);
         if (!$entity) {
             return null;
         }
-        $entity->setIdCategory($id_category);
-        $entity->setMarketplaceCommission($commission);
-        $this->getEntityManager()->flush();
+        if (isset($values['id_category'])) {
+            $entity->setIdCategory($values['id_category']);
+        }
+        if ($commission) {
+            $entity->setMarketplaceCommission($commission);
+        }
+        $entity->setVatNumber($values['vat_number']);
+        $entity->setWebsite($values['website']);
+        $entity->setReturnPolicy($values['return_policy']);
+        $entity->setEmail($values['email']);
+        $this->getEntityManager()
+            ->flush()
+        ;
 
         return $entity;
     }

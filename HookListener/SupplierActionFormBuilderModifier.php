@@ -28,12 +28,17 @@ namespace ShoppyGo\MarketplaceBundle\HookListener;
 
 use PrestaShop\PrestaShop\Adapter\Category\CategoryDataProvider;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
+use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSeller;
 use ShoppyGo\MarketplaceBundle\Exception\NotSellerException;
 use ShoppyGo\MarketplaceBundle\Form\Widget\CategorySelectWidget;
 use ShoppyGo\MarketplaceBundle\Form\Widget\CommissionSelectWidget;
 use ShoppyGo\MarketplaceBundle\Provider\MarketplaceCommissionChoiceProvider;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceCategoryRepository;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerRepository;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -44,7 +49,7 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
     protected TranslatorInterface $translator;
     protected CategorySelectWidget $categorySelectWidget;
     protected CategoryDataProvider $categoryDataProvider;
-    protected MarketplaceSellerRepository $marketplaceSellerCategoryRepository;
+    protected MarketplaceSellerRepository $marketplaceSellerRepository;
     protected CommissionSelectWidget $commissionSelectWidget;
     protected MarketplaceCommissionChoiceProvider $marketplaceCommissionChoiceProvider;
 
@@ -53,7 +58,7 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
         TranslatorInterface $translator,
         CategorySelectWidget $categorySelectWidget,
         CategoryDataProvider $categoryDataProvider,
-        MarketplaceSellerRepository $marketplaceSellerCategoryRepository,
+        MarketplaceSellerRepository $marketplaceSellerRepository,
         CommissionSelectWidget $commissionSelectWidget,
         MarketplaceCommissionChoiceProvider $marketplaceCommissionChoiceProvider
     ) {
@@ -61,18 +66,42 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
         $this->translator = $translator;
         $this->categorySelectWidget = $categorySelectWidget;
         $this->categoryDataProvider = $categoryDataProvider;
-        $this->marketplaceSellerCategoryRepository = $marketplaceSellerCategoryRepository;
+        $this->marketplaceSellerRepository = $marketplaceSellerRepository;
         $this->commissionSelectWidget = $commissionSelectWidget;
         $this->marketplaceCommissionChoiceProvider = $marketplaceCommissionChoiceProvider;
     }
 
     public function exec(array $params)
     {
+        $id_supplier = (int)$params['id'];
+        /** @var MarketplaceSeller $marketplace_seller */
+        $marketplace_seller = $this->marketplaceSellerRepository->findOneBy(['id_seller' => $id_supplier]);
+
         /** @var FormBuilder $form */
         $form = $params['form_builder'];
-
+        $form->add('vat_number', TextType::class, [
+            'required' => true,
+            'label'    => $this->translator->trans('Vat', [], 'Admin.Marketplace.Label'),
+            'data'=>$marketplace_seller->getVatNumber()
+        ])
+            ->add('website', UrlType::class, [
+                'required' => true,
+                'label'    => $this->translator->trans('Web site', [], 'Admin.Marketplace.Label'),
+                'data'=>$marketplace_seller->getWebsite()
+            ])
+            ->add('email', EmailType::class, [
+                'required' => true,
+                'label'    => $this->translator->trans('Email', [], 'Admin.Marketplace.Label'),
+                'data'=>$marketplace_seller->getEmail()
+            ])
+            ->add('return_policy', TextareaType::class, [
+                'required' => true,
+                'label'    => $this->translator->trans('Return policy', [], 'Admin.Marketplace.Label'),
+                'data'=>$marketplace_seller->getReturnPolicy()
+            ])
+        ;;
         if ($this->core->isEmployeeSeller() === true) {
-            if ($this->core->getSellerId() !== (int) $params['id']) {
+            if ($this->core->getSellerId() !== $id_supplier) {
                 throw new NotSellerException(
                     $this->translator->trans('You ar note authorized', [], 'Admin.Marketplace.Exception')
                 );
@@ -86,9 +115,9 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
             return;
         }
 
-        $id_seller = (int) $params['id'];
+        $id_seller = $id_supplier;
 
-        $seller_category = $this->marketplaceSellerCategoryRepository->findSellerCategoryRootBy($id_seller);
+        $seller_category = $this->marketplaceSellerRepository->findSellerCategoryRootBy($id_seller);
 
         $root_category = $this->categoryDataProvider->getNestedCategories();
 
@@ -111,10 +140,9 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
             ->addField($form)
         ;
 
-        // TODO aggiungere il default commission
         $commissions = $this->marketplaceCommissionChoiceProvider->getChoices();
         $this->commissionSelectWidget->setCommissionList($commissions)
-            ->setDeafult(1)
+            ->setDeafult(1) // TODO aggiungere il default commission
             ->addField($form)
         ;
     }
