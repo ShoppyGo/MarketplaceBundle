@@ -38,7 +38,7 @@ class SetupMarketplaceCommand extends Command
     protected Registry $registry;
     protected TranslatorInterface $translator;
 
-    public function installTab($controller_name, $route_name, $label, $parent, $icon = '')
+    public function installTab($controller_name, $route_name, $label, $parent, $icon = '', $position)
     {
         if (\Tab::getIdFromClassName($controller_name)) {
             return true;
@@ -46,6 +46,7 @@ class SetupMarketplaceCommand extends Command
 
         $tab = new \Tab();
         $tab->active = 1;
+        $tab->position = $position;
         $tab->class_name = $controller_name;
 
         if ($route_name) {
@@ -121,15 +122,9 @@ class SetupMarketplaceCommand extends Command
                 'controller' => 'AdminMarketplace',
                 'route_name' => '',
                 'label' => 'Marketplace',
-                'parent' => 'DEFAULT',
+                'parent' => 'SELL',
                 'icon' => 'shopping_cart',
-            ],
-            [      //--- parent seller menu
-                'controller' => 'AdminMarketplaceSeller',
-                'route_name' => '',
-                'label' => 'Your seller configuration',
-                'parent' => 'DEFAULT',
-                'icon' => 'settings_applications',
+                'position' => 99,
             ],
             [
                 'controller' => 'AdminMarketplaceDashboard',
@@ -137,13 +132,23 @@ class SetupMarketplaceCommand extends Command
                 'label' => 'Dashboard',
                 'parent' => 'AdminMarketplace',
                 'icon' => '',
+                'position' => 2,
             ],
             [
-                'controller' => 'AdminSuppliers',
+                'controller' => 'AdminMarketplaceShippingCost',
+                'route_name' => 'admin_marketplace_seller_shipping',
+                'label' => 'Shipping cost',
+                'parent' => 'AdminMarketplace',
+                'icon' => '',
+                'position' => 3,
+            ],
+            [
+                'controller' => 'AdminMarketplaceSellers',
                 'route_name' => 'admin_suppliers_index',
                 'label' => 'Sellers',
                 'parent' => 'AdminMarketplace',
                 'icon' => '',
+                'position' => 4,
             ],
             [
                 'controller' => 'AdminMarketplaceConfiguration',
@@ -151,6 +156,7 @@ class SetupMarketplaceCommand extends Command
                 'label' => 'Configuration',
                 'parent' => 'AdminMarketplace',
                 'icon' => '',
+                'position' => 1,
             ],
             [
                 'controller' => 'AdminMarketplaceCommission',
@@ -158,24 +164,16 @@ class SetupMarketplaceCommand extends Command
                 'label' => 'Commission',
                 'parent' => 'AdminMarketplace',
                 'icon' => '',
+                'position' => 4,
             ],
-            [
-                'controller' => 'AdminMarketplaceSeller',
-                'route_name' => 'admin_employees_index',
-                'label' => 'Sellers',
-                'parent' => 'AdminMarketplace',
-                'icon' => '',
-            ],
-            //-------------------
-            // submenu seller
-            //
-            [
-                'controller' => 'AdminMarketplaceSellerShipping',
-                'route_name' => 'admin_marketplace_seller_shipping',
-                'label' => 'Configure shipping cost',
-                'parent' => 'AdminMarketplaceSeller',
-                'icon' => '',
-            ],
+//            [
+//                'controller' => 'AdminMarketplaceSeller',
+//                'route_name' => 'admin_employees_index',
+//                'label' => 'Sellers',
+//                'parent' => 'AdminMarketplace',
+//                'icon' => '',
+//                'position' => 5,
+//            ],
         ];
         foreach ($adminMenu as $menu) {
             $res_install_menu = $this->installTab(
@@ -183,7 +181,8 @@ class SetupMarketplaceCommand extends Command
                 $menu['route_name'],
                 $menu['label'],
                 $menu['parent'],
-                $menu['icon']
+                $menu['icon'],
+                $menu['position']
             );
             if (!$res_install_menu) {
                 break;
