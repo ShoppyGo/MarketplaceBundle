@@ -97,7 +97,8 @@ class MarketplaceSellerProductController extends ProductController
 
         return new Response(
             $this->renderView(
-                '@PrestaShop/Admin/Product/ProductPage/product.html.twig',
+//                '@PrestaShop/Admin/Product/ProductPage/product.html.twig',
+                '@ShoppyGoMarketplace/overrides/product_page/product.html.twig',
                 array_merge($parent_response, ['is_seller' => $marketplaceCore->isEmployeeSeller()])
             )
         );

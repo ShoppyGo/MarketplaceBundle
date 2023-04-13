@@ -1,0 +1,42 @@
+{% extends '@PrestaShop/Admin/Product/ProductPage/product.html.twig' %}
+  {% block product_panel_options %}
+    {{ include('@ShoppyGoMarketplace/overrides/product_page/panels/options.html.twig', {
+      'optionsForm': form.step6,
+      'productId': id_product
+    }) }}
+  {% endblock %}
+  {% block product_panel_shipping %}
+    <div role="tabpanel" class="form-contenttab tab-pane" id="step4">
+      <div class="container-fluid">
+        <div class="row">
+          {{ include('@ShoppyGoMarketplace/overrides/product_page/forms/form_shipping.html.twig', {
+            'form' : form.step4,
+            'asm_globally_activated': asm_globally_activated,
+            'isNotVirtual': form.step1.type_product.vars.value != "2",
+            'isChecked': form.step3.advanced_stock_management.vars.checked,
+            'warehouses': warehouses
+          }) }}
+        </div>
+      </div>
+    </div>
+  {% endblock %}
+ {% block product_panel_essentials %}
+   {% set formQuantityShortcut = form.step1.qty_0_shortcut is defined ? form.step1.qty_0_shortcut : null %}
+   {{ include('@ShoppyGoMarketplace/overrides/product_page/panels/essentials.html.twig', {
+     'formPackItems': form.step1.inputPackItems,
+     'productId': id_product,
+     'images': form.step1.vars.value.images,
+     'formShortDescription': form.step1.description_short,
+     'formDescription': form.step1.description,
+     'formFeatures': form.step1.features,
+     'formManufacturer': form.step1.id_manufacturer,
+     'formRelatedProducts': form.step1.related_products,
+     'is_combination_active': is_combination_active,
+     'has_combinations': has_combinations,
+     'formReference': form.step6.reference,
+     'formQuantityShortcut': formQuantityShortcut,
+     'formPriceShortcut': form.step1.price_shortcut,
+     'formPriceShortcutTTC': form.step1.price_ttc_shortcut,
+     'formCategories': form.step1,
+   }) }}
+ {% endblock %}
