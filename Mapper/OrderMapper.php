@@ -34,12 +34,29 @@ class OrderMapper
     public static function mapArrayToMarketplaceOrderCommissionDTO(array $data): MarketplaceOrderCommissionDTO
     {
         $marketplaceOrder = new MarketplaceOrderCommissionDTO();
-
         // loop attraverso le chiavi dell'array
         foreach ($data as $key => $value) {
             // se la chiave esiste nella DTO, impostala con il valore corrispondente nell'array
             if (property_exists($marketplaceOrder, $key)) {
-                $marketplaceOrder->{$key} = $value;
+                $propType = gettype($marketplaceOrder->{$key});
+                switch ($propType) {
+                    case 'integer':
+                        $marketplaceOrder->{$key} = (int)$value;
+                        break;
+                    case 'double':
+                    case 'float':
+                        $marketplaceOrder->{$key} = (float)$value;
+                        break;
+                    case 'string':
+                        $marketplaceOrder->{$key} = (string)$value;
+                        break;
+                    case 'boolean':
+                        $marketplaceOrder->{$key} = (bool)$value;
+                        break;
+                    default:
+                        $marketplaceOrder->{$key} = $value;
+                        break;
+                }
             }
         }
 

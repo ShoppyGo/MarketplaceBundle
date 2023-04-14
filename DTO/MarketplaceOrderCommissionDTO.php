@@ -28,25 +28,25 @@ namespace ShoppyGo\MarketplaceBundle\DTO;
 
 class MarketplaceOrderCommissionDTO
 {
-    public int $id_order;
-    public int $id_currency;
-    public float $total_discounts;
-    public float $total_discounts_tax_incl;
-    public float $total_discounts_tax_excl;
-    public float $total_paid;
-    public float $total_paid_tax_incl;
-    public float $total_paid_tax_excl;
-    public float $total_paid_real;
-    public float $total_products;
-    public float $total_products_wt;
-    public float $total_shipping;
-    public float $total_shipping_tax_incl;
-    public float $total_shipping_tax_excl;
-    public float $carrier_tax_rate;
-    public float $total_wrapping;
-    public float $total_wrapping_tax_incl;
-    public float $total_wrapping_tax_excl;
-    public int $round_mode;
-    public int $round_type;
+    public int $id_order = 0;
+    public int $id_currency = 0;
+    public float $total_discounts = 0;
+    public float $total_discounts_tax_incl = 0;
+    public float $total_discounts_tax_excl = 0;
+    public float $total_paid = 0;
+    public float $total_paid_tax_incl = 0;
+    public float $total_paid_tax_excl = 0;
+    public float $total_paid_real = 0;
+    public float $total_products = 0;
+    public float $total_products_wt = 0;
+    public float $total_shipping = 0;
+    public float $total_shipping_tax_incl = 0;
+    public float $total_shipping_tax_excl = 0;
+    public float $carrier_tax_rate = 0;
+    public float $total_wrapping = 0;
+    public float $total_wrapping_tax_incl = 0;
+    public float $total_wrapping_tax_excl = 0;
+    public int $round_mode = 0;
+    public int $round_type = 0;
 
 }

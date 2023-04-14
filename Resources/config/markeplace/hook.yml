@@ -188,6 +188,16 @@ services:
             - [ setHooks,[ [ 'actionOrderGridQueryBuilderModifier' ] ] ]
         tags:
             - { name: 'shoppygo.hook', alias: 'actionordergridquerybuildermodifier' }
+    shoppygo.hook.action.order.grid.data.modifier:
+        class: ShoppyGo\MarketplaceBundle\HookListener\OrderActionGridDataModifier
+        arguments:
+            - '@shoppygo.core'
+            - '@translator.default'
+            - '@shoppygo.marketplace.repository.marketplace_seller_repository'
+        calls:
+            - [ setHooks,[ [ 'actionOrderGridDataModifier' ] ] ]
+        tags:
+            - { name: 'shoppygo.hook', alias: 'actionordergriddatamodifier' }
 
     shoppygo.hook.action.order.grid.definition.modifier:
       class: ShoppyGo\MarketplaceBundle\HookListener\OrderActionGridDefinitionModifierListener

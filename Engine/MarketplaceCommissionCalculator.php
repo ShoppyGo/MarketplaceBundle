@@ -66,7 +66,7 @@ class MarketplaceCommissionCalculator
         $commissions = [];
         foreach ($sellerOrders as $sellerOrder) {
             $order = new Order($sellerOrder->getIdOrder());
-            $order_dto = OrderMapper::toMarketplaceOrderCommissionDTO($order);
+            $order_dto = OrderMapper::mapObjecttoMarketplaceOrderCommissionDTO($order);
             $commission = $this->calculatorEngine->calculateCommission($order_dto, $seller->getMarketplaceCommission());
 
             $commissions[] = [

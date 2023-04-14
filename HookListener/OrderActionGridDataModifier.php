@@ -27,41 +27,49 @@
 namespace ShoppyGo\MarketplaceBundle\HookListener;
 
 use Doctrine\ORM\QueryBuilder;
+use PrestaShop\PrestaShop\Core\Grid\Data\GridData;
+use PrestaShop\PrestaShop\Core\Grid\Record\RecordCollection;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
+use ShoppyGo\MarketplaceBundle\Engine\CalculatorEngine;
+use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSeller;
+use ShoppyGo\MarketplaceBundle\Mapper\OrderMapper;
+use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerRepository;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class OrderActionGridQueryBuilderModifier extends AbstractHookListenerImplementation
+class OrderActionGridDataModifier extends AbstractHookListenerImplementation
 {
     protected MarketplaceCore $core;
     protected TranslatorInterface $translator;
+    protected MarketplaceSellerRepository $marketplaceSellerRepository;
 
     public function __construct(
         MarketplaceCore $core,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        MarketplaceSellerRepository $marketplaceSellerRepository
     ) {
         $this->core = $core;
         $this->translator = $translator;
+        $this->marketplaceSellerRepository = $marketplaceSellerRepository;
     }
 
     public function exec(array $params): void
     {
-        /** @var QueryBuilder $qb */
-        $qb = $params['search_query_builder'];
-        $qb->addSelect('
-             ms.`id_supplier` as `id_seller`, ms.`name` as `seller_name`, 0 as `commission_amount`,
-             o.`total_discounts`, o.`total_discounts_tax_incl`, o.`total_discounts_tax_excl`,
-             o.`total_paid`, o.`total_paid_tax_excl`, o.`total_paid_real`, o.`total_products`,
-             o.`total_products_wt`, o.`total_shipping`, o.`total_shipping_tax_incl`,
-             o.`total_shipping_tax_excl`, o.`carrier_tax_rate`, o.`total_wrapping`,
-             o.`total_wrapping_tax_incl`, o.`total_wrapping_tax_excl`, o.`round_mode`
-        ')
-            ->leftJoin('o', _DB_PREFIX_.'marketplace_seller_order', 'mp', 'o.id_order = mp.id_order')
-            ->leftJoin('mp', _DB_PREFIX_.'supplier', 'ms', 'mp.id_supplier = ms.id_supplier')
+        /** @var RecordCollection $records */
+        $records = $params['data']->getRecords()
+            ->all()
         ;
-        if (false === $this->core->isEmployStaff()) {
-            $qb->andWhere('ms.id_supplier = :id_seller')
-                ->setParameter('id_seller', $this->core->getSellerId())
-            ;
+        foreach ($records as &$record) {
+            $id_order = $record['id_order'];
+            $mkt_seller = $this->marketplaceSellerRepository->findOneBy(['id_seller' => $record['id_seller']]);
+            if(null === $mkt_seller) {
+                continue;
+            }
+            $record['commission_amount'] = (new CalculatorEngine())->calculateCommission(
+                OrderMapper::mapArrayToMarketplaceOrderCommissionDTO($record),
+                $mkt_seller->getMarketplaceCommission()
+            );
         }
+
+        $params['data'] = new GridData(new RecordCollection($records), count($records));
     }
 }

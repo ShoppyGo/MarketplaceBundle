@@ -29,6 +29,7 @@ namespace ShoppyGo\MarketplaceBundle\HookListener;
 use PrestaShop\PrestaShop\Core\Form\IdentifiableObject\Builder\FormBuilderInterface;
 use PrestaShop\PrestaShop\Core\Grid\Column\ColumnCollection;
 use PrestaShop\PrestaShop\Core\Grid\Column\Type\DataColumn;
+use PrestaShop\PrestaShop\Core\Grid\Column\Type\OrderPriceColumn;
 use PrestaShop\PrestaShop\Core\Grid\Definition\GridDefinitionInterface;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -56,10 +57,16 @@ class OrderActionGridDefinitionModifierListener extends AbstractHookListenerImpl
         $definition = $params['definition'];
         /** @var ColumnCollection $columns */
         $columns = $definition->getColumns();
+
         //-------creo la colonna e la nomino is_seller
         $seller_name = new DataColumn('seller_name');
         $seller_name->setName($this->translator->trans('Seller name', [], 'Admin.Shoppygo.Marketplace'))
             ->setOptions(['field' => 'seller_name'])
+        ;
+
+        $commission_amount = new DataColumn('commission_ammount');
+        $commission_amount->setName($this->translator->trans('Commission amount', [], 'Admin.Shoppygo.Marketplace'))
+            ->setOptions(['field' => 'commission_amount'])
         ;
 
         //-------creo la colonna e la nomino is_seller
@@ -69,5 +76,6 @@ class OrderActionGridDefinitionModifierListener extends AbstractHookListenerImpl
 
         //----aggiungo la colonna alla grid
         $columns->addAfter('reference', $seller_name);
+        $columns->addAfter('total_paid_tax_incl', $commission_amount);
     }
 }
