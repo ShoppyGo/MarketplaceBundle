@@ -31,13 +31,26 @@ use ShoppyGo\MarketplaceBundle\DTO\MarketplaceOrderCommissionDTO;
 
 class OrderMapper
 {
-    public static function toMarketplaceOrderCommissionDTO(Order $order): MarketplaceOrderCommissionDTO
+    public static function mapArrayToMarketplaceOrderCommissionDTO(array $data): MarketplaceOrderCommissionDTO
     {
         $marketplaceOrder = new MarketplaceOrderCommissionDTO();
 
-        // loop attraverso le proprietà dell'oggetto Order
+        // loop attraverso le chiavi dell'array
+        foreach ($data as $key => $value) {
+            // se la chiave esiste nella DTO, impostala con il valore corrispondente nell'array
+            if (property_exists($marketplaceOrder, $key)) {
+                $marketplaceOrder->{$key} = $value;
+            }
+        }
+
+        return $marketplaceOrder;
+    }
+
+    public static function mapObjecttoMarketplaceOrderCommissionDTO(Order $order): MarketplaceOrderCommissionDTO
+    {
+        $marketplaceOrder = new MarketplaceOrderCommissionDTO();
+
         foreach (get_object_vars($order) as $propName => $propValue) {
-            // se la proprietà esiste nella DTO, impostala con il valore corrispondente nell'oggetto Order
             if (property_exists($marketplaceOrder, $propName)) {
                 $marketplaceOrder->{$propName} = $propValue;
             }
