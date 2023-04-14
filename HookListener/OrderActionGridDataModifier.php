@@ -61,7 +61,7 @@ class OrderActionGridDataModifier extends AbstractHookListenerImplementation
         foreach ($records as &$record) {
             $id_order = $record['id_order'];
             $mkt_seller = $this->marketplaceSellerRepository->findOneBy(['id_seller' => $record['id_seller']]);
-            if(null === $mkt_seller) {
+            if (null === $mkt_seller) {
                 continue;
             }
             $record['commission_amount'] = (new CalculatorEngine())->calculateCommission(
