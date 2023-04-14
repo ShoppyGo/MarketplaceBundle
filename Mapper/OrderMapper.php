@@ -24,20 +24,25 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace ShoppyGo\MarketplaceBundle\Engine;
+namespace ShoppyGo\MarketplaceBundle\Mapper;
 
+use PrestaShop\PrestaShop\Adapter\Entity\Order;
 use ShoppyGo\MarketplaceBundle\DTO\MarketplaceOrderCommissionDTO;
-use ShoppyGo\MarketplaceBundle\Entity\MarketplaceCommission;
 
-class CalculatorEngine implements CommissionCalculatorInterface
+class OrderMapper
 {
-    public function calculateCommission(
-        MarketplaceOrderCommissionDTO $order_amounts,
-        MarketplaceCommission $commission
-    ): float {
-        $amount = $order_amounts->total_paid;
-        $commissionPercentage = $commission->getCommissionPercentage();
+    public static function toMarketplaceOrderCommissionDTO(Order $order): MarketplaceOrderCommissionDTO
+    {
+        $marketplaceOrder = new MarketplaceOrderCommissionDTO();
 
-        return $amount * ($commissionPercentage);
+        // loop attraverso le proprietà dell'oggetto Order
+        foreach (get_object_vars($order) as $propName => $propValue) {
+            // se la proprietà esiste nella DTO, impostala con il valore corrispondente nell'oggetto Order
+            if (property_exists($marketplaceOrder, $propName)) {
+                $marketplaceOrder->{$propName} = $propValue;
+            }
+        }
+
+        return $marketplaceOrder;
     }
 }

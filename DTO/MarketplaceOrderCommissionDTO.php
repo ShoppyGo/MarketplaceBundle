@@ -24,20 +24,29 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace ShoppyGo\MarketplaceBundle\Engine;
+namespace ShoppyGo\MarketplaceBundle\DTO;
 
-use ShoppyGo\MarketplaceBundle\DTO\MarketplaceOrderCommissionDTO;
-use ShoppyGo\MarketplaceBundle\Entity\MarketplaceCommission;
-
-class CalculatorEngine implements CommissionCalculatorInterface
+class MarketplaceOrderCommissionDTO
 {
-    public function calculateCommission(
-        MarketplaceOrderCommissionDTO $order_amounts,
-        MarketplaceCommission $commission
-    ): float {
-        $amount = $order_amounts->total_paid;
-        $commissionPercentage = $commission->getCommissionPercentage();
+    public int $id_order;
+    public int $id_currency;
+    public float $total_discounts;
+    public float $total_discounts_tax_incl;
+    public float $total_discounts_tax_excl;
+    public float $total_paid;
+    public float $total_paid_tax_incl;
+    public float $total_paid_tax_excl;
+    public float $total_paid_real;
+    public float $total_products;
+    public float $total_products_wt;
+    public float $total_shipping;
+    public float $total_shipping_tax_incl;
+    public float $total_shipping_tax_excl;
+    public float $carrier_tax_rate;
+    public float $total_wrapping;
+    public float $total_wrapping_tax_incl;
+    public float $total_wrapping_tax_excl;
+    public int $round_mode;
+    public int $round_type;
 
-        return $amount * ($commissionPercentage);
-    }
 }

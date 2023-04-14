@@ -26,6 +26,7 @@
 
 namespace ShoppyGo\MarketplaceBundle\Engine;
 
+use ShoppyGo\MarketplaceBundle\Mapper\OrderMapper;
 use PrestaShop\PrestaShop\Adapter\Entity\Order;
 use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSeller;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerOrderRepository;
@@ -65,14 +66,15 @@ class MarketplaceCommissionCalculator
         $commissions = [];
         foreach ($sellerOrders as $sellerOrder) {
             $order = new Order($sellerOrder->getIdOrder());
-            $commission = $this->calculatorEngine->calculateCommission($order, $seller->getMarketplaceCommission());
+            $order_dto = OrderMapper::toMarketplaceOrderCommissionDTO($order);
+            $commission = $this->calculatorEngine->calculateCommission($order_dto, $seller->getMarketplaceCommission());
 
             $commissions[] = [
-                'seller' => $seller,
-                'id_seller' => $seller->getIdSeller(),
-                'id_order' => $order->id,
+                'seller'          => $seller,
+                'id_seller'       => $seller->getIdSeller(),
+                'id_order'        => $order->id,
                 'order_reference' => $order->reference,
-                'total' => $commission,
+                'total'           => $commission,
             ];
         }
 
