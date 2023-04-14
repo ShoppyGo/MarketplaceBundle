@@ -194,6 +194,8 @@ services:
             - '@shoppygo.core'
             - '@translator.default'
             - '@shoppygo.marketplace.repository.marketplace_seller_repository'
+            - '@prestashop.core.localization.locale.repository'
+            - '@=service("prestashop.adapter.legacy.context").getContext().language.getLocale()'
         calls:
             - [ setHooks,[ [ 'actionOrderGridDataModifier' ] ] ]
         tags:

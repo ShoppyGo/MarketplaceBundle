@@ -27,8 +27,10 @@
 namespace ShoppyGo\MarketplaceBundle\HookListener;
 
 use Doctrine\ORM\QueryBuilder;
+use PrestaShop\PrestaShop\Core\ConfigurationInterface;
 use PrestaShop\PrestaShop\Core\Grid\Data\GridData;
 use PrestaShop\PrestaShop\Core\Grid\Record\RecordCollection;
+use PrestaShop\PrestaShop\Core\Localization\Locale\RepositoryInterface;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
 use ShoppyGo\MarketplaceBundle\Engine\CalculatorEngine;
 use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSeller;
@@ -41,15 +43,21 @@ class OrderActionGridDataModifier extends AbstractHookListenerImplementation
     protected MarketplaceCore $core;
     protected TranslatorInterface $translator;
     protected MarketplaceSellerRepository $marketplaceSellerRepository;
+    protected RepositoryInterface $localeRepository;
+    protected $contextLocale;
 
     public function __construct(
         MarketplaceCore $core,
         TranslatorInterface $translator,
-        MarketplaceSellerRepository $marketplaceSellerRepository
+        MarketplaceSellerRepository $marketplaceSellerRepository,
+        RepositoryInterface $localeRepository,
+        $contextLocale
     ) {
         $this->core = $core;
         $this->translator = $translator;
         $this->marketplaceSellerRepository = $marketplaceSellerRepository;
+        $this->localeRepository = $localeRepository;
+        $this->contextLocale = $contextLocale;
     }
 
     public function exec(array $params): void
@@ -58,15 +66,21 @@ class OrderActionGridDataModifier extends AbstractHookListenerImplementation
         $records = $params['data']->getRecords()
             ->all()
         ;
+        $locale = $this->localeRepository->getLocale($this->contextLocale);
+
         foreach ($records as &$record) {
-            $id_order = $record['id_order'];
             $mkt_seller = $this->marketplaceSellerRepository->findOneBy(['id_seller' => $record['id_seller']]);
             if (null === $mkt_seller) {
-                continue;
+                $commission_amount = 0;
+            } else {
+                $commission_amount = (new CalculatorEngine())->calculateCommission(
+                    OrderMapper::mapArrayToMarketplaceOrderCommissionDTO($record),
+                    $mkt_seller->getMarketplaceCommission()
+                );
             }
-            $record['commission_amount'] = (new CalculatorEngine())->calculateCommission(
-                OrderMapper::mapArrayToMarketplaceOrderCommissionDTO($record),
-                $mkt_seller->getMarketplaceCommission()
+            $record['commission_amount'] = $locale->formatPrice(
+                $commission_amount,
+                $record['iso_code']
             );
         }
 
