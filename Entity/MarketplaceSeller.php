@@ -27,7 +27,7 @@
 namespace ShoppyGo\MarketplaceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+//use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table()
@@ -68,13 +68,13 @@ class MarketplaceSeller
     /**
      * @var string
      * @ORM\Column(name="website", type="string", length=255)
-     * @Assert\Url()
+     * TODO frontend Assert\Url()
      */
     private string $website;
     /**
      * @var string
      * @ORM\Column(name="email", type="string", length=100)
-     * @Assert\Email()
+     * TODO frontend Assert\Email()
      */
     private string $email;
     /**
@@ -148,7 +148,7 @@ class MarketplaceSeller
      */
     public function getReturnPolicy(): string
     {
-        return $this->return_policy;
+        return $this->return_policy??'';
     }
 
     /**
