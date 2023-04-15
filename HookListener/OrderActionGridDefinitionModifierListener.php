@@ -28,10 +28,13 @@ namespace ShoppyGo\MarketplaceBundle\HookListener;
 
 use PrestaShop\PrestaShop\Core\Form\IdentifiableObject\Builder\FormBuilderInterface;
 use PrestaShop\PrestaShop\Core\Grid\Column\ColumnCollection;
+use PrestaShop\PrestaShop\Core\Grid\Column\ColumnCollectionInterface;
 use PrestaShop\PrestaShop\Core\Grid\Column\Type\DataColumn;
-use PrestaShop\PrestaShop\Core\Grid\Column\Type\OrderPriceColumn;
 use PrestaShop\PrestaShop\Core\Grid\Definition\GridDefinitionInterface;
+use PrestaShop\PrestaShop\Core\Grid\Filter\Filter;
+use PrestaShop\PrestaShop\Core\Grid\Filter\FilterCollectionInterface;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class OrderActionGridDefinitionModifierListener extends AbstractHookListenerImplementation
@@ -53,10 +56,12 @@ class OrderActionGridDefinitionModifierListener extends AbstractHookListenerImpl
         if (false === $this->core->isEmployStaff()) {
             return;
         }
-        /** @var GridDefinitionInterface $definition */
-        $definition = $params['definition'];
-        /** @var ColumnCollection $columns */
-        $columns = $definition->getColumns();
+        $this->addNewColumns($params['definition']->getColumns());
+        $this->addNewFilters($params['definition']->getFilters());
+    }
+
+    protected function addNewColumns(ColumnCollectionInterface $columns): void
+    {
 
         //-------creo la colonna e la nomino is_seller
         $seller_name = new DataColumn('seller_name');
@@ -69,8 +74,6 @@ class OrderActionGridDefinitionModifierListener extends AbstractHookListenerImpl
             ->setOptions(['field' => 'commission_amount'])
         ;
 
-
-
         //-------creo la colonna e la nomino is_seller
 //        $seller_name = new DataColumn('split');
 //        $seller_name->setName($this->translator->trans('Split', [], 'Admin.Shoppygo.Marketplace'));
@@ -79,5 +82,13 @@ class OrderActionGridDefinitionModifierListener extends AbstractHookListenerImpl
         //----aggiungo la colonna alla grid
         $columns->addAfter('reference', $seller_name);
         $columns->addAfter('total_paid_tax_incl', $commission_amount);
+    }
+
+    private function addNewFilters(FilterCollectionInterface $filters)
+    {
+        $filters->add(
+            (new Filter('seller_name', TextType::class))
+                ->setAssociatedColumn('seller_name')
+        );
     }
 }

@@ -27,6 +27,7 @@
 namespace ShoppyGo\MarketplaceBundle\HookListener;
 
 use Doctrine\ORM\QueryBuilder;
+use PrestaShop\PrestaShop\Core\Search\Filters\OrderFilters;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -44,7 +45,7 @@ class OrderActionGridQueryBuilderModifier extends AbstractHookListenerImplementa
     }
 
     public function exec(array $params): void
-    {
+    {xdebug_break();
         /** @var QueryBuilder $qb */
         $qb = $params['search_query_builder'];
         $qb->addSelect('
@@ -62,6 +63,12 @@ class OrderActionGridQueryBuilderModifier extends AbstractHookListenerImplementa
             $qb->andWhere('ms.id_supplier = :id_seller')
                 ->setParameter('id_seller', $this->core->getSellerId())
             ;
+        }
+        /** @var OrderFilters $order_filters */
+        $filters = $params['search_criteria']->getFilters();
+        if(true === isset($filters['seller_name'])){
+            $qb->andWhere('ms.name LIKE :seller_name')
+                ->setParameter('seller_name', '%'.$filters['seller_name'].'%');
         }
     }
 }
