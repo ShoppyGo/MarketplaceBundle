@@ -3,6 +3,12 @@ services:
         class: ShoppyGo\MarketplaceBundle\Controller\MarketplaceSellerProductController
         decorates: PrestaShopBundle\Controller\Admin\ProductController
         arguments: [ '@ShoppyGo\MarketplaceBundle\Controller\MarketplaceSellerProductController.inner' ]
+  ShoppyGo\MarketplaceBundle\Controller\MarketplaceSellerOrderController:
+        class: ShoppyGo\MarketplaceBundle\Controller\MarketplaceSellerOrderController
+        decorates: PrestaShopBundle\Controller\Admin\Sell\Order\OrderController
+        arguments: [ '@ShoppyGo\MarketplaceBundle\Controller\MarketplaceSellerOrderController.inner']
+        calls:
+          - [setCore,['@shoppygo.core']]
     #    public: true
 #    prestashop.adapter.data_provider.category:
 #        class: ShoppyGo\MarketplaceBundle\Provider\SellerCategoryDataProvider
