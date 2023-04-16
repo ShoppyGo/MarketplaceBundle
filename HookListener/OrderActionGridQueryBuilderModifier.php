@@ -45,7 +45,7 @@ class OrderActionGridQueryBuilderModifier extends AbstractHookListenerImplementa
     }
 
     public function exec(array $params): void
-    {xdebug_break();
+    {
         /** @var QueryBuilder $qb */
         $qb = $params['search_query_builder'];
         $qb->addSelect('
