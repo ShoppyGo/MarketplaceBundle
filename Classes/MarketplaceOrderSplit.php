@@ -32,9 +32,9 @@ use PrestaShop\PrestaShop\Adapter\Entity\Order;
 use PrestaShop\PrestaShop\Adapter\Entity\OrderCarrier;
 use PrestaShop\PrestaShop\Adapter\Entity\OrderDetail;
 use PrestaShop\PrestaShop\Core\Localization\CLDR\ComputingPrecision;
-use PrestaShop\PrestaShop\ShoppyGo\MarketplaceBundle\Exception\NotSellerOderDetailsException;
 use Psr\Log\LoggerInterface;
 use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSellerOrder;
+use ShoppyGo\MarketplaceBundle\Exception\NotSellerOderDetailsException;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerOrderRepository;
 use ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerProductRepository;
 
@@ -72,13 +72,16 @@ class MarketplaceOrderSplit
             });
 
             $sellerOrderCarrier->id_order = $sellerOrder->id;
-            $sellerOrderCarrier->add();
+
             $this->updateTotalOrder(
                 new Cart($sellerOrder->id_cart),
                 $sellerOrder,
                 $this->precision,
                 $sellerOrderCarrier->id_carrier
             );
+            $sellerOrderCarrier->shipping_cost_tax_excl = $sellerOrder->total_shipping_tax_excl;
+            $sellerOrderCarrier->shipping_cost_tax_incl = $sellerOrder->total_shipping_tax_incl;
+            $sellerOrderCarrier->add();
             $id_order_state = $this->mainOrder->getCurrentState();
             $sellerOrder->setCurrentState($id_order_state);
 
