@@ -68,7 +68,7 @@ class EmployeeActionFormBuilderModifierListener extends AbstractHookListenerImpl
 
         $this->sellerSelectWidget->setSeller($seller);
 
-        $this->sellerSelectWidget->addField($form);
+        $this->sellerSelectWidget->addField($form, false);
     }
 
     public function setSellerSelectWidget(SellerSelectWidget $sellerSelectWidget): void

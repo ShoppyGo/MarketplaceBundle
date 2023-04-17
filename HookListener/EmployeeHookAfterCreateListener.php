@@ -55,8 +55,11 @@ class EmployeeHookAfterCreateListener extends AbstractHookListenerImplementation
         $employeeForm = $this->formBuilder->getForm();
         $employeeForm->handleRequest($params['request']);
         $data = $employeeForm->getData();
-        $id_seller = $data['supplier'];
+        $id_seller = (int)$data['supplier'];
+        if(!$id_seller){
+            return;
+        }
         $id_employee = $params['id'];
-        $this->employeeSellerRepository->create($id_employee, $id_seller);
+        $this->employeeSellerRepository->create($id_employee, (int)$id_seller);
     }
 }

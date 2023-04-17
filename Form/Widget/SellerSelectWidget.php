@@ -41,18 +41,19 @@ class SellerSelectWidget
         $this->sellerChoiceProvider = $sellerChoiceProvider;
     }
 
-    public function addField(FormBuilder $form)
+    public function addField(FormBuilder $form, $required = true): void
     {
         $form->add(
             'supplier', ChoiceType::class, [
                 'label' => 'Seller',
                 'choices' => $this->sellerChoiceProvider->getChoices(),
                 'data' => $this->seller ? $this->seller->getIdSeller() : '',
+                'required' => $required,
             ]
         );
     }
 
-    public function setSeller(?MarketplaceEmployeeSeller $seller)
+    public function setSeller(?MarketplaceEmployeeSeller $seller): void
     {
         $this->seller = $seller;
     }
