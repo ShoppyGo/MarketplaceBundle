@@ -5,3 +5,11 @@ services:
       - '@shoppygo.provider.seller.choices'
     tags:
       - { name: form.type }
+  shoppygo_marketplace_seller_shipping_configuration_type:
+    class: ShoppyGo\MarketplaceBundle\Form\Type\MarketplaceShippingConfigurationType
+    arguments:
+      - '@shoppygo.core'
+      - '@translator'
+      - '@prestashop.adapter.data_provider.tax'
+    tags:
+      - { name: form.type }

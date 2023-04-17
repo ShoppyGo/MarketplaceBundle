@@ -118,12 +118,12 @@ class SetupMarketplaceDatabaseCommand extends Command
         $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'marketplace_seller_shipping` (
                     `id_shipping` int(11) NOT NULL AUTO_INCREMENT,
                     `id_supplier` int(11) NOT NULL ,
+                    `id_tax_rules_group` int(11) null,
                     `carrier_name` varchar(255) NOT NULL ,
                     `from_total` decimal(8,2),
                     `to_total` decimal(8,2),
                     `type` char(1),
                     `shipping_cost` decimal(4,2),
-                    `vat` decimal(4,2),
                     PRIMARY KEY  (`id_shipping`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
 

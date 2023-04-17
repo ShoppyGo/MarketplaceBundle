@@ -41,7 +41,7 @@ class MarketplaceSellerShipping
      *
      * @var int
      */
-    private $id_shipping;
+    private int $id_shipping;
 
     /**
      * @ORM\Column(name="id_supplier", type="integer")
@@ -59,25 +59,36 @@ class MarketplaceSellerShipping
      *
      * @var float
      */
-    private $from = 0;
+    private float $from = 0;
     /**
      * @ORM\Column(name="to_total", type="decimal", precision=2)
      *
      * @var float
      */
-    private $to = 0;
+    private float $to = 0;
     /**
      * @ORM\Column(name="shipping_cost", type="decimal", precision=2)
      *
      * @var float
      */
-    private $cost = 0;
+    private float $cost = 0;
+
     /**
-     * @ORM\Column(name="vat", type="decimal", precision=2)
-     *
-     * @var float
+     * @ORM\Column(name="id_tax_rules_group", type="integer")
+     * @var int
      */
-    private $vat = 0;
+    private int $id_tax_rules_group;
+
+    public function getIdTaxRulesGroup(): int
+    {
+        return $this->id_tax_rules_group;
+    }
+
+    public function setIdTaxRulesGroup(int $id_tax_rules_group): self
+    {
+        $this->id_tax_rules_group = $id_tax_rules_group;
+        return $this;
+    }
 
     /**
      * @return string
@@ -158,15 +169,4 @@ class MarketplaceSellerShipping
         return $this;
     }
 
-    public function getVat()
-    {
-        return $this->vat;
-    }
-
-    public function setVat($vat): self
-    {
-        $this->vat = $vat;
-
-        return $this;
-    }
 }

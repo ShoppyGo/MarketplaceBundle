@@ -30,7 +30,9 @@ use PrestaShop\PrestaShop\Core\Grid\Search\SearchCriteria;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore;
 use ShoppyGo\MarketplaceBundle\Entity\MarketplaceSellerShipping;
+use ShoppyGo\MarketplaceBundle\Form\Type\MarketplaceShippingConfigurationType;
 use ShoppyGo\MarketplaceBundle\Form\Type\SellerChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
@@ -38,17 +40,20 @@ use Symfony\Component\HttpFoundation\Request;
 
 class MarketplaceSellerShippingController extends FrameworkBundleAdminController
 {
+
     public function delete(Request $request)
     {
         /** @var MarketplaceCore $core */
         $core = $this->get('bwlab_core_marketplace');
 
         $criteria = $this->getCriteria($request, $core);
-        $objectManager = $this->getDoctrine()->getManager();
+        $objectManager = $this->getDoctrine()
+            ->getManager()
+        ;
 
-        $record = $objectManager
-            ->getRepository(MarketplaceSellerShipping::class)
-            ->findOneBy($criteria);
+        $record = $objectManager->getRepository(MarketplaceSellerShipping::class)
+            ->findOneBy($criteria)
+        ;
 
         if ($record) {
             $objectManager->remove($record);
@@ -63,32 +68,27 @@ class MarketplaceSellerShippingController extends FrameworkBundleAdminController
         /** @var MarketplaceCore $core */
         $core = $this->get('shoppygo.core');
 
-        //
-        // preparo nuovo record
-        //
         $shipping_cost = new MarketplaceSellerShipping();
-        //
-        // vedo se viene richiesto un id
-        //
         if ($request->get('id_shipping')) {
             $criteria = $this->getCriteria($request, $core);
 
-            $shipping_cost = $this->getDoctrine()->getManager()
-                ->getRepository(MarketplaceSellerShipping::class)->findOneBy(
+            $shipping_cost = $this->getDoctrine()
+                ->getManager()
+                ->getRepository(MarketplaceSellerShipping::class)
+                ->findOneBy(
                     $criteria
-                );
+                )
+            ;
 
             if (!$shipping_cost) {
                 return $this->redirectToRoute('admin_marketplace_seller_shipping');
             }
         }
 
-        $form = $this->getShippingForm($shipping_cost, $core);
+        $form = $this->createForm(MarketplaceShippingConfigurationType::class, $shipping_cost);
 
         $form->handleRequest($request);
-        //
-        // se i dati sono stati inviati allora procedo al salvataggio
-        //
+
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 /** @var MarketplaceSellerShipping $data */
@@ -99,17 +99,17 @@ class MarketplaceSellerShippingController extends FrameworkBundleAdminController
                 }
 
                 $ranges = [];
-                $m = $this->getDoctrine()->getManager();
-                //
-                // solo se non sono in modifica devo controllare l'accavallamento
-                //
+                $m = $this->getDoctrine()
+                    ->getManager()
+                ;
                 if (!$request->get('id_shipping')) {
                     $ranges = $m->getRepository(MarketplaceSellerShipping::class)
                         ->getRanges(
                             $shipping_cost->getFrom(),
                             $shipping_cost->getTo(),
                             $data->getIdSeller(),
-                        );
+                        )
+                    ;
                 }
                 if (count($ranges) === 0) {
                     try {
@@ -127,7 +127,6 @@ class MarketplaceSellerShippingController extends FrameworkBundleAdminController
                 }
             } else {
                 $this->addFlash('error', 'Error save shipping', 'Admin.Marketplace.Shipping');
-
                 foreach ($form->getErrors() as $err) {
                     $this->addFlash('error', $err->getMessage());
                 }
@@ -135,8 +134,7 @@ class MarketplaceSellerShippingController extends FrameworkBundleAdminController
         }
 
         return $this->render(
-            '@ShoppyGoMarketplace/controller/shipping/marketplace_seller_shipping_edit.html.twig',
-            [
+            '@ShoppyGoMarketplace/controller/shipping/marketplace_seller_shipping_edit.html.twig', [
                 'form' => $form->createView(),
             ]
         );
@@ -145,14 +143,12 @@ class MarketplaceSellerShippingController extends FrameworkBundleAdminController
     public function index(Request $request)
     {
         //--------vedi   https://devdocs.prestashop.com/1.7/development/components/grid/#rendering-grid
-        // posso impostare la grid per la lista dello shipping
-        // posso impostare la grid per la lista dello shipping
 
         $gridFactory = $this->get('shoppygo_marketplace_grid_seller_shipping_factory');
         $productGrid = $gridFactory->getGrid(new SearchCriteria());
+
         return $this->render(
-            '@ShoppyGoMarketplace/controller/shipping/marketplace_seller_shipping_index.html.twig',
-            [
+            '@ShoppyGoMarketplace/controller/shipping/marketplace_seller_shipping_index.html.twig', [
                 'shipping_grid' => $this->presentGrid($productGrid),
             ]
         );
@@ -169,9 +165,7 @@ class MarketplaceSellerShippingController extends FrameworkBundleAdminController
         $criteria = [
             'id_shipping' => $request->get('id_shipping'),
         ];
-        //
-        // controllo se l'utente prova ad editare un altro record da url
-        //
+
         if ($core->isEmployStaff() === false) {
             $criteria['id_seller'] = $core->getSellerId();
         }
@@ -179,47 +173,4 @@ class MarketplaceSellerShippingController extends FrameworkBundleAdminController
         return $criteria;
     }
 
-    private function getShippingForm(mixed $shipping_cost, MarketplaceCore $core): FormInterface
-    {
-        $builder = $this->createFormBuilder($shipping_cost);
-
-        $builder
-            ->add(
-                'carrier_name', TextType::class, [
-                    'label' => $this->trans('Carrier name', 'Admin.Marketplace.Shipping'),
-                ]
-            )
-            ->add(
-                'from', MoneyType::class, [
-                    'scale' => 2,
-                    'label' => $this->trans('from', 'Admin.Marketplace.Shipping'),
-                ]
-            )
-            ->add(
-                'to', MoneyType::class, [
-                    'scale' => 2,
-                    'label' => $this->trans('to', 'Admin.Marketplace.Shipping'),
-                ]
-            )
-            ->add(
-                'cost', MoneyType::class, [
-                    'scale' => 2,
-                    'label' => $this->trans('cost', 'Admin.Marketplace.Shipping'),
-                ]
-            )
-            ->add(
-                'vat', MoneyType::class, [
-                    'scale' => 2,
-                    'label' => $this->trans('vat', 'Admin.Marketplace.Shipping'),
-                ]
-            )
-        ;
-        if ($core->isEmployStaff()) {
-            $builder->add('id_seller', SellerChoiceType::class, [
-                'label' => $this->trans('seller', 'Admin.Marketplace.Shipping'),
-            ]);
-        }
-
-        return $builder->getForm();
-    }
 }
