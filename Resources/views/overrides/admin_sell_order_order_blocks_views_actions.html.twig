@@ -122,6 +122,8 @@
      {% endif %}
    {% endif %}
 
+
+ {% endif %}
    {% if orderForViewing.hasBeenPaid() or orderForViewing.hasPayments() %}
      <button class="btn btn-action partial-refund-display"
              type="button"{% if not orderForViewing.isRefundable() %} disabled{% endif %}>
@@ -129,6 +131,4 @@
        {{ 'Partial refund'|trans({}, 'Admin.Orderscustomers.Feature') }}
      </button>
    {% endif %}
- {% endif %}
-
   {% include '@PrestaShop/Admin/Sell/Order/Order/Blocks/View/order_navigation.html.twig' %}
