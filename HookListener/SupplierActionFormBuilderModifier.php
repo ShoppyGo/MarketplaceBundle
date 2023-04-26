@@ -82,22 +82,22 @@ class SupplierActionFormBuilderModifier extends AbstractHookListenerImplementati
         $form->add('vat_number', TextType::class, [
             'required' => true,
             'label'    => $this->translator->trans('Vat', [], 'Admin.Marketplace.Label'),
-            'data'=>$marketplace_seller->getVatNumber()
+            'data'=>$marketplace_seller?->getVatNumber()
         ])
             ->add('website', UrlType::class, [
                 'required' => true,
                 'label'    => $this->translator->trans('Web site', [], 'Admin.Marketplace.Label'),
-                'data'=>$marketplace_seller->getWebsite()
+                'data'=>$marketplace_seller?->getWebsite()
             ])
             ->add('email', EmailType::class, [
                 'required' => true,
                 'label'    => $this->translator->trans('Email', [], 'Admin.Marketplace.Label'),
-                'data'=>$marketplace_seller->getEmail()
+                'data'=>$marketplace_seller?->getEmail()
             ])
             ->add('return_policy', TextareaType::class, [
                 'required' => true,
                 'label'    => $this->translator->trans('Return policy', [], 'Admin.Marketplace.Label'),
-                'data'=>$marketplace_seller->getReturnPolicy()
+                'data'=>$marketplace_seller?->getReturnPolicy()
             ])
         ;;
         if ($this->core->isEmployeeSeller() === true) {
