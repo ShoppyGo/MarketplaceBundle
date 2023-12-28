@@ -21,11 +21,14 @@ services:
     prestashop.hook.dispatcher:
         class: PrestaShop\PrestaShop\Adapter\Hook\HookDispatcher
         arguments:
-            - '@request_stack'
+          - '@request_stack'
+          - !tagged core.legacy.hook.subscriber
+          - '@prestashop.hooks_registry'
+          - '@=service("prestashop.adapter.environment").isDebug()'
         calls:
             - [ addSubscriber, [ "@shoppygo.event.subscriber" ] ]
-            - [ addSubscriber, [ "@prestashop.adapter.legacy.hook.subscriber" ] ]
-            - [ addSubscriber, [ "@prestashop.adapter.legacy.block.helper.subscriber" ] ]
+  #            - [ addSubscriber, [ "@prestashop.adapter.legacy.hook.subscriber" ] ]
+  #            - [ addSubscriber, [ "@prestashop.adapter.legacy.block.helper.subscriber" ] ]
 
     shoppygo.core:
         class: ShoppyGo\MarketplaceBundle\Classes\MarketplaceCore

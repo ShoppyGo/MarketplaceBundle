@@ -230,3 +230,25 @@ services:
         - [ setHooks,[ [ 'actionSupplierGridDataModifier' ] ] ]
       tags:
         - { name: 'shoppygo.hook', alias: 'actionsuppliergriddatamodifier' }
+
+    shoppygo.hook.action.product.grid.query.builder.modifier:
+      class: ShoppyGo\MarketplaceBundle\HookListener\ProductActionGridQueryBuilderModifierListener
+      arguments:
+        - '@shoppygo.provider.seller.choices'
+        - '@shoppygo.core'
+        - '@shoppygo.marketplace.repository.seller_repository'
+        - '@translator.default'
+      calls:
+        - [ setHooks,[ [ 'actionProductGridQueryBuilderModifier' ] ] ]
+      tags:
+        - { name: 'shoppygo.hook', alias: 'actionproductgridquerybuildermodifier' }
+
+    shoppygo.hook.action.product.grid.definition.modifier:
+      class: ShoppyGo\MarketplaceBundle\HookListener\ProductActionGridDefinitionModifierListener
+      arguments:
+        - '@shoppygo.core'
+        - '@translator.default'
+      calls:
+        - [ setHooks,[ [ 'actionProductGridDefinitionModifier' ] ] ]
+      tags:
+        - { name: 'shoppygo.hook', alias: 'actionproductgriddefinitionmodifier' }

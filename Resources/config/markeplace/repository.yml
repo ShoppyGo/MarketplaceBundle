@@ -18,10 +18,10 @@ services:
             - "@doctrine.orm.entity_manager"
             - getRepository
         arguments: [ ShoppyGo\MarketplaceBundle\Entity\MarketplaceSellerOrderStatus ]
-
-    shoppygo.marketplace.repository.product_supplier_repository:
-        parent: "prestashop.adapter.product.repository.product_supplier_repository"
-        class: ShoppyGo\MarketplaceBundle\Repository\MarketplaceProductSupplierRepository
+  # commentato
+  #    shoppygo.marketplace.repository.product_supplier_repository:
+  #        parent: "prestashop.adapter.product.repository.product_supplier_repository"
+  #        class: ShoppyGo\MarketplaceBundle\Repository\MarketplaceProductSupplierRepository
 
 #    shoppygo.marketplace.repository.category_seller_repository:
 #        class: ShoppyGo\MarketplaceBundle\Repository\MarketplaceSellerCategoryRepository
