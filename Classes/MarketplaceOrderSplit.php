@@ -61,7 +61,6 @@ class MarketplaceOrderSplit
         if (0 === count($selleOrderDetails)) {
             throw new NotSellerOderDetailsException();
         }
-        $sellerOrderCarrier = $this->cloneOrderCarrier();
 
         try {
             $sellerOrder->add();
@@ -71,17 +70,23 @@ class MarketplaceOrderSplit
                 $detail->add();
             });
 
-            $sellerOrderCarrier->id_order = $sellerOrder->id;
+            $sellerOrderCarrier = null;
+            if (!$this->mainOrder->isVirtual()) {
+                $sellerOrderCarrier = $this->cloneOrderCarrier();
+                $sellerOrderCarrier->id_order = $sellerOrder->id;
+            }
 
             $this->updateTotalOrder(
                 new Cart($sellerOrder->id_cart),
                 $sellerOrder,
                 $this->precision,
-                $sellerOrderCarrier->id_carrier
+                $sellerOrderCarrier?->id_carrier
             );
-            $sellerOrderCarrier->shipping_cost_tax_excl = $sellerOrder->total_shipping_tax_excl;
-            $sellerOrderCarrier->shipping_cost_tax_incl = $sellerOrder->total_shipping_tax_incl;
-            $sellerOrderCarrier->add();
+            if ($sellerOrderCarrier) {
+                $sellerOrderCarrier->shipping_cost_tax_excl = $sellerOrder->total_shipping_tax_excl;
+                $sellerOrderCarrier->shipping_cost_tax_incl = $sellerOrder->total_shipping_tax_incl;
+                $sellerOrderCarrier->add();
+            }
             $id_order_state = $this->mainOrder->getCurrentState();
             $sellerOrder->setCurrentState($id_order_state);
 
@@ -176,7 +181,7 @@ class MarketplaceOrderSplit
         return $sellerOrder;
     }
 
-    private function updateTotalOrder(Cart $cart, Order $sellerOrder, int|float $computingPrecision, int $id_carrier)
+    private function updateTotalOrder(Cart $cart, Order $sellerOrder, int|float $computingPrecision, ?int $id_carrier)
     {
         $sellerOrder->total_products = \Tools::ps_round(
             (float) $cart->getOrderTotal(false, Cart::ONLY_PRODUCTS, $sellerOrder->getCartProducts(), $id_carrier),
